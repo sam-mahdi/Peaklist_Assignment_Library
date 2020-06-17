@@ -36,20 +36,20 @@ You can load this by clicking the browse button, navigating to the folder that c
 
 #############Sequence File###########
 The sequence file must be single-letter abbreviation:
-
+```
 MSYQVLAR...
-
+```
 It should be a txt file containing only the sequences (no header). I might change the script later to include seq files with headers and other variations later, but current file only accepts single-letter abbreviation with no other artifacts. 
 You can load this by clicking the browse button, navigating to the folder that contains the pred.tab file, and simply clicking on it. 
 
 #############NHSQC File###########
 The NHSQC peaklist must be in the SPARKY format and sorted by resonance:
-
+```
            Y3N-HN    121.699      7.992 
            Q4N-HN    121.973      8.343 
            V5N-HN    120.902      8.008 
 
-
+```
 This is designed to work with the direct SPARKY .list output. Unassigned peaks, and the header are ignored. 
 Thus, no modifications are required. 
 **It is important that all peaklist files are in the same folder.**
@@ -57,6 +57,7 @@ You can load this by clicking the browse button, navigating to the folder that c
 
 #############HNCA/HNCACB/HNCO File###########
 These peaklists must be in the SPARKY format and sorted by resonance:
+```
 HNCA
     Y3N-S2CA-Y3HN    121.666     58.259      7.984 
         Y3N-CA-HN    121.666     57.616      7.992 
@@ -77,6 +78,8 @@ HNCO
      Y3N-S2C-Y3HN    121.666    173.775      7.997 
      Q4N-Y3C-Q4HN    121.973    175.460      8.339 
      V5N-Q4C-V5HN    120.902    175.123      8.015 
+     
+ ```    
 
 This is designed to work with the direct SPARKY .list output. Unassigned peaks, and the header are ignored. 
 Thus, no modifications are required. 
@@ -86,22 +89,23 @@ You can load this by clicking the browse button, navigating to the folder that c
 #############Save SPARTA and Peaklist Files###########
 The script modifies the SPARTA file to only include the amino acids within your sequence. Any other amino acids in the pred.tab will be removed. Additionally, if the portion of the sequence you are using is the start of the crystal structure, the first amino acid will be removed (since it lacks both the amide nitrogen and hydrogen). If the portion of the sequence you are using ends at the end of the crystal structure, the last amino acid will be removed (it lacks a carbonyl). Prolines have their amide nitrogen and hydrogen added (with values of 1000 given to them). The final file will only contain the residue number, residue type, atom type, predicted chemical shift, and error. 
 
+```
 4QN 123.306 2.598
 4QHA 4.510 0.237
 4QC 173.967 0.914
 4QCA 55.623 1.065
 4QCB 32.000 1.586
 4QHN 8.504 0.484
-
+```
 The script modifies the peaklist file to only include the amino acids that are also included in your SPARTA+ predictions. Any other amino acids will be removed. Any amino acids that are in the SPARTA file but unassigned in the peaklist file will be added with values of 1000 given to them. Additionally, all amino acids will be given an HA with the value of 1000. The final file will only contain the residue number, residue type, atom type, and experimental chemical shift.  
-
+```
 Q4N-HN 121.973
 Q4N-HA 1000
 Q4C 175.123
 Q4N-CA-HN 55.802
 Q4N-CB-HN 30.087
 Q4N-HN 8.343
-
+```
 **Use the browse button to indicate the save names of these files**
 
 #############Mutations############
@@ -117,11 +121,11 @@ The first entry would be: 133R
 The second entry would be: 133A
 
 If you have a double, triple, etc. mutant, seperate these with spaces
-
+```
 133R 137Q 182Y 220N
 
 133A 137V 182L 220A
-
+```
 **Click enter after done typing in mutations**
 **If you have no mutations, leave these entries blank.** 
 
@@ -129,16 +133,16 @@ If you have a double, triple, etc. mutant, seperate these with spaces
 The sequence may be the start of the protein, it might be in the middle of the protein. It is important to specify what the residue number of the first amino acid in the sequence file is. 
 
 If sequence is:
-
+```
 1   5    
 MSYQVLAR...
-
+```
 Then enter 1
-
+```
 If sequence is:
 5
 VLAR...
-
+```
 Then enter 5
 
 **Click enter to input entry**
