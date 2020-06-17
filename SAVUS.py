@@ -7,18 +7,27 @@ import re
 import tkinter.scrolledtext as st
 from tkinter import ttk
 import functools
-from PIL import ImageTk, Image
+#from PIL import ImageTk, Image
+import webbrowser
 
 
 
 
 root = tk.Tk()
 root.title('SAVUS')
+#RThis is for fitting the image to the size of the GUI
+#def on_resize(event):
+#    image = bgimg.resize((event.width, event.height), Image.ANTIALIAS)
+#    l.image = ImageTk.PhotoImage(image)
+#    l.config(image=l.image)
 
-#background_image = ImageTk.PhotoImage(Image.open("pretty.jpg"))
-#l=Label(image=background_image)
-#l.grid()
+root.geometry('1200x800')
 
+#bgimg = Image.open('pretty.jpg')
+#l = tk.Label(root)
+#l.place(x=0, y=0, relwidth=1, relheight=1)
+#l.bind('<Configure>', on_resize)
+#This enables the output box to update, but prevents the user from typing stuff into it (read only)
 class ReadOnlyText(st.ScrolledText):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -37,7 +46,7 @@ class ReadOnlyText(st.ScrolledText):
         return wrap
 
 
-ttk.Label(root,text = "Program Output",font = ("Times New Roman", 15),background = 'green',foreground = "white").grid(column = 0, row = 13)
+ttk.Label(root,text = "Program Output",font = ("Times New Roman", 15),background = 'green',foreground = "white").grid(column = 0, row = 14)
 
 text_area = ReadOnlyText(root,width = 40,height = 10,font = ("Times New Roman",12))
 
@@ -82,7 +91,7 @@ e10.grid(row=9, column=1)
 e11.grid(row=10, column=1)
 e12.grid(row=11, column=1)
 
-
+#These global values are what is entered by the user, and use within the script
 sparta_file=()
 sparta_directory=()
 seq_file=()
@@ -103,6 +112,7 @@ mutation_list2=()
 seq_start=()
 set_threshold=()
 
+#These functions define the function of the buttons
 def input_file():
     fullpath = filedialog.askopenfilename(parent=root, title='Choose a file')
     global sparta_directory
@@ -197,26 +207,31 @@ def threshold():
     set_threshold=float(threshold_input)
     text_area.insert(tk.INSERT,f'RMSD Threshold set: {threshold_input} \n')
 
+def help():
+    webbrowser.open('https://github.com/sam-mahdi/SAVUS/blob/master/HELP/Manual.md')
+
 def fun():
     text_area.delete(1.0,END)
     if sparta_file == ():
-        text_area.insert(tk.INSERT,'please upload your sparta file\n')
+        text_area.insert(tk.INSERT,'please upload your sparta file (make sure to use browse)\n')
     if seq_file == ():
-        text_area.insert(tk.INSERT,'please upload your seq file\n')
+        text_area.insert(tk.INSERT,'please upload your seq file (make sure to use browse)\n')
     if save_file_sparta == ():
-        text_area.insert(tk.INSERT,'please indicate sparta save file\n')
+        text_area.insert(tk.INSERT,'please indicate sparta save file (make sure to use browse)\n')
     if save_file_peaklist == ():
-        text_area.insert(tk.INSERT,'please indicate peaklist save file\n')
+        text_area.insert(tk.INSERT,'please indicate peaklist save file (make sure to use browse)\n')
     if NHSQC_file == ():
-        text_area.insert(tk.INSERT,'please upload NHSQC peaklist\n')
+        text_area.insert(tk.INSERT,'please upload NHSQC peaklist (make sure to use browse)\n')
     if HNCA_file == ():
-        text_area.insert(tk.INSERT,'please upload HNCO file\n')
+        text_area.insert(tk.INSERT,'please upload HNCO file (make sure to use browse)\n')
     if HNCACB_file == ():
-        text_area.insert(tk.INSERT,'please upload HNCACB file\n')
+        text_area.insert(tk.INSERT,'please upload HNCACB file (make sure to use browse)\n')
     if HNCO_file == ():
-        text_area.insert(tk.INSERT,'please upload HNCO file\n')
+        text_area.insert(tk.INSERT,'please upload HNCO file (make sure to use browse)\n')
     if set_threshold == ():
-        text_area.insert(tk.INSERT,'please enter a threshold\n')
+        text_area.insert(tk.INSERT,'please enter a threshold (make sure to hit enter)\n')
+    if seq_start == ():
+        text_area.insert(tk.INSERT,'please enter a seq number (make sure to hit enter)\n')
     else:
         text_area.insert(tk.INSERT,'Starting Program\n')
 #Determines the number of amino acids, used for filling in the missing data
@@ -229,7 +244,7 @@ def fun():
                 for word in stripped_amino_acid:
                     amino_acid_count+=1
                     sequence_list.append(str(amino_acid_count)+word)
-#Extracts and combines the amino acid number, type, and its chemical shift and error from SPArta+ pred.tab
+#Extracts and combines the amino acid number, type, and its chemical shift and error from SPARTA+ pred.tab
 #Since prolines lack the amide nitrogen and hydrogen, they are added in
         os.chdir(sparta_directory)
         text_area.insert(tk.INSERT,'Creating Sparta File\n')
@@ -259,6 +274,7 @@ def fun():
                             sparta_file_list1.append(f'{proline_count.group(0)}PHN'+' 1000'+' 1000')
                             y=0
 #Mutations that deviate from the crystal structure used for SPARTA+ are replaced with the appropriate amino acid type, and values replaced by 1000
+#Designed to go through multiple mutation inputs (if doule or triple mutant)
         for mutations,mutations2 in zip(mutation_list1,mutation_list2):
             for amino_acids in sparta_file_list1:
                 if re.findall(mutations,amino_acids):
@@ -270,7 +286,7 @@ def fun():
                     sparta_file_list2.append(mutation_replacement)
                 else:
                     sparta_file_list2.append(amino_acids)
-
+#Only appends amino acids that are within your sequence list. If crystal structure is truncated, or has more amino acids than you are looking at, they are ignored.
         sparta_file_list3=[]
         for aa in sparta_file_list2:
             modifiers=aa.strip()
@@ -281,7 +297,8 @@ def fun():
             if sparta_sequence_comparison != []:
                 sparta_file_list3.append(aa)
 
-
+#The first amino acid will only lack the amide nitrogen and hydrogen.
+#This goes through the first 5 entires, if the 5th entry does not equal the 4th, then the first 4 entires (the first amino acid) is removed.
         temp_list=[]
         temp_counter=0
         for checker in sparta_file_list3:
@@ -296,7 +313,8 @@ def fun():
                 else:
                     del sparta_file_list3[0:4]
                     break
-
+#The last amino acid will be missing the carbonyl
+#At this point, every amino acids should have 6 entries, if the file is not divisible by 6, the last 5 (the last amino acid) is removed
         if len(sparta_file_list3)%6 != 0:
             del sparta_file_list3[-5:-1]
 
@@ -322,7 +340,7 @@ def fun():
             for line in NHSQC:
                 modifications=line.strip().upper()
                 if re.findall('^[A-Z]\d+[A-Z]',modifications):
-        #This portion fills in any gaps in the data (portion important regarding this post)
+        #This portion fills in any gaps in the data
                     C=re.search(r'\d+',modifications)
                     for a in list2:
                         if a == int(C.group(0)):
@@ -370,7 +388,7 @@ def fun():
                         else:
                             list5.append(f'{A.group(0)}N-CB'+ ' 1000' +'\n')
                     list5.append(splitting1[0]+ ' '+ splitting1[2] + '\n')
-        #print(list5)
+#This part compares the peaklist to the SPARTA file, and only appens amino acids that are in both SPARTA and the Peaklist file
         text_area.insert(tk.INSERT,'Converting Peaklist to match Sparta\n')
         text_area.update_idletasks()
         list3=[]
@@ -388,8 +406,11 @@ def fun():
             else:
                 count+=1
                 if count==6:
+                    #if any amino acid is the peaklist, but not SPARTA file, it will be excluded and printed out here
                     count=0
                     text_area.insert(tk.INSERT,f'{splitting5[0]} was excluded\n')
+#This portion calculates the RMSD. First calculates the square deviations of each amino acid with its SPARTA counterpart
+#Then it sums up these deviations (once you've done all 6 atoms), if the RMSD is above the set threshold, it prints it out
         list4=[]
         number=0
         for experimental,predictions in zip(list3,sparta_file_list3):
@@ -405,8 +426,10 @@ def fun():
             if number%6 ==0:
                 rmsd=math.sqrt((1/5)*sum(list4))
                 list4.clear()
-                if rmsd>3:
-                    text_area.insert(tk.INSERT,f'{splitting6[0]} had a rmsd less than the threshold (3)',f'rmsd={rmsd}\n')
+                if rmsd>float(set_threshold):
+                    text_area.insert(tk.INSERT,f'{splitting6[0]} had a rmsd of {rmsd}\n')
+                    #text_area.insert(tk.INSERT,f'rmsd={rmsd}\n')
+#The compiled files can be useful to use for other SPARTA comparisons (such as determing unknowns), so they are saved for later use
         os.chdir(save_directory)
         with open(save_file_sparta,'w') as file, open(save_file_peaklist,'w') as file2:
             for stuff_to_write in sparta_file_list3:
@@ -429,5 +452,7 @@ tk.Button(root,text='enter',command=seq_number).grid(row=10,column=2)
 tk.Button(root,text='enter',command=threshold).grid(row=11,column=2)
 tk.Button(root,text='quit',command=root.quit).grid(row=12,column=1)
 tk.Button(root,text='run',command=fun).grid(row=12,column=0)
+tk.Button(root,text='help',command=help).grid(row=13,column=0)
 
-tk.mainloop()
+root.mainloop()
+#tk.mainloop()
