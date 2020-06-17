@@ -2,7 +2,7 @@ The test files are each formatted and set up properly. To test the script, brows
 There is a R133A mutation. 
 In the first grid type: 133R 
 In the 2nd type: 133A
-The amino acid starts from the number 1
+The amino acid starts from the number 1.
 If threshold is set to 2, this is the output:
 ```
 Starting Program
