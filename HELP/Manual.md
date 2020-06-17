@@ -26,16 +26,18 @@ To quick search the manual, ctrl+f search these titles for each section:
 
 
 #############SPARTA File###########
+
 The sparta file must be the original sparta format:
-
+```
    3    Y   HA     0.000     4.561     4.550     0.018     0.000     0.201
-
+```
 This file is obtained by using SPARTA+ on the crystal structure of your protein. The output of SPARTA+ will be pred.tab.
 However, you may rename the file whatever you'd like. The program is designed to work with the direct output of SPARTA+, so no modifications are needed. 
 You can load this by clicking the browse button, navigating to the folder that contains the pred.tab file, and simply clicking on it. 
 
 #############Sequence File###########
-The sequence file must be single-letter abbreviation:
+The sequence file must be single-letter a
+bbreviation:
 ```
 MSYQVLAR...
 ```
@@ -43,6 +45,7 @@ It should be a txt file containing only the sequences (no header). I might chang
 You can load this by clicking the browse button, navigating to the folder that contains the pred.tab file, and simply clicking on it. 
 
 #############NHSQC File###########
+
 The NHSQC peaklist must be in the SPARKY format and sorted by resonance:
 ```
            Y3N-HN    121.699      7.992 
@@ -87,6 +90,7 @@ Thus, no modifications are required.
 You can load this by clicking the browse button, navigating to the folder that contains the pred.tab file, and simply clicking on it.
 
 #############Save SPARTA and Peaklist Files###########
+
 The script modifies the SPARTA file to only include the amino acids within your sequence. Any other amino acids in the pred.tab will be removed. Additionally, if the portion of the sequence you are using is the start of the crystal structure, the first amino acid will be removed (since it lacks both the amide nitrogen and hydrogen). If the portion of the sequence you are using ends at the end of the crystal structure, the last amino acid will be removed (it lacks a carbonyl). Prolines have their amide nitrogen and hydrogen added (with values of 1000 given to them). The final file will only contain the residue number, residue type, atom type, predicted chemical shift, and error. 
 
 ```
@@ -130,6 +134,7 @@ If you have a double, triple, etc. mutant, seperate these with spaces
 **If you have no mutations, leave these entries blank.** 
 
 #############Sequence Number Start############
+
 The sequence may be the start of the protein, it might be in the middle of the protein. It is important to specify what the residue number of the first amino acid in the sequence file is. 
 
 If sequence is:
@@ -148,6 +153,7 @@ Then enter 5
 **Click enter to input entry**
 
 #############Threshold############
+
 The threshold allows you to set whatever RMSD threshold you want (2, 2.2, 2.25, 2.253, etc.). Generally, an RMSD between 2-3 means your assignment is "accurate" (assuming the crystal structure is an accurate representation of your protein). 
 
 **Click enter to input entry**
