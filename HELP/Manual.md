@@ -36,8 +36,8 @@ However, you may rename the file whatever you'd like. The program is designed to
 You can load this by clicking the browse button, navigating to the folder that contains the pred.tab file, and simply clicking on it. 
 
 #############Sequence File###########
-The sequence file must be single-letter a
-bbreviation:
+
+The sequence file must be single-letter abbreviation:
 ```
 MSYQVLAR...
 ```
