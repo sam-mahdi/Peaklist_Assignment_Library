@@ -62,7 +62,7 @@ tk.Label(root, text="Save Sparta Filename").grid(row=6)
 tk.Label(root, text="Save Peaklist Filename").grid(row=7)
 tk.Label(root, text="Mutations (enter what amino acid was mutated E.G.if mutation was R133A, type 133R)\n If multiple mutations, seperate with space.\n Hit enter when done").grid(row=8)
 tk.Label(root, text="Mutations (enter what it was mutated to E.G. if mutation was R133A, type 133A)\n If multiple mutations, seperate with space.\n Hit enter when done").grid(row=9)
-tk.Label(root, text="Sequence number start: Please type what number the first amino acid in the sequence file is in the pdb file used for SPARTA\nI.E. if the first amino acid in the sequence is 20 in the pdb, type in 20\n Click enter when done").grid(row=10)
+tk.Label(root, text="Please type in what residue number the first amino acid in the sequence file is\nI.E. if the first amino acid in the sequence file is 20, type in 20\n Click enter when done").grid(row=10)
 tk.Label(root, text="Set RMSD Threshold (Recommended 2-3). Click enter when done").grid(row=11)
 
 
