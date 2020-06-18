@@ -1,6 +1,6 @@
 This is the manual for SAVUS. This program is written in python 3.7, and uses tkinter, PIL, and webbrowser. 
 The program requires a sparta prediction file, sequence file, NHSQC peaklist, HNCA peaklist, HNCACB peaklist, and the HNCO peaklist. 
-The program calculates the RMSD values between the experimental values and the predicted values obtained from SPARTA+
+The program calculates the RMSD values between the experimental values and the predicted values obtained from SPARTA+ (**except for proline)**
 The program prints the amino acids that were excluded from the calculation, and the amino acids that had RMSD values below the set threshold. 
 Additionally, the program writes the modified sparta and compiled peaklist files, for use in other programs. 
 Requirements:
