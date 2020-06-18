@@ -362,6 +362,9 @@ def fun():
                     list5.append(splitting1[0]+ ' '+ splitting1[1] + '\n')
                     A=re.search(r'[A-Z]\d+',modifications)
                     list5.append(f'{A.group(0)}N-HA'+ ' 1000' + '\n')
+                    glycine_search=re.search(r'^G',modifications)
+                    if glycine_search != None:
+                        list5.append(f'{A.group(0)}N-HA2'+ ' 1000' + '\n')
                     with open(HNCA_file) as HNCA,open(HNCO_file) as HNCO, open (HNCACB_file) as HNCACB:
                         for line3 in HNCO:
                             modifications3=line3.strip().upper()
@@ -382,6 +385,8 @@ def fun():
                         for line4 in HNCACB:
                             modifications4=line4.strip().upper()
                             splitting4=modifications4.split()
+                            if glycine_search != None:
+                                break
                             if re.findall(f'{A.group(0)}N-CB',modifications4):
                                 list5.append(splitting4[0] + ' '+splitting4[2]+'\n')
                                 break
@@ -420,15 +425,16 @@ def fun():
             square_deviation=((float(splitting7[1])-float(splitting6[1]))**2)/((float(splitting7[2]))**2)
             if square_deviation>100:
                 square_deviation=0
-                list4.append(square_deviation)
             else:
                 list4.append(square_deviation)
             if number%6 ==0:
-                rmsd=math.sqrt((1/5)*sum(list4))
-                list4.clear()
-                if rmsd>float(set_threshold):
-                    text_area.insert(tk.INSERT,f'{splitting6[0]} had a rmsd of {rmsd}\n')
-                    #text_area.insert(tk.INSERT,f'rmsd={rmsd}\n')
+                if len(list4)==0:
+                    continue
+                else:
+                    rmsd=math.sqrt((1/int(len(list4)))*sum(list4))
+                    list4.clear()
+                    if rmsd>float(set_threshold):
+                        text_area.insert(tk.INSERT,f'{splitting6[0]} had a rmsd of {rmsd}\n')
 #The compiled files can be useful to use for other SPARTA comparisons (such as determing unknowns), so they are saved for later use
         os.chdir(save_directory)
         with open(save_file_sparta,'w') as file, open(save_file_peaklist,'w') as file2:
