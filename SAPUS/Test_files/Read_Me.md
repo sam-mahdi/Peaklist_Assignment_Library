@@ -1,4 +1,4 @@
-These test show both the capabilites of confirming assignments, and assigning peaks even when you only have the i and i-1
+These tests show both the capabilites of confirming assignments, and assigning peaks even when you only have the i and i-1
 Using the SAVUS_sparta_input file with assigned_peak_list file with a threshold of 2, generates this output
 Diagonal Sum
 ```
