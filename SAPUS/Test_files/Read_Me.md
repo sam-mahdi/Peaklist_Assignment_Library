@@ -38,6 +38,7 @@ Combined sum (sorted by rmsd)
 ```
 
 Using the SAVUS_sparta_input file with the unassigned_peak_list file (generated using SAG) using a threshold of 1.2, generates this output:
+
 Diagonal Sum
 ```
 Diagonal Sum (sorted by rmsd value)
@@ -65,4 +66,4 @@ Combined sum (sorted by rmsd)
 241L-242G rmsd=1.07
 194E-195H rmsd=1.14
 ```
-
+Confirming our uknown peaks are in fact Q84 and G85
