@@ -15,7 +15,7 @@ import webbrowser
 
 root = tk.Tk()
 root.title('SAVUS')
-#RThis is for fitting the image to the size of the GUI
+#This is for fitting the image to the size of the GUI
 #def on_resize(event):
 #    image = bgimg.resize((event.width, event.height), Image.ANTIALIAS)
 #    l.image = ImageTk.PhotoImage(image)
@@ -240,6 +240,7 @@ def sparta_gen_only():
         y=0
         sparta_file_list1=[]
         sparta_file_list2=[]
+        proline_counter=0
         with open(sparta_file) as sparta_predictions:
             for line in sparta_predictions:
                 modifier=line.strip().upper()
@@ -249,18 +250,20 @@ def sparta_gen_only():
                     del A[3]
                     A[0:3]=["".join(A[0:3])]
                     joined=" ".join(A)
-                    sparta_file_list1.append(joined)
                     proline_searcher=re.search('\BP',joined)
-                    if proline_searcher==None:
-                        continue
-                    else:
-                        y+=1
-                        if y==4:
-                            #only for y==4, otherwise these proline additions would be added everytime proline is found (and we only want 2 additions per proline)
+                    if proline_searcher != None:
+                        proline_counter+=1
+                        if proline_counter<2:
                             proline_count=re.search('^\d+',joined)
                             sparta_file_list1.append(f'{proline_count.group(0)}PN'+' 1000'+' 1000')
+                    sparta_file_list1.append(joined)
+                    if proline_searcher != None:
+                        y+=1
+                        if y==4:
+                            proline_count=re.search('^\d+',joined)
                             sparta_file_list1.append(f'{proline_count.group(0)}PHN'+' 1000'+' 1000')
                             y=0
+                            proline_counter=0
 #Mutations that deviate from the crystal structure used for SPARTA+ are replaced with the appropriate amino acid type, and values replaced by 1000
 #Designed to go through multiple mutation inputs (if doule or triple mutant)
         for mutations,mutations2 in zip(mutation_list1,mutation_list2):
@@ -309,6 +312,7 @@ def sparta_gen_only():
         with open(save_file_sparta,'w') as file:
             for stuff_to_write in sparta_file_list3:
                 file.write(stuff_to_write+'\n')
+        text_area.insert(tk.INSERT,'Sparta file written\n')
 
 def fun():
     text_area.delete(1.0,END)
@@ -352,6 +356,7 @@ def fun():
         y=0
         sparta_file_list1=[]
         sparta_file_list2=[]
+        proline_counter=0
         with open(sparta_file) as sparta_predictions:
             for line in sparta_predictions:
                 modifier=line.strip().upper()
@@ -361,18 +366,20 @@ def fun():
                     del A[3]
                     A[0:3]=["".join(A[0:3])]
                     joined=" ".join(A)
-                    sparta_file_list1.append(joined)
                     proline_searcher=re.search('\BP',joined)
-                    if proline_searcher==None:
-                        continue
-                    else:
-                        y+=1
-                        if y==4:
-                            #only for y==4, otherwise these proline additions would be added everytime proline is found (and we only want 2 additions per proline)
+                    if proline_searcher != None:
+                        proline_counter+=1
+                        if proline_counter<2:
                             proline_count=re.search('^\d+',joined)
                             sparta_file_list1.append(f'{proline_count.group(0)}PN'+' 1000'+' 1000')
+                    sparta_file_list1.append(joined)
+                    if proline_searcher != None:
+                        y+=1
+                        if y==4:
+                            proline_count=re.search('^\d+',joined)
                             sparta_file_list1.append(f'{proline_count.group(0)}PHN'+' 1000'+' 1000')
                             y=0
+                            proline_counter=0
 #Mutations that deviate from the crystal structure used for SPARTA+ are replaced with the appropriate amino acid type, and values replaced by 1000
 #Designed to go through multiple mutation inputs (if doule or triple mutant)
         for mutations,mutations2 in zip(mutation_list1,mutation_list2):
