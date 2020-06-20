@@ -134,10 +134,9 @@ tk.Button(root,text='enter values',command=generate_files).grid(row=6,column=0)
 tk.Button(root,text='save/write file',command=write_file).grid(row=6,column=1)
 tk.Button(root,text='browse',command=save_file2).grid(row=5,column=2)
 tk.Button(root,text='quit',command=root.quit).grid(row=6,column=2)
-tk.Button(root,text='help',command=help).grid(row=4,column=0)
+tk.Button(root,text='help',command=help).grid(row=6,column=3)
 
 
 
 
 root.mainloop()
-
