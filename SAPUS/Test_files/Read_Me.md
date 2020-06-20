@@ -4,36 +4,29 @@ Diagonal Sum
 ```
 Diagonal Sum (sorted by rmsd value)
 84Q-88V rmsd=1.06
-143L-147P rmsd=1.64
 34L-38H rmsd=1.67
-159P-163P rmsd=1.67
-8R-12P rmsd=1.79
+8R-12P rmsd=1.73
 193E-197A rmsd=1.86
-144E-148E rmsd=1.90
-198H-202A rmsd=1.91
-112Q-116A rmsd=1.97
+159P-163P rmsd=1.91
 233S-237V rmsd=1.97
 ```
 Combined RMSD
 ```
 Collective RMSD (sorted by rmsd value)
 84Q-88V rmsd=1.10
-143L-147P rmsd=1.79
-8R-12P rmsd=1.80
+8R-12P rmsd=1.71
 34L-38H rmsd=1.83
 193E-197A rmsd=1.94
-198H-202A rmsd=1.96
 233S-237V rmsd=1.98
+198H-202A rmsd=1.99
 ```
 Combined Sum
 ```
 Combined sum (sorted by rmsd)
 84Q-88V rmsd=1.08
-143L-147P rmsd=1.71
 34L-38H rmsd=1.75
-8R-12P rmsd=1.79
+8R-12P rmsd=1.72
 193E-197A rmsd=1.90
-198H-202A rmsd=1.93
 233S-237V rmsd=1.97
 ```
 
@@ -44,7 +37,6 @@ Diagonal Sum
 Diagonal Sum (sorted by rmsd value)
 84Q-85G rmsd=0.76
 212G-213S rmsd=0.94
-146P-147P rmsd=0.98
 241L-242G rmsd=1.03
 194E-195H rmsd=1.20
 ```
@@ -52,7 +44,6 @@ Collective RMSD
 ```
 Collective RMSD (sorted by rmsd value)
 84Q-85G rmsd=0.77
-146P-147P rmsd=0.98
 212G-213S rmsd=0.99
 194E-195H rmsd=1.08
 241L-242G rmsd=1.11
@@ -62,7 +53,6 @@ Combined Sum
 Combined sum (sorted by rmsd)
 84Q-85G rmsd=0.77
 212G-213S rmsd=0.96
-146P-147P rmsd=0.98
 241L-242G rmsd=1.07
 194E-195H rmsd=1.14
 ```
