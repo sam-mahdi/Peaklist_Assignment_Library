@@ -10,13 +10,14 @@ import re
 import numpy as np
 import matplotlib.pyplot as plt
 import mplcursors
+import webbrowser
 
 
 
 
 
 root = tk.Tk()
-root.title('SparkPred')
+root.title('SOPUS')
 root.geometry('800x600')
 
 class ReadOnlyText(st.ScrolledText):
@@ -72,6 +73,9 @@ def threshold():
     global set_threshold
     set_threshold=float(threshold_input)
     text_area.insert(tk.INSERT,f'RMSD Threshold set: {threshold_input} \n')
+
+def help():
+    webbrowser.open('https://github.com/sam-mahdi/SPARKY-Assignment-Tools/blob/master/SAPUS/Manual/SAPUS_Manual.md')
 
 def clear_option():
     text_area.delete(1.0,END)
@@ -444,7 +448,8 @@ tk.Button(root,text='run using combined sum',command=combined_sum).grid(row=3,co
 tk.Button(root,text='Clear',command=clear_option).grid(row=4,column=1)
 tk.Button(root,text='enter',command=threshold).grid(row=2,column=2)
 tk.Button(root,text='quit',command=root.quit).grid(row=4,column=2)
+tk.Button(root,text='help',command=help).grid(row=4,column=0)
+
 
 
 root.mainloop()
-
