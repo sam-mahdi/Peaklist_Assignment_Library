@@ -208,7 +208,107 @@ def threshold():
     text_area.insert(tk.INSERT,f'RMSD Threshold set: {threshold_input} \n')
 
 def help():
-    webbrowser.open('https://github.com/sam-mahdi/SAVUS/blob/master/HELP/Manual.md')
+    webbrowser.open('https://github.com/sam-mahdi/SPARKY-Assignment-Tools/blob/master/SAVUS/HELP/SAVUS_Manual.md')
+
+def sparta_gen_only():
+    text_area.delete(1.0,END)
+    if sparta_file == ():
+        text_area.insert(tk.INSERT,'please upload your sparta file (make sure to use browse)\n')
+    if seq_file == ():
+        text_area.insert(tk.INSERT,'please upload your seq file (make sure to use browse)\n')
+    if save_file_sparta == ():
+        text_area.insert(tk.INSERT,'please indicate sparta save file (make sure to use browse)\n')
+    if seq_start == ():
+        text_area.insert(tk.INSERT,'please enter a seq number (make sure to hit enter)\n')
+    else:
+        text_area.insert(tk.INSERT,'Starting Program\n')
+#Determines the number of amino acids, used for filling in the missing data
+        amino_acid_count=(0+seq_start)-1
+        os.chdir(seq_directory)
+        sequence_list=[]
+        with open(seq_file) as sequence_file:
+            for amino_acid in sequence_file:
+                stripped_amino_acid=amino_acid.strip().upper()
+                for word in stripped_amino_acid:
+                    amino_acid_count+=1
+                    sequence_list.append(str(amino_acid_count)+word)
+#Extracts and combines the amino acid number, type, and its chemical shift and error from SPARTA+ pred.tab
+#Since prolines lack the amide nitrogen and hydrogen, they are added in
+        os.chdir(sparta_directory)
+        text_area.insert(tk.INSERT,'Creating Sparta File\n')
+        text_area.update_idletasks()
+        y=0
+        sparta_file_list1=[]
+        sparta_file_list2=[]
+        with open(sparta_file) as sparta_predictions:
+            for line in sparta_predictions:
+                modifier=line.strip().upper()
+                if re.findall('^\d+',modifier):
+                    A=modifier.split()
+                    del A[5:8]
+                    del A[3]
+                    A[0:3]=["".join(A[0:3])]
+                    joined=" ".join(A)
+                    sparta_file_list1.append(joined)
+                    proline_searcher=re.search('\BP',joined)
+                    if proline_searcher==None:
+                        continue
+                    else:
+                        y+=1
+                        if y==4:
+                            #only for y==4, otherwise these proline additions would be added everytime proline is found (and we only want 2 additions per proline)
+                            proline_count=re.search('^\d+',joined)
+                            sparta_file_list1.append(f'{proline_count.group(0)}PN'+' 1000'+' 1000')
+                            sparta_file_list1.append(f'{proline_count.group(0)}PHN'+' 1000'+' 1000')
+                            y=0
+#Mutations that deviate from the crystal structure used for SPARTA+ are replaced with the appropriate amino acid type, and values replaced by 1000
+#Designed to go through multiple mutation inputs (if doule or triple mutant)
+        for mutations,mutations2 in zip(mutation_list1,mutation_list2):
+            for amino_acids in sparta_file_list1:
+                if re.findall(mutations,amino_acids):
+                    splitting=amino_acids.split()
+                    mutation=re.sub(mutations,mutations2,splitting[0])
+                    mutation_value=re.sub('\d+.\d+',' 1000',splitting[1])
+                    mutation_value2=re.sub('\d+.\d+',' 1000',splitting[2])
+                    mutation_replacement=mutation+mutation_value+mutation_value2
+                    sparta_file_list2.append(mutation_replacement)
+                else:
+                    sparta_file_list2.append(amino_acids)
+#Only appends amino acids that are within your sequence list. If crystal structure is truncated, or has more amino acids than you are looking at, they are ignored.
+        sparta_file_list3=[]
+        for aa in sparta_file_list2:
+            modifiers=aa.strip()
+            splitter=modifiers.split()
+            searcher=re.search('^\d+[A-Z]',splitter[0])
+            compiler=re.compile(searcher.group(0))
+            sparta_sequence_comparison=list(filter(compiler.match,sequence_list))
+            if sparta_sequence_comparison != []:
+                sparta_file_list3.append(aa)
+
+#The first amino acid will only lack the amide nitrogen and hydrogen.
+#This goes through the first 5 entires, if the 5th entry does not equal the 4th, then the first 4 entires (the first amino acid) is removed.
+        temp_list=[]
+        temp_counter=0
+        for checker in sparta_file_list3:
+            temp_modifier=checker.strip()
+            temp_split=temp_modifier.split()
+            temp_finder=re.search('^\d+',temp_split[0])
+            temp_list.append(temp_finder.group(0))
+            temp_counter+=1
+            if temp_counter==5:
+                if int(temp_finder.group(0))==int(temp_list[0]):
+                    break
+                else:
+                    del sparta_file_list3[0:4]
+                    break
+#The last amino acid will be missing the carbonyl
+#At this point, every amino acids should have 6 entries, if the file is not divisible by 6, the last 5 (the last amino acid) is removed
+        if len(sparta_file_list3)%6 != 0:
+            del sparta_file_list3[-5:-1]
+        os.chdir(save_directory)
+        with open(save_file_sparta,'w') as file:
+            for stuff_to_write in sparta_file_list3:
+                file.write(stuff_to_write+'\n')
 
 def fun():
     text_area.delete(1.0,END)
@@ -435,6 +535,7 @@ def fun():
                     list4.clear()
                     if rmsd>float(set_threshold):
                         text_area.insert(tk.INSERT,f'{splitting6[0]} had a rmsd of {rmsd}\n')
+                    #text_area.insert(tk.INSERT,f'rmsd={rmsd}\n')
 #The compiled files can be useful to use for other SPARTA comparisons (such as determing unknowns), so they are saved for later use
         os.chdir(save_directory)
         with open(save_file_sparta,'w') as file, open(save_file_peaklist,'w') as file2:
@@ -459,6 +560,7 @@ tk.Button(root,text='enter',command=threshold).grid(row=11,column=2)
 tk.Button(root,text='quit',command=root.quit).grid(row=12,column=1)
 tk.Button(root,text='run',command=fun).grid(row=12,column=0)
 tk.Button(root,text='help',command=help).grid(row=13,column=0)
+tk.Button(root,text='generate SPARTA file only (for SOPUS)',command=sparta_gen_only).grid(row=13,column=1)
 
 root.mainloop()
 #tk.mainloop()
