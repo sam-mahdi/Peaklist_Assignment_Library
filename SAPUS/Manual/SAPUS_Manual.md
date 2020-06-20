@@ -25,10 +25,12 @@ To quick search the manual, ctrl+f search these titles for each section:
   c)#Confirming Assignment of peaks#
 
 #############SPARTA File###########
+
 The SPARTA+ format must follow the SAVUS format. There is an option in SAVUS to only generate a SPARTA+ file. Simply upload the raw pred.tab SPARTA+ file with your sequence, indicate sequence number and any mutations in you sample that deviate from the crystal structure used for SPARTA. 
 
 #############Chemical shift File###########
-You may make your own chemical shift file, or use SAG to generate one. SAVUS also generates a compiled chemical shift file from the NHSQC, HNCA, HNCO, HNCACB peaklists that is properly formatted. To make your own, the format must follow:
+
+You may make your own chemical shift file, or use SAG to generate one. SAVUS also generates a compiled chemical shift file from the NHSQC, HNCA, HNCO, HNCACB peaklists that is properly formatted. To make your own, the format must follow **The i-1 amino acid must be first, followed by the i amino acid**:
 
 ```
 X1N-HN 113.882
@@ -54,6 +56,7 @@ With the amino acid followed by its value, in the order of N, HA, HA2, C, CA, HN
 
 
 #############Set threshold###########
+
 Only the values that are below the rmsd threshold will be displayed. If you set your threshold too high, you'll get too many matchs. If you set your threshold too low, you might not get any matches. Usually values below 2-3 are considered acceptable. 
 
 
@@ -61,6 +64,7 @@ Only the values that are below the rmsd threshold will be displayed. If you set 
 
 
 #############Diagonal Sum###########
+
 This method calculates the rmsd of each amino acid with every single amino acid in SPARTA. Generating an array of RMSDs. 
 ```
                        Q4    V5  Y6 ....Sparta amino acids  
@@ -89,6 +93,7 @@ Before, unknown amino acid 1 seemed to fit Y6N, but using a diagonal vector, now
 
 
 #############RMSD Sum###########
+
 Rather than compare the RMSD of one amino acid with one sparta amino acid, instead the RMSD of the entire group of amino acids is calculated with a group of SPARTA amino acids. 
 ```
 Diagonal Sum (1 experimental with 1 predicted)
@@ -105,11 +110,13 @@ where Nexp1, Nexp2, and Nexp3 is the nitrogen  experimental chemical shift of Un
 The increase in parameters (number of atoms used to calculate RMSD) causes a greater variation in the rmsd values between matches. Thus you are less likely to get rmsd values lower than your actual match. 
 
 #############Combined Sum###########
+
 To maximize the differentiaton between various potential matches, you can combine the values from both techniques. While this may cause a greater differentiation between matches, it can also swing both ways. Neither of the 2 above techniques is completely false positive proof, and whereas one technique may provide a match with the lowest rmsd, the other may have a higher value. Combining the proper fit with the improper one may lead to a false postive, where the lowest rmsd is now not the best match. Thus, it is best to look across all 3 techniques to make the best decision. 
 
 #############Uses###########
 
 #############Use for i+1 or i-1##########
+
 When trying to find an i-1 or i+1 of an amino acid, you may have multiple potential options. To narrow down your options and find the best fit, you can generate a file of your assigned amino acids using SAVUS, then the chemical shift values of your various potentials and determine which gives the lowest rmsd value. 
 ```
 Known/Assigned peaks
@@ -187,6 +194,7 @@ X2N-HN 7.837
 Cycle through your options, and see which amino acid gives you the lowest rmsd value in the appropriate range (for the above example, you would be looking at the lowest rmsd value for G85). 
 
 #############Use for unknown/unassigned peaks##########
+
 In many instances, you may not find any matches for a particular peak. However, you will have both the i CA,CB and i-1 CA,CB in addition the carbonly of the i-1 and the N and HN of the i. This alone may be enough to get a match. 
 ```
 X1N-HN 113.882
@@ -204,6 +212,7 @@ X2N-HN 7.837
 ```
 In other cases you may have 3 or 4 matches, however the chemical shifts are all in non-unique ranges. SPARTA is also particular useful for this as well. 
 #############Confirming Assignment of peaks##########
+
 During the assignment process, there are many isntances where you may doubt a series of your assignmnents or question their validity. While SOVUS can be used, that is designed more for the entire protein. Use SOVUS to generate a properly formatted/compiled peaklist file. Then use SOPUS to confirm the range of amino acids you are looking for has the lowest rmsd value. 
 
 ```
