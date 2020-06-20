@@ -4,6 +4,9 @@ This will compile your amino acid in the proper format. To add more amino acids,
 amino acid, and click add values. **If there is no value for a particular atom, leave it blank.** 
 You may add as many values as you wish. When done, choose your save file (use browse) and click save/write file. 
 
+**Input i-1 first, followed by the i peak**
+
+
 Input
 ```
 Inputed Values:
