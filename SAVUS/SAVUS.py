@@ -7,7 +7,7 @@ import re
 import tkinter.scrolledtext as st
 from tkinter import ttk
 import functools
-#from PIL import ImageTk, Image
+from PIL import ImageTk, Image
 import webbrowser
 
 
@@ -16,17 +16,17 @@ import webbrowser
 root = tk.Tk()
 root.title('SAVUS')
 #This is for fitting the image to the size of the GUI
-#def on_resize(event):
-#    image = bgimg.resize((event.width, event.height), Image.ANTIALIAS)
-#    l.image = ImageTk.PhotoImage(image)
-#    l.config(image=l.image)
+def on_resize(event):
+    image = bgimg.resize((event.width, event.height), Image.ANTIALIAS)
+    l.image = ImageTk.PhotoImage(image)
+    l.config(image=l.image)
 
 root.geometry('1200x800')
 
-#bgimg = Image.open('kermit.jpg')
-#l = tk.Label(root)
-#l.place(x=0, y=0, relwidth=1, relheight=1)
-#l.bind('<Configure>', on_resize)
+bgimg = Image.open('kermit.jpg')
+l = tk.Label(root)
+l.place(x=0, y=0, relwidth=1, relheight=1)
+l.bind('<Configure>', on_resize)
 #This enables the output box to update, but prevents the user from typing stuff into it (read only)
 class ReadOnlyText(st.ScrolledText):
     def __init__(self, *args, **kwargs):
@@ -46,7 +46,7 @@ class ReadOnlyText(st.ScrolledText):
         return wrap
 
 
-ttk.Label(root,text = "Program Output",font = ("Times New Roman", 15),background = 'green',foreground = "white").grid(column = 0, row = 15)
+ttk.Label(root,text = "Program Output",font = ("Times New Roman", 15),background = 'green',foreground = "white").grid(column = 0, row = 16)
 
 text_area = ReadOnlyText(root,width = 40,height = 10,font = ("Times New Roman",12))
 
@@ -65,6 +65,7 @@ tk.Label(root, text="Mutations (enter what it was mutated to E.G. if mutation wa
 tk.Label(root, text="Please type in what residue number the first amino acid in the sequence file is\nI.E. if the first amino acid in the sequence file is 20, type in 20\n Click enter when done").grid(row=10)
 tk.Label(root, text="Set RMSD Threshold (Recommended 2-3). Click enter when done").grid(row=11)
 tk.Label(root, text="NMR_STAR V3").grid(row=12)
+tk.Label(root, text="Offset value (if protein contains tag, indicate how many amino acids in tag e.g. His-Tag pETDeut is 14)\n If no tag, leave blank. Click enter when done. ").grid(row=13)
 
 
 e1 = tk.Entry(root)
@@ -80,6 +81,7 @@ e10 = tk.Entry(root)
 e11 = tk.Entry(root)
 e12 = tk.Entry(root)
 e13 = tk.Entry(root)
+e14 = tk.Entry(root)
 e1.grid(row=0, column=1)
 e2.grid(row=1, column=1)
 e3.grid(row=2, column=1)
@@ -93,6 +95,7 @@ e10.grid(row=9, column=1)
 e11.grid(row=10, column=1)
 e12.grid(row=11, column=1)
 e13.grid(row=12, column=1)
+e14.grid(row=13, column=1)
 
 #These global values are what is entered by the user, and use within the script
 sparta_file=()
@@ -116,6 +119,7 @@ seq_start=()
 set_threshold=()
 nmrstarfile=()
 nmrstarfile_directory=()
+offset_value=()
 
 #These functions define the function of the buttons
 def input_file():
@@ -211,6 +215,11 @@ def threshold():
     global set_threshold
     set_threshold=float(threshold_input)
     text_area.insert(tk.INSERT,f'RMSD Threshold set: {threshold_input} \n')
+def offset_fun():
+    offset_input=e14.get()
+    global offset_value
+    offset_value=int(offset_input)
+    text_area.insert(tk.INSERT,f'Offset Value set: {offset_value} \n')
 
 def help():
     webbrowser.open('https://github.com/sam-mahdi/SPARKY-Assignment-Tools/blob/master/SAVUS/HELP/SAVUS_Manual.md')
@@ -586,7 +595,7 @@ def nmrstarrun():
         text_area.insert(tk.INSERT,'please enter a threshold (make sure to hit enter)\n')
     if seq_start == ():
         text_area.insert(tk.INSERT,'please enter a seq number (make sure to hit enter)\n')
-    if seq_start == ():
+    if nmrstarfile == ():
         text_area.insert(tk.INSERT,'please upload your nmrstar file (make sure to use browse)\n')
     else:
         text_area.insert(tk.INSERT,'Starting Program\n')
@@ -689,6 +698,7 @@ def nmrstarrun():
         os.chdir(nmrstarfile_directory)
         final_list=[]
         x=0
+        print(offset_value)
         with open(nmrstarfile) as file:
           for lines in file:
             modifier=lines.strip()
@@ -696,7 +706,10 @@ def nmrstarrun():
             if A != None:
                 atom_search=A.string
                 C=atom_search.split()
-                amino_acid_number=C[19]
+                if offset_value == ():
+                    amino_acid_number=C[5]
+                else:
+                    amino_acid_number=str(int(C[5])-offset_value)
                 residue_type=C[6]
                 atom_type=C[7]
                 converted=acid_map[residue_type]
@@ -945,11 +958,12 @@ tk.Button(root,text='enter',command=mutation_input2).grid(row=9,column=2)
 tk.Button(root,text='enter',command=seq_number).grid(row=10,column=2)
 tk.Button(root,text='enter',command=threshold).grid(row=11,column=2)
 tk.Button(root,text='browse',command=nmrstar).grid(row=12,column=2)
-tk.Button(root,text='Quit',command=root.quit).grid(row=15,column=1)
-tk.Button(root,text='Run using SPARKY files',command=fun).grid(row=13,column=0)
-tk.Button(root,text='Run using NMRSTAR V3 file',command=nmrstarrun).grid(row=13,column=1)
-tk.Button(root,text='Help',command=help).grid(row=14,column=0)
-tk.Button(root,text='Generate SPARTA file only (for SOPUS)',command=sparta_gen_only).grid(row=14,column=1)
+tk.Button(root,text='enter',command=offset_fun).grid(row=13,column=2)
+tk.Button(root,text='Quit',command=root.quit).grid(row=16,column=1)
+tk.Button(root,text='Run using SPARKY files',command=fun).grid(row=14,column=0)
+tk.Button(root,text='Run using NMRSTAR V3 file',command=nmrstarrun).grid(row=14,column=1)
+tk.Button(root,text='Help',command=help).grid(row=15,column=0)
+tk.Button(root,text='Generate SPARTA file only (for SOPUS)',command=sparta_gen_only).grid(row=15,column=1)
 
 root.mainloop()
 #tk.mainloop()
