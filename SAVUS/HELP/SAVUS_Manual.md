@@ -4,7 +4,7 @@ The program calculates the RMSD values between the experimental values and the p
 The program prints the amino acids that were excluded from the calculation, and the amino acids that had RMSD values below the set threshold. 
 Additionally, the program writes the modified sparta and compiled peaklist files, for use in SAPUS. 
 Requirements:
-1. The peaklists must be in a SPARKY format, ordered by resonance number. 
+1. The peaklists must be in a SPARKY format, ordered by resonance number (or NMRSTAR V3). 
 2. The sparta file must be in the same format as the direct output of SPARTA+ (pred.tab)
 3. The peaklist numbering must be identical to the number format used in the crystal structure 
 4. Each file must be uploaded using the browse option. Furthermore each value must be entered by clicking enter. 
