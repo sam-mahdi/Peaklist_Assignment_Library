@@ -1047,7 +1047,7 @@ def nmrstarrun2():
                     break
         if len(sparta_file_list3)%6 != 0:
             del sparta_file_list3[-5:-1]
-
+#NMRSTAR files are stored as 3 letter abbreviatons, SPARTA+ files use single letter, thus this dict will conver the 3 letter, into 1 letter
         acid_map = {
               'ASP':'D', 'THR':'T', 'SER':'S', 'GLU':'E',
               'PRO':'P', 'GLY':'G', 'ALA':'A', 'CYS':'C',
@@ -1059,6 +1059,8 @@ def nmrstarrun2():
         os.chdir(nmrstarfile_directory)
         final_list=[]
         x=0
+#NMRSTAR files contain a lot of into, and may have multiple formats. However all formats contain atom number, followed by amino acid type, and atom type
+#If protein contains tag, it will be missing in the SPARTA+ file. However, NMRSTAR includes tags into its atom_number ocunt. Thus, the offset will take this into account.
         with open(nmrstarfile) as file:
           for lines in file:
             modifier=lines.strip()
@@ -1074,7 +1076,10 @@ def nmrstarrun2():
                 atom_type=C[4]
                 converted=acid_map[residue_type]
                 chemical_shift=C[6]
+#NMSTAR sorta atom number and atom types in different format. This converts it into the SPARTA+ format
                 G=[amino_acid_number]+[converted]+[atom_type]+[chemical_shift]
+#NMRSTAR files can contain carbon/hydrogen info from side chain assignment. This is used to remove them and focus exlclusively on backbone.
+#As a result of this formatting tho, backbone atoms must use this nomenclature (i.e. H cannot be HN)
                 if atom_type == 'N' or atom_type == 'HA' or atom_type =='CA' or atom_type == 'CB' or atom_type=='H' or atom_type=='C':
                     joined=' '.join(G)
                     final_list.append(joined)
@@ -1084,10 +1089,12 @@ def nmrstarrun2():
         temp_list=[]
         temp_list2=[]
         temp_list3=[]
+#NMRSTAR sorts atoms in various ways. NMRSTAR 2 and 3 sort H,C,CA,CB,N whereas SPARKY converted NMRSTAR3 sorts C,CA,CB,N,HN this sorts them into the SPARTA+ order
         for amino_acids in final_list:
             splitter2=amino_acids.split()
-            #atom_type_list.append(splitter2[1])
             x+=1
+#This line states you start with the first amino acid, and then compare it to the 2nd. If they the same, then store the hydrogen, and nitrogen in different lists.
+#When you reach the end of the amino acid (splitter2[0]!=atom_number_list[0]) then combine everythin gin the proper format. I.E. N=temp_list2, C,CA,CB=temp_list3, H=temp_list
             if x >= 2:
                 if splitter2[0] != atom_number_list[0]:
                     list_compiler=temp_list2+temp_list3+temp_list
@@ -1118,14 +1125,14 @@ def nmrstarrun2():
                     temp_list2.append(amino_acids)
                 else:
                     temp_list3.append(amino_acids)
-
+#The above makes a list of lists. This joinst he list, then joines them. Then you convert it back into a list, and add the -.
         final_list3=[]
         for lists in final_list2:
             for elements in lists:
                 splitting=elements.split()
                 joined=''.join(splitting[0:2])
                 final_list3.append(joined+'-'+splitting[2]+ ' ' + splitting[3])
-
+#This creates the dictionary for adding in the blanks
         list2=[]
         x=(0+seq_start)-1
         dict={}
@@ -1136,7 +1143,8 @@ def nmrstarrun2():
                     x+=1
                     dict[x]=word
                     list2.append(x)
-
+#This will search through every amino acid, if it is msising any of the atoms. It will fill it in with the value of 1000.
+#At this point, we know the order will be N, HA, C, CA, CB, H due to the previous loops. Thus, we can go through each value, and if it isn't there, fill it in.
         final_list4=[]
         temp_list=[]
         count=0
@@ -1180,6 +1188,8 @@ def nmrstarrun2():
                     count=0
                     temp_list.clear()
                 else:
+#Sometimes, the last value might not be a hydrogen. Sometimes one amino acid may only have one chemical shift, and will be missing everything else.
+#To keep those chemical shifts, but compensate for the missing ones, this goes through every value it should have, and if it doesn't have it, adds it in.
                     final_list4.append(temp_list[0]+'-H'+' 1000'+'\n')
                     temp_list.clear()
                     if re.findall('-N',values) != []:
@@ -1213,7 +1223,7 @@ def nmrstarrun2():
                         final_list4.append(atom_find.group(0)+'-CA'+' 1000'+'\n')
                         final_list4.append(values+'\n')
                         count=0
-
+#The above scripts will add a CB value for Glycines. Additionally, our first loop does not transfer HA2 values. This will add an HA2, and eliminate the added CB
         glycine_search_list=[]
         for stuff in final_list4:
             if re.findall('\BG-HA',stuff) != []:
@@ -1224,6 +1234,12 @@ def nmrstarrun2():
                 pass
             else:
                 glycine_search_list.append(stuff)
+
+#The previous loops added 6 values for every amino acid. However, there are some amino acids with no values. This portion will fill in those gaps.
+#It will search and extract the number, and store that into a temp_outskirt_list. When it has gone through it 6 times (one amino acid), it will go to the next amino acid (i+1)
+#If the int(A.group(0)), the atom number of the amino acid we are looking at, is equivalent to its i-1 atom_number +1, then it will add the values and continue on
+#If not, it will go through and add the 6 values as needed. To index properly we will simply use a value y, which counts how many atoms we have gone through so far. Since we are at the end of the new amino acids
+#we need to add -6. It will do this, until the next amino acid is equal to the i-1 amino acids i+1.
 
         outskirts_added=[]
         temp_outskirt_list=[]
