@@ -1,10 +1,10 @@
 This is the manual for SAVUS. This program is written in python 3.7, and uses tkinter, PIL, and webbrowser. 
 The program requires a sparta prediction file, sequence file, NHSQC peaklist, HNCA peaklist, HNCACB peaklist, and the HNCO peaklist. 
-The program calculates the RMSD values between the experimental values and the predicted values obtained from SPARTA+ (**except for proline)**. 
+The program calculates the RMSD values between the experimental values and the predicted values obtained from SPARTA+. 
 The program prints the amino acids that were excluded from the calculation, and the amino acids that had RMSD values below the set threshold. 
 Additionally, the program writes the modified sparta and compiled peaklist files, for use in SAPUS. 
 Requirements:
-1. The peaklists must be in a SPARKY format, ordered by resonance number (or NMRSTAR V3). 
+1. The peaklists must be in a SPARKY format, ordered by resonance number (or NMRSTAR V2,V3, and SPARKY Converted NMRSTAR V3). 
 2. The sparta file must be in the same format as the direct output of SPARTA+ (pred.tab)
 3. The peaklist numbering must be identical to the number format used in the crystal structure 
 4. Each file must be uploaded using the browse option. Furthermore each value must be entered by clicking enter. 
@@ -23,8 +23,8 @@ To quick search the manual, ctrl+f search these titles for each section:
 6. #Mutations#
 7. #Sequence Number Start#
 8. #Threshold#
-
-
+9.#NMRSTAR V2,V3, or SPARKY Converted V3#
+10.#Offset#
 
 
 #############SPARTA File###########
@@ -43,7 +43,7 @@ The sequence file must be single-letter abbreviation:
 ```
 MSYQVLAR...
 ```
-It should be a txt file containing only the sequences (no header). I might change the script later to include seq files with headers and other variations later, but current file only accepts single-letter abbreviation with no other artifacts. 
+It should be a txt file containing only the sequences (no header). I might change the script later to include seq files with headers and other variations later, but current file only accepts single-letter abbreviation with no other artifacts. **If protein contains any kind of tag, include it in the sequence**
 You can load this by clicking the browse button, navigating to the folder that contains the pred.tab file, and simply clicking on it. 
 
 #############NHSQC File###########
@@ -160,4 +160,7 @@ The threshold allows you to set whatever RMSD threshold you want (2, 2.2, 2.25, 
 
 **Click enter to input entry**
 
-
+#############NMRSTAR V2,V3, or SPARKY Converted V3############
+You may now upload NMRSTAR V2 or V3 files from BMRB and SAVUS will convert them into the appropriate format for rmsd calculations with SPARTA+. SPARKY Converted V3 files are also supported, however, the nomenclature for the atoms must follow the SPARKY/NMRSTAR format (N,HA,C,CA,CB,H). 
+#############Offset############
+Often times a protein may contain tags, either for purification or solubility. To account for these tags, simply indicate the size of the tag (I.E. A His-Tag for pETDuet is 14 amino acids, thus the offset would be 14). 
