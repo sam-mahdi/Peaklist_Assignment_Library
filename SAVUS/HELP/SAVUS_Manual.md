@@ -24,7 +24,6 @@ To quick search the manual, ctrl+f search these titles for each section:
 7. #Sequence Number Start#
 8. #Threshold#
 9.#NMRSTAR V2,V3, or SPARKY Converted V3#
-10.#Offset#
 
 
 #############SPARTA File###########
@@ -162,5 +161,3 @@ The threshold allows you to set whatever RMSD threshold you want (2, 2.2, 2.25, 
 
 #############NMRSTAR V2,V3, or SPARKY Converted V3############
 You may now upload NMRSTAR V2 or V3 files from BMRB and SAVUS will convert them into the appropriate format for rmsd calculations with SPARTA+. SPARKY Converted V3 files are also supported, however, the nomenclature for the atoms must follow the SPARKY/NMRSTAR format (N,HA,C,CA,CB,H). 
-#############Offset############
-Often times a protein may contain tags, either for purification or solubility. To account for these tags, simply indicate the size of the tag (I.E. A His-Tag for pETDuet is 14 amino acids, thus the offset would be 14). 
