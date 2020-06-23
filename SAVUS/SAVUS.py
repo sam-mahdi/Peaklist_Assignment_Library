@@ -1143,7 +1143,6 @@ def nmrstarrun2():
         temp_list=[]
         count=0
         for values in final_list3:
-            print(values)
             atom_find=re.search('^-*\d+[A-Z]',values)
             count+=1
             temp_list.append(atom_find.group(0))
@@ -1186,8 +1185,6 @@ def nmrstarrun2():
 #Sometimes, the last value might not be a hydrogen. Sometimes one amino acid may only have one chemical shift, and will be missing everything else.
 #To keep those chemical shifts, but compensate for the missing ones, this goes through every value it should have, and if it doesn't have it, adds it in.
                     final_list4.append(temp_list[0]+'-H'+' 1000'+'\n')
-                    print(temp_list[0])
-                    print(atom_find.group(0))
                     temp_list.clear()
                     if re.findall('-N',values) != []:
                         final_list4.append(values+'\n')
@@ -1237,7 +1234,6 @@ def nmrstarrun2():
         x=0
         y=0
         for atoms in glycine_search_list:
-            print(atoms)
             A=re.search('^-*\d+',atoms)
             outskirts_added.append(atoms)
             x+=1
