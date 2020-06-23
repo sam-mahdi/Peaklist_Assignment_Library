@@ -1,5 +1,5 @@
 This is the manual for SAC (Sparky assignment checker). This program was written in python3.7, and uses tkinter and functools.
-This program checks SPARKY converted NMRSTAR files to ensure there are no peaklist errors in the file. T
+This program checks SPARKY converted NMRSTAR files to ensure there are no peaklist errors in the file.
 To run just upload your sequence, the converted NMRSTAR file, the sequence start number (what is the residue number of the first amino acid in your sequence), and the offset (the number acids in the tag). If no tag used for your protein, then leave it blank. 
 
 If errors are found, error messages will pop up, and you will only see:
