@@ -1,4 +1,4 @@
-This proteins sequence starts at -2 due to the leftover TEV cleavage. As a result, it also has an offset of 3.
+This proteins sequence starts at -2 due to the leftover TEV cleavage. 
 This is the output of an RMSD with a threshold of 2.
 
 This is using NMRSTAR_V3
