@@ -1,5 +1,5 @@
 
-This is the manual for SAPUS (Sparky Assignment prediction using SPARTA+). This was written in python3 and uses numpy, matplotlib, tkinter, webbrowser, and mplcursors. The program requires a modified SPARTA+ file generated from SAVUS, and a chemical shift file of your unknown assignment(s). It calculates the rmsd value of your unknown peaks with predicted SPARTA+ values to determine which amino acid your unknowns would be.   T
+This is the manual for SAPUS (Sparky Assignment prediction using SPARTA+). This was written in python3 and uses numpy, matplotlib, tkinter, webbrowser, and mplcursors. The program requires a modified SPARTA+ file generated from SAVUS, and a chemical shift file of your unknown assignment(s). It calculates the rmsd value of your unknown peaks with predicted SPARTA+ values to determine which amino acid your unknowns would be.   
 
 Requirements: 
 1. SPARTA+ file must be formatted properly (use SAVUS)
