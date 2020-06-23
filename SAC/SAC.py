@@ -297,7 +297,6 @@ def checker():
                                 offset+=6
                         except:
                             text_area.insert(tk.INSERT,f'Error in residue {atoms}\n Either residue number or atom type is assigned incorrectly. Check assignments and change accordingly\n')
-                            print(atoms)
                             break
                         x=0
                         y+=offset
