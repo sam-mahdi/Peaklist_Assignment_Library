@@ -787,31 +787,31 @@ def nmrstarrun3():
                 if re.findall('-N',values) != []:
                     final_list4.append(values+'\n')
                 else:
-                    final_list4.append(atom_find.group(0)+'-N'+' 1000'+'\n')
+                    final_list4.append(temp_list[0]+'-N'+' 1000'+'\n')
                     count+=1
             if count == 2:
                 if re.findall('-HA',values) != []:
                     final_list4.append(values+'\n')
                 else:
-                    final_list4.append(atom_find.group(0)+'-HA'+' 1000'+'\n')
+                    final_list4.append(temp_list[0]+'-HA'+' 1000'+'\n')
                     count+=1
             if count == 3:
                 if re.findall('-C\s',values) != []:
                     final_list4.append(values+'\n')
                 else:
-                    final_list4.append(atom_find.group(0)+'-C'+' 1000'+'\n')
+                    final_list4.append(temp_list[0]+'-C'+' 1000'+'\n')
                     count+=1
             if count == 4:
                 if re.findall('-CA',values) != []:
                     final_list4.append(values+'\n')
                 else:
-                    final_list4.append(atom_find.group(0)+'-CA'+' 1000'+'\n')
+                    final_list4.append(temp_list[0]+'-CA'+' 1000'+'\n')
                     count+=1
             if count == 5:
                 if re.findall('-CB',values) != []:
                     final_list4.append(values+'\n')
                 else:
-                    final_list4.append(atom_find.group(0)+'-CB'+' 1000'+'\n')
+                    final_list4.append(temp_list[0]+'-CB'+' 1000'+'\n')
                     count+=1
             if count == 6:
                 if re.findall('-H\s',values) != []:
@@ -839,19 +839,13 @@ def nmrstarrun3():
                         final_list4.append(atom_find.group(0)+'-C'+' 1000'+'\n')
                         final_list4.append(values+'\n')
                         count=4
-                    if re.findall('-CA',values) != []:
-                        final_list4.append(atom_find.group(0)+'-N'+' 1000'+'\n')
-                        final_list4.append(atom_find.group(0)+'-HA'+' 1000'+'\n')
-                        final_list4.append(atom_find.group(0)+'-C'+' 1000'+'\n')
-                        final_list4.append(values+'\n')
-                        count=5
                     if re.findall('-CB',values) != []:
                         final_list4.append(atom_find.group(0)+'-N'+' 1000'+'\n')
                         final_list4.append(atom_find.group(0)+'-HA'+' 1000'+'\n')
                         final_list4.append(atom_find.group(0)+'-C'+' 1000'+'\n')
                         final_list4.append(atom_find.group(0)+'-CA'+' 1000'+'\n')
                         final_list4.append(values+'\n')
-                        count=0
+                        count=5
 
         glycine_search_list=[]
         for stuff in final_list4:
@@ -1149,6 +1143,7 @@ def nmrstarrun2():
         temp_list=[]
         count=0
         for values in final_list3:
+            print(values)
             atom_find=re.search('^-*\d+[A-Z]',values)
             count+=1
             temp_list.append(atom_find.group(0))
@@ -1156,31 +1151,31 @@ def nmrstarrun2():
                 if re.findall('-N',values) != []:
                     final_list4.append(values+'\n')
                 else:
-                    final_list4.append(atom_find.group(0)+'-N'+' 1000'+'\n')
+                    final_list4.append(temp_list[0]+'-N'+' 1000'+'\n')
                     count+=1
             if count == 2:
                 if re.findall('-HA',values) != []:
                     final_list4.append(values+'\n')
                 else:
-                    final_list4.append(atom_find.group(0)+'-HA'+' 1000'+'\n')
+                    final_list4.append(temp_list[0]+'-HA'+' 1000'+'\n')
                     count+=1
             if count == 3:
                 if re.findall('-C\s',values) != []:
                     final_list4.append(values+'\n')
                 else:
-                    final_list4.append(atom_find.group(0)+'-C'+' 1000'+'\n')
+                    final_list4.append(temp_list[0]+'-C'+' 1000'+'\n')
                     count+=1
             if count == 4:
                 if re.findall('-CA',values) != []:
                     final_list4.append(values+'\n')
                 else:
-                    final_list4.append(atom_find.group(0)+'-CA'+' 1000'+'\n')
+                    final_list4.append(temp_list[0]+'-CA'+' 1000'+'\n')
                     count+=1
             if count == 5:
                 if re.findall('-CB',values) != []:
                     final_list4.append(values+'\n')
                 else:
-                    final_list4.append(atom_find.group(0)+'-CB'+' 1000'+'\n')
+                    final_list4.append(temp_list[0]+'-CB'+' 1000'+'\n')
                     count+=1
             if count == 6:
                 if re.findall('-H\s',values) != []:
@@ -1191,6 +1186,8 @@ def nmrstarrun2():
 #Sometimes, the last value might not be a hydrogen. Sometimes one amino acid may only have one chemical shift, and will be missing everything else.
 #To keep those chemical shifts, but compensate for the missing ones, this goes through every value it should have, and if it doesn't have it, adds it in.
                     final_list4.append(temp_list[0]+'-H'+' 1000'+'\n')
+                    print(temp_list[0])
+                    print(atom_find.group(0))
                     temp_list.clear()
                     if re.findall('-N',values) != []:
                         final_list4.append(values+'\n')
@@ -1210,19 +1207,13 @@ def nmrstarrun2():
                         final_list4.append(atom_find.group(0)+'-C'+' 1000'+'\n')
                         final_list4.append(values+'\n')
                         count=4
-                    if re.findall('-CA',values) != []:
-                        final_list4.append(atom_find.group(0)+'-N'+' 1000'+'\n')
-                        final_list4.append(atom_find.group(0)+'-HA'+' 1000'+'\n')
-                        final_list4.append(atom_find.group(0)+'-C'+' 1000'+'\n')
-                        final_list4.append(values+'\n')
-                        count=5
                     if re.findall('-CB',values) != []:
                         final_list4.append(atom_find.group(0)+'-N'+' 1000'+'\n')
                         final_list4.append(atom_find.group(0)+'-HA'+' 1000'+'\n')
                         final_list4.append(atom_find.group(0)+'-C'+' 1000'+'\n')
                         final_list4.append(atom_find.group(0)+'-CA'+' 1000'+'\n')
                         final_list4.append(values+'\n')
-                        count=0
+                        count=5
 #The above scripts will add a CB value for Glycines. Additionally, our first loop does not transfer HA2 values. This will add an HA2, and eliminate the added CB
         glycine_search_list=[]
         for stuff in final_list4:
@@ -1246,6 +1237,7 @@ def nmrstarrun2():
         x=0
         y=0
         for atoms in glycine_search_list:
+            print(atoms)
             A=re.search('^-*\d+',atoms)
             outskirts_added.append(atoms)
             x+=1
@@ -1525,34 +1517,34 @@ def sparky_to_nmrstar():
             if re.findall('-N',values) != []:
                 final_list4.append(values+'\n')
             else:
-                final_list4.append(atom_find.group(0)+'-N'+' 1000'+'\n')
+                final_list4.append(temp_list[0]+'-N'+' 1000'+'\n')
                 count+=1
         if count == 2:
             if re.findall('-HA',values) != []:
                 final_list4.append(values+'\n')
             else:
-                final_list4.append(atom_find.group(0)+'-HA'+' 1000'+'\n')
+                final_list4.append(temp_list[0]+'-HA'+' 1000'+'\n')
                 count+=1
         if count == 3:
             if re.findall('-C\s',values) != []:
                 final_list4.append(values+'\n')
             else:
-                final_list4.append(atom_find.group(0)+'-C'+' 1000'+'\n')
+                final_list4.append(temp_list[0]+'-C'+' 1000'+'\n')
                 count+=1
         if count == 4:
             if re.findall('-CA',values) != []:
                 final_list4.append(values+'\n')
             else:
-                final_list4.append(atom_find.group(0)+'-CA'+' 1000'+'\n')
+                final_list4.append(temp_list[0]+'-CA'+' 1000'+'\n')
                 count+=1
         if count == 5:
             if re.findall('-CB',values) != []:
                 final_list4.append(values+'\n')
             else:
-                final_list4.append(atom_find.group(0)+'-CB'+' 1000'+'\n')
+                final_list4.append(temp_list[0]+'-CB'+' 1000'+'\n')
                 count+=1
         if count == 6:
-            if re.findall('-H',values) != []:
+            if re.findall('-H\s',values) != []:
                 final_list4.append(values+'\n')
                 count=0
                 temp_list.clear()
@@ -1577,19 +1569,13 @@ def sparky_to_nmrstar():
                     final_list4.append(atom_find.group(0)+'-C'+' 1000'+'\n')
                     final_list4.append(values+'\n')
                     count=4
-                if re.findall('-CA',values) != []:
-                    final_list4.append(atom_find.group(0)+'-N'+' 1000'+'\n')
-                    final_list4.append(atom_find.group(0)+'-HA'+' 1000'+'\n')
-                    final_list4.append(atom_find.group(0)+'-C'+' 1000'+'\n')
-                    final_list4.append(values+'\n')
-                    count=5
                 if re.findall('-CB',values) != []:
                     final_list4.append(atom_find.group(0)+'-N'+' 1000'+'\n')
                     final_list4.append(atom_find.group(0)+'-HA'+' 1000'+'\n')
                     final_list4.append(atom_find.group(0)+'-C'+' 1000'+'\n')
                     final_list4.append(atom_find.group(0)+'-CA'+' 1000'+'\n')
                     final_list4.append(values+'\n')
-                    count=0
+                    count=5
 
 
     glycine_search_list=[]
