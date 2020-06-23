@@ -75,7 +75,7 @@ def offset_fun():
     text_area.insert(tk.INSERT,f'Offset Value set: {offset_value} \n')
 
 def help():
-    webbrowser.open('https://github.com/sam-mahdi/SPARKY-Assignment-Tools/blob/master/SAVUS/HELP/SAVUS_Manual.md')
+    webbrowser.open('https://github.com/sam-mahdi/SPARKY-Assignment-Tools/blob/master/SAC/Manual/Manual.md')
 
 def nmrstar():
     fullpath = filedialog.askopenfilename(parent=root, title='Choose a file')
