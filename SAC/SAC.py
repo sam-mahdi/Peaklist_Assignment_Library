@@ -6,6 +6,7 @@ import tkinter.scrolledtext as st
 from tkinter import ttk
 import functools
 import re
+import webbrowser
 
 root = tk.Tk()
 root.title('SAC')
