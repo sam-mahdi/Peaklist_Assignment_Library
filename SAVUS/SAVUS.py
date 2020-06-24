@@ -46,7 +46,7 @@ class ReadOnlyText(st.ScrolledText):
         return wrap
 
 
-ttk.Label(root,text = "Program Output",font = ("Times New Roman", 15),background = 'green',foreground = "white").grid(column = 0, row = 16)
+ttk.Label(root,text = "Program Output",font = ("Times New Roman", 15),background = 'green',foreground = "white").grid(column = 0, row = 15)
 
 text_area = ReadOnlyText(root,width = 40,height = 10,font = ("Times New Roman",12))
 
@@ -65,7 +65,6 @@ tk.Label(root, text="Mutations (enter what it was mutated to E.G. if mutation wa
 tk.Label(root, text="Please type in what residue number the first amino acid in the sequence file is\nI.E. if the first amino acid in the sequence file is 20, type in 20\n Click enter when done").grid(row=10)
 tk.Label(root, text="Set RMSD Threshold (Recommended 2-3). Click enter when done").grid(row=11)
 tk.Label(root, text="NMR_STAR V2 or V3").grid(row=12)
-tk.Label(root, text="Offset value (if protein contains tag, indicate how many amino acids in tag e.g. His-Tag pETDeut is 14)\n If no tag, leave blank. Click enter when done. ").grid(row=13)
 
 
 e1 = tk.Entry(root)
@@ -81,7 +80,6 @@ e10 = tk.Entry(root)
 e11 = tk.Entry(root)
 e12 = tk.Entry(root)
 e13 = tk.Entry(root)
-e14 = tk.Entry(root)
 e1.grid(row=0, column=1)
 e2.grid(row=1, column=1)
 e3.grid(row=2, column=1)
@@ -95,7 +93,6 @@ e10.grid(row=9, column=1)
 e11.grid(row=10, column=1)
 e12.grid(row=11, column=1)
 e13.grid(row=12, column=1)
-e14.grid(row=13, column=1)
 
 #These global values are what is entered by the user, and use within the script
 sparta_file=()
@@ -119,7 +116,6 @@ seq_start=()
 set_threshold=()
 nmrstarfile=()
 nmrstarfile_directory=()
-offset_value=()
 
 #These functions define the function of the buttons
 def input_file():
@@ -215,11 +211,6 @@ def threshold():
     global set_threshold
     set_threshold=float(threshold_input)
     text_area.insert(tk.INSERT,f'RMSD Threshold set: {threshold_input} \n')
-def offset_fun():
-    offset_input=e14.get()
-    global offset_value
-    offset_value=int(offset_input)
-    text_area.insert(tk.INSERT,f'Offset Value set: {offset_value} \n')
 
 def help():
     webbrowser.open('https://github.com/sam-mahdi/SPARKY-Assignment-Tools/blob/master/SAVUS/HELP/SAVUS_Manual.md')
@@ -667,7 +658,6 @@ def nmrstarrun3():
             sparta_sequence_comparison=list(filter(compiler.match,sequence_list))
             if sparta_sequence_comparison != []:
                 sparta_file_list3.append(aa)
-
         #The first amino acid will only lack the amide nitrogen and hydrogen.
         #This goes through the first 5 entires, if the 5th entry does not equal the 4th, then the first 4 entires (the first amino acid) is removed.
         temp_list=[]
@@ -694,21 +684,17 @@ def nmrstarrun3():
               'TYR':'Y', 'PHE':'F', 'HIS':'H', 'LYS':'K',
               'ARG':'R', 'TRP':'W', 'GLN':'Q', 'ASN':'N'
             }
-
         os.chdir(nmrstarfile_directory)
         final_list=[]
         x=0
         with open(nmrstarfile) as file:
           for lines in file:
             modifier=lines.strip()
-            A=re.search('\d+\.\d+',modifier)
+            A=re.search(r'\b\d+\s+[A-Z]{3}\s+\w+\s+\w+\s+\d+\s+\d+',modifier)
             if A != None:
                 atom_search=A.string
                 C=atom_search.split()
-                if offset_value == ():
-                    amino_acid_number=C[5]
-                else:
-                    amino_acid_number=str(int(C[5])-offset_value)
+                amino_acid_number=str(int(C[5])+int(seq_start)-1)
                 residue_type=C[6]
                 atom_type=C[7]
                 converted=acid_map[residue_type]
@@ -725,7 +711,6 @@ def nmrstarrun3():
         temp_list3=[]
         for amino_acids in final_list:
             splitter2=amino_acids.split()
-            #atom_type_list.append(splitter2[1])
             x+=1
             if x >= 2:
                 if splitter2[0] != atom_number_list[0]:
@@ -1058,14 +1043,11 @@ def nmrstarrun2():
         with open(nmrstarfile) as file:
           for lines in file:
             modifier=lines.strip()
-            A=re.search(r'\b\d+\s+[A-Z]{3}\s+[A-Z]',modifier)
+            A=re.search(r'\d+\s+[A-Z]{3}\s+\w+\s+\w+\s+\d+',modifier)
             if A != None:
                 atom_search=A.string
                 C=atom_search.split()
-                if offset_value == ():
-                    amino_acid_number=C[2]
-                else:
-                    amino_acid_number=str(int(C[2])-offset_value)
+                amino_acid_number=str(int(C[2])+int(seq_start)-1)
                 residue_type=C[3]
                 atom_type=C[4]
                 converted=acid_map[residue_type]
@@ -1423,18 +1405,15 @@ def sparky_to_nmrstar():
     os.chdir(nmrstarfile_directory)
     final_list=[]
     x=0
-    offset_value=0
     with open(nmrstarfile) as file:
       for lines in file:
         modifier=lines.strip()
-        A=re.search(r'\b\d+\s+[A-Z]{3}\s+[A-Z]',modifier)
+        A=re.search(r'\d+\s+[A-Z]{3}\s+\w+\s+\w+\s+\d+',modifier)
         if A != None:
             atom_search=A.string
             C=atom_search.split()
-            if offset_value == ():
-                amino_acid_number=C[2]
-            else:
-                amino_acid_number=str(int(C[2])-offset_value)
+            amino_acid_number=C[2]
+            amino_acid_number=str(int(C[2])+int(seq_start)-1)
             residue_type=C[3]
             atom_type=C[4]
             converted=acid_map[residue_type]
@@ -1680,14 +1659,13 @@ tk.Button(root,text='enter',command=mutation_input2).grid(row=9,column=2)
 tk.Button(root,text='enter',command=seq_number).grid(row=10,column=2)
 tk.Button(root,text='enter',command=threshold).grid(row=11,column=2)
 tk.Button(root,text='browse',command=nmrstar).grid(row=12,column=2)
-tk.Button(root,text='enter',command=offset_fun).grid(row=13,column=2)
-tk.Button(root,text='Quit',command=root.quit).grid(row=16,column=1)
-tk.Button(root,text='Run using SPARKY files',command=fun).grid(row=14,column=0)
-tk.Button(root,text='Run using NMRSTAR V3 file',command=nmrstarrun3).grid(row=14,column=1)
-tk.Button(root,text='Run using NMRSTAR V2 file',command=nmrstarrun2).grid(row=14,column=2)
-tk.Button(root,text='Run using SPARKY converted NMRSTAR V3 file',command=sparky_to_nmrstar).grid(row=15,column=2)
-tk.Button(root,text='Help',command=help).grid(row=15,column=0)
-tk.Button(root,text='Generate SPARTA file only (for SAPUS)',command=sparta_gen_only).grid(row=15,column=1)
+tk.Button(root,text='Quit',command=root.quit).grid(row=15,column=1)
+tk.Button(root,text='Run using SPARKY files',command=fun).grid(row=13,column=0)
+tk.Button(root,text='Run using NMRSTAR V3 file',command=nmrstarrun3).grid(row=13,column=1)
+tk.Button(root,text='Run using NMRSTAR V2 file',command=nmrstarrun2).grid(row=13,column=2)
+tk.Button(root,text='Run using SPARKY converted NMRSTAR V3 file',command=sparky_to_nmrstar).grid(row=14,column=2)
+tk.Button(root,text='Help',command=help).grid(row=14,column=0)
+tk.Button(root,text='Generate SPARTA file only (for SAPUS)',command=sparta_gen_only).grid(row=14,column=1)
 
 root.mainloop()
 #tk.mainloop()
