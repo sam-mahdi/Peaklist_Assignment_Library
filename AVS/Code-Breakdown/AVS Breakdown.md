@@ -1,4 +1,4 @@
-Here I will present a breakdown of the code for SAVUS, both for my sanity, and for anyone wishing to understand what's going on. There is a lot of reptition, especially in the nmrstar file code, so I will only cover the variations between the functions. 
+Here I will present a breakdown of the code for AVS, both for my sanity, and for anyone wishing to understand what's going on. There is a lot of reptition, especially in the nmrstar file code, so I will only cover the variations between the functions. 
 
 ctrl+f search to go to a specific section:
 1.#sparta gen only#
