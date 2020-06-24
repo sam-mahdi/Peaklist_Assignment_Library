@@ -11,7 +11,7 @@ Requirements:
 
 To run program, simply upload all files, fill in all the blanks (if no mutations, don't input anything), and click run. 
 
-You may also click the generate sparta file only, this will skip the calculations and generate a sparta file for SOPUS use. To do so, simply upload the pred.tab and sequence files, indicate the sequence start number and any mutations you have, and indicate the sparta save file. 
+You may also click the generate sparta file only, this will skip the calculations and generate a sparta file for SAPUS use. To do so, simply upload the pred.tab and sequence files, indicate the sequence start number and any mutations you have, and indicate the sparta save file. 
 
 To quick search the manual, ctrl+f search these titles for each section:
 
