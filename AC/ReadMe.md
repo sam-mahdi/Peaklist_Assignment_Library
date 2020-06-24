@@ -1,0 +1,2 @@
+Assignment Checker (AC) is a program that checks the SPARKY converted NMRSTAR V3 files to ensure there are no errors in the peaklist formatting. 
+SAVUS will ignore the improperly formatted peaks in the individual peaklist files. However it will not work on improperly formatted SPARKY converted NMRSTAR V3 files. Thus it is reccomended to use this on the converted files to ensure there are no errors before using AVS. 
