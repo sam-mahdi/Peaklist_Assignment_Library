@@ -221,7 +221,8 @@ os.chdir(seq_directory)
                     x+=1
                     dict[x]=word
                     list2.append(x)
-                    ```
+
+```
                     
             
 Again, the same philosophy as in the sparta file list. Except now we are making a dictionary where the residue numbers key is the single letter amino acid abbreviation. 
@@ -259,5 +260,5 @@ list5=[]
                     glycine_search=re.search(r'^G',modifications)
                     if glycine_search != None:
                         list5.append(f'{A.group(0)}N-HA2'+ ' 1000' + '\n')
-                     ```
-A number                     
+```
+A number of things are going on here                    
