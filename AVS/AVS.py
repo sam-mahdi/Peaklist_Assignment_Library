@@ -7,26 +7,26 @@ import re
 import tkinter.scrolledtext as st
 from tkinter import ttk
 import functools
-#from PIL import ImageTk, Image
+from PIL import ImageTk, Image
 import webbrowser
 
 
 
 
 root = tk.Tk()
-root.title('SAVUS')
+root.title('AVS')
 #This is for fitting the image to the size of the GUI
-#def on_resize(event):
-    #image = bgimg.resize((event.width, event.height), Image.ANTIALIAS)
-    #l.image = ImageTk.PhotoImage(image)
-    #l.config(image=l.image)
+def on_resize(event):
+    image = bgimg.resize((event.width, event.height), Image.ANTIALIAS)
+    l.image = ImageTk.PhotoImage(image)
+    l.config(image=l.image)
 
 root.geometry('1200x800')
 
-#bgimg = Image.open('kermit.jpg')
-#l = tk.Label(root)
-#l.place(x=0, y=0, relwidth=1, relheight=1)
-#l.bind('<Configure>', on_resize)
+bgimg = Image.open('mountain.jpg')
+l = tk.Label(root)
+l.place(x=0, y=0, relwidth=1, relheight=1)
+l.bind('<Configure>', on_resize)
 #This enables the output box to update, but prevents the user from typing stuff into it (read only)
 class ReadOnlyText(st.ScrolledText):
     def __init__(self, *args, **kwargs):
@@ -213,7 +213,7 @@ def threshold():
     text_area.insert(tk.INSERT,f'RMSD Threshold set: {threshold_input} \n')
 
 def help():
-    webbrowser.open('https://github.com/sam-mahdi/SPARKY-Assignment-Tools/blob/master/SAVUS/HELP/SAVUS_Manual.md')
+    webbrowser.open('https://github.com/sam-mahdi/Peaklist_Assignment_Library/blob/master/AVS/HELP/AVS_Manual.md')
 
 def nmrstar():
     fullpath = filedialog.askopenfilename(parent=root, title='Choose a file')
@@ -1665,7 +1665,7 @@ tk.Button(root,text='Run using NMRSTAR V3 file',command=nmrstarrun3).grid(row=13
 tk.Button(root,text='Run using NMRSTAR V2 file',command=nmrstarrun2).grid(row=13,column=2)
 tk.Button(root,text='Run using SPARKY converted NMRSTAR V3 file',command=sparky_to_nmrstar).grid(row=14,column=2)
 tk.Button(root,text='Help',command=help).grid(row=14,column=0)
-tk.Button(root,text='Generate SPARTA file only (for SAPUS)',command=sparta_gen_only).grid(row=14,column=1)
+tk.Button(root,text='Generate SPARTA file only (for APS)',command=sparta_gen_only).grid(row=14,column=1)
 
 root.mainloop()
 #tk.mainloop()
