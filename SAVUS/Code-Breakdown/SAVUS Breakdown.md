@@ -1,5 +1,12 @@
 Here I will present a breakdown of the code for SAVUS, both for my sanity, and for anyone wishing to understand what's going on. There is a lot of reptition, especially in the nmrstar file code, so I will only cover the variations between the functions. 
 
+ctrl+f search to go to a specific section:
+1.#sparta gen only#
+2.#Peaklist compiler (fun)#
+3.#NMRSTAR V3#
+4.#NMRSTAR V2# (very similar to nmrstar v3)
+5.#SPARKY Converted NMRSTAR V3 files# (identical to nmrstar v2)
+
 The sparta file generation is the same for every function, so we will start with that here. 
 
 #####sparta gen only#####
@@ -380,3 +387,350 @@ Now that the sparta file and compiled peaklist files are the same size and forma
 Since the sizes of the 2 files are the same. We can simply go through each, calculate the square deviation, store it in a list, and take the sum of that list to get the rmsd. The reason the placeholders were 1000 were to eliminate them from the calculations. If the square deviation is above 1000, then the value is not used for calculatons. 
 
 
+#######NMRSTAR V3###########
+
+Many other programs, including sparky, have the option to convert their files into the NMRSTAR V3 format. Additionally, the bmrb databank (which would be used for testing the script) uses NMRSTAR V3 format as well. The sparta file manipulation and rmsd calculation is the same as before in this case. So I will only cover converting NMRSTAR V3 into the sparta format. 
+
+NMRSTAR V3 files are formatted as such:
+```
+Content for NMR-STAR saveframe, "assigned_chem_shift_list_1"
+    save_assigned_chem_shift_list_1
+   _Assigned_chem_shift_list.Sf_category                   assigned_chemical_shifts
+   _Assigned_chem_shift_list.Sf_framecode                  assigned_chem_shift_list_1
+   _Assigned_chem_shift_list.Entry_ID                      26909
+   _Assigned_chem_shift_list.ID                            1
+   _Assigned_chem_shift_list.Sample_condition_list_ID      1
+   _Assigned_chem_shift_list.Sample_condition_list_label   $sample_conditions_1
+   _Assigned_chem_shift_list.Chem_shift_reference_ID       1
+   _Assigned_chem_shift_list.Chem_shift_reference_label    $chemical_shift_reference_1
+   _Assigned_chem_shift_list.Chem_shift_1H_err             .
+   _Assigned_chem_shift_list.Chem_shift_13C_err            .
+   _Assigned_chem_shift_list.Chem_shift_15N_err            .
+   _Assigned_chem_shift_list.Chem_shift_31P_err            .
+   _Assigned_chem_shift_list.Chem_shift_2H_err             .
+   _Assigned_chem_shift_list.Chem_shift_19F_err            .
+   _Assigned_chem_shift_list.Error_derivation_method       .
+   _Assigned_chem_shift_list.Details                       .
+   _Assigned_chem_shift_list.Text_data_format              .
+   _Assigned_chem_shift_list.Text_data                     .
+
+   loop_
+      _Chem_shift_experiment.Experiment_ID
+      _Chem_shift_experiment.Experiment_name
+      _Chem_shift_experiment.Sample_ID
+      _Chem_shift_experiment.Sample_label
+      _Chem_shift_experiment.Sample_state
+      _Chem_shift_experiment.Entry_ID
+      _Chem_shift_experiment.Assigned_chem_shift_list_IDfamily_title
+      ...
+      1      .   1   1   2     2     SER   HA     H   1    4.477     0.003   .   1   .   .   .   .   .   -1    Ser   HA     .   26909   1
+      2      .   1   1   2     2     SER   HB2    H   1    3.765     0.001   .   1   .   .   .   .   .   -1    Ser   HB2    .   26909   1
+      3      .   1   1   2     2     SER   HB3    H   1    3.765     0.001   .   1   .   .   .   .   .   -1    Ser   HB3    .   26909   1
+      4      .   1   1   2     2     SER   C      C   13   173.726   0.2     .   1   .   .   .   .   .   -1    Ser   C      .   26909   1
+      5      .   1   1   2     2     SER   CA     C   13   58.16     0.047   .   1   .   .   .   .   .   -1    Ser   CA     .   26909   1
+      6      .   1   1   2     2     SER   CB     C   13   64.056    0.046   .   1   .   .   .   .   .   -1    Ser   CB     .   26909   1
+      7      .   1   1   3     3     HIS   H      H   1    8.357     0.004   .   1   .   .   .   .   .   0     His   H      .   26909   1
+      8      .   1   1   3     3     HIS   HA     H   1    4.725     0.003   .   1   .   .   .   .   .   0     His   HA     .   26909   1
+      
+```
+There is a lot info, so our regex search and exctraction must be more stringent as before. Additionally, NMRSTAR uses 3 letter abbreviations for amino acids, instead of the 1 in sparta, and while sometimes the peaklist label will be included (-1, 0 values on the right) that is not always the case. Finally, the atoms are ordered HA, C, CA, CB, N,H instead of N,HA,C,CA,CB,H. 
+
+```
+acid_map = {
+              'ASP':'D', 'THR':'T', 'SER':'S', 'GLU':'E',
+              'PRO':'P', 'GLY':'G', 'ALA':'A', 'CYS':'C',
+              'VAL':'V', 'MET':'M', 'ILE':'I', 'LEU':'L',
+              'TYR':'Y', 'PHE':'F', 'HIS':'H', 'LYS':'K',
+              'ARG':'R', 'TRP':'W', 'GLN':'Q', 'ASN':'N'
+            }
+        os.chdir(nmrstarfile_directory)
+        final_list=[]
+        x=0
+        with open(nmrstarfile) as file:
+          for lines in file:
+            modifier=lines.strip()
+            A=re.search(r'\b\d+\s+[A-Z]{3}\s+\w+\s+\w+\s+\d+\s+\d+',modifier)
+            if A != None:
+                atom_search=A.string
+                C=atom_search.split()
+                amino_acid_number=str(int(C[5])+int(seq_start)-1)
+                residue_type=C[6]
+                atom_type=C[7]
+                converted=acid_map[residue_type]
+                chemical_shift=C[10]
+                G=[amino_acid_number]+[converted]+[atom_type]+[chemical_shift]
+                if atom_type == 'N' or atom_type == 'HA' or atom_type =='CA' or atom_type == 'CB' or atom_type=='H' or atom_type=='C':
+                    joined=' '.join(G)
+                    final_list.append(joined)
+```
+Thus first we need a dictionary to convert the 3 letter abbreviations into one letter needs to be made. Then we go through the nmrstar file, extracting only the lines with the data. While the formats may change, you will always have a residue number, followed by 3 letter abbreviation of the residue type, followed by atom type, isotope type, and finally the chemical shift and error. The string is split into a list, the various values are extracted, moved around in the proper format, and recompiled. The residue number (amino_acid_number) may vary from the sequence. Since solubility tags or any other additions are counted as part of the protein, the numbering in the NMRSTAR file will not represent the numbering of the protein. The user indicates the first residue number, and we build from there. Finally, NMRSTAR files contain side chain data as well, but sparta does not predict those. Thus, only the backbone atoms are added. 
+
+As stated prior, NMRSTAR atom types are formatted differently. They are stored as HA,C,CA,CB,H,N where we want them to be N,HA,C,CA,CB,H. 
+```
+final_list2=[]
+        atom_number_list=[]
+        temp_list=[]
+        temp_list2=[]
+        temp_list3=[]
+        for amino_acids in final_list:
+            splitter2=amino_acids.split()
+            x+=1
+            if x >= 2:
+                if splitter2[0] != atom_number_list[0]:
+                    list_compiler=temp_list2+temp_list3+temp_list
+                    final_list2.append(list_compiler)
+                    atom_number_list.clear()
+                    temp_list.clear()
+                    temp_list2.clear()
+                    temp_list3.clear()
+                    atom_number_list.append(splitter2[0])
+                    if splitter2[2] == 'H':
+                        temp_list.append(amino_acids)
+                    elif splitter2[2] == 'N':
+                        temp_list2.append(amino_acids)
+                    else:
+                        temp_list3.append(amino_acids)
+                else:
+                    if splitter2[2] == 'H':
+                        temp_list.append(amino_acids)
+                    elif splitter2[2] == 'N':
+                        temp_list2.append(amino_acids)
+                    else:
+                        temp_list3.append(amino_acids)
+            else:
+                atom_number_list.append(splitter2[0])
+                if splitter2[2] == 'H':
+                    temp_list.append(amino_acids)
+                elif splitter2[2] == 'N':
+                    temp_list2.append(amino_acids)
+                else:
+                    temp_list3.append(amino_acids)
+```
+To do this, we go through each amino acid, and store its residue number/type into a list. Since the HA,C,CA,CB are the proper order, we keep those in one list, and keep the H and N in a seperate list. We also add an x>2 clause, since we do need a start point. When the residue number/type does not match the previous one (i.e. you have finished one amino acid and moved on to the next), then you compile the amino acids in the proper order. The lists are cleared to start anew. 
+
+This forms a list of lists however, thus we want to flatten our list. Additionally, we want to add a hyphen, it makes seperating/extracting the atom type from residu type/number easier. 
+```
+final_list3=[]
+        for lists in final_list2:
+            for elements in lists:
+                splitting=elements.split()
+                joined=''.join(splitting[0:2])
+                final_list3.append(joined+'-'+splitting[2]+ ' ' + splitting[3])
+```
+Thus we simply join the list of lists, and add a - and space in the process.
+
+Now that we have the proper format, it's time to fill in the blanks. As before we'll need to create a dictionary of amino acids with their residue number, to fill in the blanks properly. 
+```
+        list2=[]
+        x=(0+seq_start)-1
+        dict={}
+        with open(seq_file) as sequence_file:
+            for line in sequence_file:
+                B=line.strip().upper()
+                for word in B:
+                    x+=1
+                    dict[x]=word
+                    list2.append(x)
+```           
+We cannot use the prior technique used for compiling peaklists, since that was just going through the amide peaks, whereas the NMRSTAR file contains all the peaks. Instead we go through by atom type. 
+
+```
+        final_list4=[]
+        temp_list=[]
+        count=0
+        for values in final_list3:
+            atom_find=re.search('^-*\d+[A-Z]',values)
+            count+=1
+            temp_list.append(atom_find.group(0))
+            if count == 1:
+                if re.findall('-N',values) != []:
+                    final_list4.append(values+'\n')
+                else:
+                    final_list4.append(temp_list[0]+'-N'+' 1000'+'\n')
+                    count+=1
+            if count == 2:
+                if re.findall('-HA',values) != []:
+                    final_list4.append(values+'\n')
+                else:
+                    final_list4.append(temp_list[0]+'-HA'+' 1000'+'\n')
+                    count+=1
+            if count == 3:
+                if re.findall('-C\s',values) != []:
+                    final_list4.append(values+'\n')
+                else:
+                    final_list4.append(temp_list[0]+'-C'+' 1000'+'\n')
+                    count+=1
+            if count == 4:
+                if re.findall('-CA',values) != []:
+                    final_list4.append(values+'\n')
+                else:
+                    final_list4.append(temp_list[0]+'-CA'+' 1000'+'\n')
+                    count+=1
+            if count == 5:
+                if re.findall('-CB',values) != []:
+                    final_list4.append(values+'\n')
+                else:
+                    final_list4.append(temp_list[0]+'-CB'+' 1000'+'\n')
+                    count+=1
+            if count == 6:
+                if re.findall('-H\s',values) != []:
+                    final_list4.append(values+'\n')
+                    count=0
+                    temp_list.clear()
+                else:
+                    final_list4.append(temp_list[0]+'-H'+' 1000'+'\n')
+                    temp_list.clear()
+                    if re.findall('-N',values) != []:
+                        final_list4.append(values+'\n')
+                        count=1
+                    if re.findall('-HA',values) != []:
+                        final_list4.append(atom_find.group(0)+'-N'+' 1000'+'\n')
+                        final_list4.append(values+'\n')
+                        count=2
+                    if re.findall('-C',values) != []:
+                        final_list4.append(atom_find.group(0)+'-N'+' 1000'+'\n')
+                        final_list4.append(atom_find.group(0)+'-HA'+' 1000'+'\n')
+                        final_list4.append(values+'\n')
+                        count=3
+                    if re.findall('-CA',values) != []:
+                        final_list4.append(atom_find.group(0)+'-N'+' 1000'+'\n')
+                        final_list4.append(atom_find.group(0)+'-HA'+' 1000'+'\n')
+                        final_list4.append(atom_find.group(0)+'-C'+' 1000'+'\n')
+                        final_list4.append(values+'\n')
+                        count=4
+                    if re.findall('-CB',values) != []:
+                        final_list4.append(atom_find.group(0)+'-N'+' 1000'+'\n')
+                        final_list4.append(atom_find.group(0)+'-HA'+' 1000'+'\n')
+                        final_list4.append(atom_find.group(0)+'-C'+' 1000'+'\n')
+                        final_list4.append(atom_find.group(0)+'-CA'+' 1000'+'\n')
+                        final_list4.append(values+'\n')
+                        count=5
+```
+The way this works is we know the format now is N,HA,C,CA,CB,H. Thus, every amino acid should have those 6 values in that order. So we go through each amino acid, and store the residue type/number in a list. If that amino acid has a Nitrogen, then it is added to the list, otherwise it's placeholder is added. The same for every other atom. A counter is used keep track of which atom type you currently have. I.E. If the amino acid you are looking at is HA, that means it should be count=2. That way when you add the placeholder, you can add 1 to the count, pushing it to the HA section. If you are missing the hydrogen, that means you have moved on to the next peak. That next peak could be any atom type, thus you use the count one again to determine which one it is. In this manner, the missing amino acids are filled. Additionally, by using atom type instead of residue number/type, you can keep i-1 ca/cb and prolines as well (that you couldn't when compiling the peaklists). 
+
+However, this technique does add a CB for glycine, additionally due to the above backbone filter we first used, glycines HA2 was not transffered over. 
+```
+        glycine_search_list=[]
+        for stuff in final_list4:
+            if re.findall('\BG-HA',stuff) != []:
+                splitting=stuff.split()
+                glycine_search_list.append(stuff)
+                glycine_search_list.append(splitting[0]+'2'+' 1000'+'\n')
+            elif re.findall('\BG-CB',stuff) != []:
+                pass
+            else:
+                glycine_search_list.append(stuff)
+```            
+Thus we filter for gycine, add its HA2, and exclude its CB. 
+
+While the above added in the missing values, it only added the missing values **for amino acids that had a value**. In other words, you needed to have at least one atom type assigned. However, we still need to fill in the placeholders for amino acids with no atom types assigned. 
+```
+        outskirts_added=[]
+        temp_outskirt_list=[]
+        x=0
+        y=0
+        for atoms in glycine_search_list:
+            A=re.search('^-*\d+',atoms)
+            outskirts_added.append(atoms)
+            x+=1
+            y+=1
+            if x == 6:
+                if len(temp_outskirt_list)>0:
+                    if int(A.group(0)) == (int(temp_outskirt_list[0])+1):
+                        x=0
+                        temp_outskirt_list.clear()
+                        temp_outskirt_list.append(A.group(0))
+                        pass
+                    else:
+                        z=int(temp_outskirt_list[0])+1
+                        offset=0
+                        while z != int(A.group(0)):
+                            outskirts_added.insert((y+offset-6),f'{z}{dict[z]}N-H' + ' 1000' +'\n')
+                            outskirts_added.insert((y+offset-6),f'{z}{dict[z]}N-CB' + ' 1000' +'\n')
+                            outskirts_added.insert((y+offset-6),f'{z}{dict[z]}N-CA' + ' 1000' +'\n')
+                            outskirts_added.insert((y+offset-6),f'{z}{dict[z]}N-C' + ' 1000' +'\n')
+                            outskirts_added.insert((y+offset-6),f'{z}{dict[z]}N-HA' + ' 1000' +'\n')
+                            outskirts_added.insert((y+offset-6),f'{z}{dict[z]}N-HN' + ' 1000' + '\n')
+                            z+=1
+                            offset+=6
+                        x=0
+                        y+=offset
+                        temp_outskirt_list.clear()
+                        temp_outskirt_list.append(A.group(0))
+                else:
+                    temp_outskirt_list.append(A.group(0))
+                    x=0
+ ```
+ We know each amino acid now has 6 values. Thus, we can go through each amino acid, extract its residue number, and use that to determine when you've moved on to the next amino acid in the list. When you've gone through all 6, the next amino acid should be different by a factor of 1, which would indicate you've moved on to the next amino acid. If it isn't, that means it is missing a value. However, the current loop is on the next amino acid, and we want to add our placeholder in between the prior value, and the current one, so we cannot use append. Instead, we use another counter (y) to index how many values have been added to the list. We use z to determine what the residue number should be, and add placeholders until the value of z matches the residue number of the current loop. Since you only compare values when x==6, that means we already have 6 values added to the overall list. Thus, we need to subtract 6 to our y index. Additionally, there may be multiple amino acids in a row missing. Thus, we need to offset the index by a value 6, so we continuouslly add after the other. Fnally, since indexing pushes everything to the right, we the order is reveresed (H,CB,CA...etc). 
+ 
+ Filtering the peaklist to match sparta and RMSD are done as before. 
+ 
+ 
+ 
+ #######NMRSTAR V2######
+ NMRSTAR V2 files are formatted slightly differently:
+ 
+ ```
+         1  -1   2 SER HA   H   4.477 0.003 1
+         2  -1   2 SER HB2  H   3.765 0.001 1
+         3  -1   2 SER HB3  H   3.765 0.001 1
+         4  -1   2 SER C    C 173.726 0.2   1
+         5  -1   2 SER CA   C  58.16  0.047 1
+         6  -1   2 SER CB   C  64.056 0.046 1
+         7   0   3 HIS H    H   8.357 0.004 1
+         8   0   3 HIS HA   H   4.725 0.003 1
+         9   0   3 HIS HB2  H   3.203 0.003 2
+        10   0   3 HIS HB3  H   2.996 0.005 2
+        11   0   3 HIS C    C 174.33  0.2   1
+```
+The placement of some things is moved around or removed. However, the order of the atoms and nomenclature is the same. Thus the only real change needed is at the very start:
+```
+with open(nmrstarfile) as file:
+          for lines in file:
+            modifier=lines.strip()
+            A=re.search(r'\d+\s+[A-Z]{3}\s+\w+\s+\w+\s+\d+',modifier)
+            if A != None:
+                atom_search=A.string
+                C=atom_search.split()
+                amino_acid_number=str(int(C[2])+int(seq_start)-1)
+                residue_type=C[3]
+                atom_type=C[4]
+                converted=acid_map[residue_type]
+                chemical_shift=C[6]
+```
+As you'll if you cmopare, the only real different is the indexing. The rest of the script is identical. 
+
+
+######SPARKY Converted NMRSTAR V3 files#####
+
+SPARKY has a built in plug in that converts your peaklists in NMRSTAR V3 files.
+```
+     1    2    2   SER     C  C 13  173.775   0.00 0  1
+     2    2    2   SER    CA  C 13   58.210   0.05 0  1
+     3    2    2   SER    CB  C 13   63.849   0.00 0  1
+     4    3    3   TYR     C  C 13  175.460   0.00 0  1
+     5    3    3   TYR    CA  C 13   57.593   0.02 0  1
+     6    3    3   TYR    CB  C 13   38.996   0.06 0  1
+     7    3    3   TYR    HN  H  1    7.993   0.00 0  1
+     8    3    3   TYR     N  N 15  121.671   0.01 0  1
+     9    4    4   GLN     C  C 13  175.123   0.00 0  1
+    10    4    4   GLN    CA  C 13   55.776   0.05 0  1
+    11    4    4   GLN    CB  C 13   30.082   0.01 0  1
+    12    4    4   GLN    HN  H  1    8.339   0.00 0  1
+    13    4    4   GLN     N  N 15  121.971   0.01 0  1
+    14    5    5   VAL    CA  C 13   63.013   0.02 0  1
+```
+ However, it compiles the format similarly to nmrstar v2, instead of 3, so the indexing is still similar. Additionally, the H and N are placed differently (NMRSTAR is C,CA,CB,N,H, not H,N as in the sparky converter). But our previous script can still rearrange this in the proper format. 
+
+```
+            atom_search=A.string
+            C=atom_search.split()
+            amino_acid_number=C[2]
+            amino_acid_number=str(int(C[2])+int(seq_start)-1)
+            residue_type=C[3]
+            atom_type=C[4]
+            converted=acid_map[residue_type]
+            chemical_shift=C[7]
+```
+However, outside these subtle difference, everything else is the same. Thus the nmrstar v2 and v3 scripts work the same here as well. 
+            
