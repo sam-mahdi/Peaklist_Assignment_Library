@@ -213,7 +213,7 @@ X2N-HN 7.837
 In other cases you may have 3 or 4 matches, however the chemical shifts are all in non-unique ranges. SPARTA is also particular useful for this as well. 
 #############Confirming Assignment of peaks##########
 
-During the assignment process, there are many isntances where you may doubt a series of your assignmnents or question their validity. While SOVUS can be used, that is designed more for the entire protein. Use SOVUS to generate a properly formatted/compiled peaklist file. Then use SOPUS to confirm the range of amino acids you are looking for has the lowest rmsd value. 
+During the assignment process, there are many isntances where you may doubt a series of your assignmnents or question their validity. While SAVUS can be used, that is designed more for the entire protein. Use SAVUS to generate a properly formatted/compiled peaklist file. Then use SAPUS to confirm the range of amino acids you are looking for has the lowest rmsd value. 
 
 ```
 Assigned amino acids
