@@ -6,9 +6,23 @@ from tkinter import ttk
 import functools
 from tkinter import *
 import webbrowser
+from PIL import ImageTk, Image
+
 
 root = tk.Tk()
-root.title('SAG')
+root.title('AG')
+
+def on_resize(event):
+    image = bgimg.resize((event.width, event.height), Image.ANTIALIAS)
+    l.image = ImageTk.PhotoImage(image)
+    l.config(image=l.image)
+
+root.geometry('800x400')
+
+bgimg = Image.open('cave.jpg')
+l = tk.Label(root)
+l.place(x=0, y=0, relwidth=1, relheight=1)
+l.bind('<Configure>', on_resize)
 
 class ReadOnlyText(st.ScrolledText):
     def __init__(self, *args, **kwargs):
@@ -116,7 +130,7 @@ def save_file2():
     label8=Label(root,text=fullpath).grid(row=5,column=1)
 
 def help():
-    webbrowser.open('https://github.com/sam-mahdi/SPARKY-Assignment-Tools/blob/master/SAG/HELP/SAG%20Manual.md')
+    webbrowser.open('https://github.com/sam-mahdi/Peaklist_Assignment_Library/blob/master/AG/HELP/AG%20Manual.md')
 
 
 def write_file():
