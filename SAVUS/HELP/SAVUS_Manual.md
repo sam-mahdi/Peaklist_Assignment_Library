@@ -1,8 +1,8 @@
-This is the manual for SAVUS. This program is written in python 3.7, and uses tkinter, PIL, and webbrowser. 
+This is the manual for AVS. This program is written in python 3.7, and uses tkinter, PIL, and webbrowser. 
 The program requires a sparta prediction file, sequence file, NHSQC peaklist, HNCA peaklist, HNCACB peaklist, and the HNCO peaklist. 
 The program calculates the RMSD values between the experimental values and the predicted values obtained from SPARTA+. 
 The program prints the amino acids that were excluded from the calculation, and the amino acids that had RMSD values below the set threshold. 
-Additionally, the program writes the modified sparta and compiled peaklist files, for use in SAPUS. 
+Additionally, the program writes the modified sparta and compiled peaklist files, for use in APS. 
 Requirements:
 1. The peaklists must be in a SPARKY format, ordered by resonance number (or NMRSTAR V2,V3, and SPARKY Converted NMRSTAR V3). 
 2. The sparta file must be in the same format as the direct output of SPARTA+ (pred.tab)
@@ -11,7 +11,7 @@ Requirements:
 
 To run program, simply upload all files, fill in all the blanks (if no mutations, don't input anything), and click run. 
 
-You may also click the generate sparta file only, this will skip the calculations and generate a sparta file for SAPUS use. To do so, simply upload the pred.tab and sequence files, indicate the sequence start number and any mutations you have, and indicate the sparta save file. 
+You may also click the generate sparta file only, this will skip the calculations and generate a sparta file for APS use. To do so, simply upload the pred.tab and sequence files, indicate the sequence start number and any mutations you have, and indicate the sparta save file. 
 
 To quick search the manual, ctrl+f search these titles for each section:
 
@@ -160,4 +160,4 @@ The threshold allows you to set whatever RMSD threshold you want (2, 2.2, 2.25, 
 **Click enter to input entry**
 
 #############NMRSTAR V2,V3, or SPARKY Converted V3############
-You may now upload NMRSTAR V2 or V3 files from BMRB and SAVUS will convert them into the appropriate format for rmsd calculations with SPARTA+. SPARKY Converted V3 files are also supported, however, the nomenclature for the atoms must follow the SPARKY/NMRSTAR format (N,HA,C,CA,CB,H). 
+You may now upload NMRSTAR V2 or V3 files from BMRB and AVSA will convert them into the appropriate format for rmsd calculations with SPARTA+. SPARKY Converted V3 files are also supported, however, the nomenclature for the atoms must follow the SPARKY/NMRSTAR format (N,HA,C,CA,CB,H). 
