@@ -124,7 +124,7 @@ proline_searcher=re.search('\BP',joined)
                     sparta_file_list1.append(f'{proline_count.group(0)}PN'+' 1000'+' 1000')
                     sparta_file_list1.append(f'{proline_count.group(0)}PHN'+' 1000'+' 1000')
                     y=0
-                    ```
+```
 We also want to account for mutations as well. If your protein has a mutation that is not present in the crystal structure, it will give an artificially high rmsd value. As a result, we wish to replace these mutated amino acids, with placeholders of the appropriate mutation residue type. Additionally, we will be using the peaklist to filter out what will be kept and what isn't. The seuence used will have the mutation, thus to include all the amino acids, the sparta file sequence must match the sequence file. 
 
 ```
@@ -143,7 +143,8 @@ if mutation_list1==() or mutation_list2==():
                         sparta_file_list2.append(mutation_replacement)
                     else:
                         sparta_file_list2.append(amino_acids)
-                        ```
+                        
+```                        
 The way this is done is the original mutation is first defined by the user ```mutation_list1``` and then what that amino acid was mutated to is defined next ```mutation_list2```
 There many be multiple mutations, so we want to loop through each mutation first. ```for mutations,mutations2 in zip(mutation_list1,mutation_list2):``` Then we want to loop through every amino acid, and if you find the amino acid using regex, you split the string into its individual values. Thus, if mutation is R133A: the split output would be:
 ```
@@ -202,7 +203,7 @@ The same is true for the last amino. It will be lacking the carbonyl carbon. Thu
 ```
 if len(sparta_file_list3)%6 != 0:
     del sparta_file_list3[-5:-1]
-    ```
+```
 Now we have our properly formatted sparta prediction file for our protein. 
 
 
@@ -261,4 +262,10 @@ list5=[]
                     if glycine_search != None:
                         list5.append(f'{A.group(0)}N-HA2'+ ' 1000' + '\n')
 ```
-A number of things are going on here                    
+A number of things are going on here, so we'll break it down. The peaklists may have a number of peaks unnassigned, thus they'll have ?-? as a label:
+```
+              ?-?    119.954      8.076 
+           Y3N-HN    121.699      7.992 
+           Q4N-HN    121.973      8.343 
+```
+We use a regex search to first eliminate that, and only focus on the assigned peaks. What
