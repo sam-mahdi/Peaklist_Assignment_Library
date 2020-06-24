@@ -7,9 +7,23 @@ from tkinter import ttk
 import functools
 import re
 import webbrowser
+from PIL import ImageTk, Image
+
 
 root = tk.Tk()
-root.title('SAC')
+root.title('AC')
+
+def on_resize(event):
+    image = bgimg.resize((event.width, event.height), Image.ANTIALIAS)
+    l.image = ImageTk.PhotoImage(image)
+    l.config(image=l.image)
+
+root.geometry('1200x600')
+
+bgimg = Image.open('desert.jpg')
+l = tk.Label(root)
+l.place(x=0, y=0, relwidth=1, relheight=1)
+l.bind('<Configure>', on_resize)
 
 class ReadOnlyText(st.ScrolledText):
     def __init__(self, *args, **kwargs):
@@ -76,7 +90,7 @@ def offset_fun():
     text_area.insert(tk.INSERT,f'Offset Value set: {offset_value} \n')
 
 def help():
-    webbrowser.open('https://github.com/sam-mahdi/SPARKY-Assignment-Tools/blob/master/SAC/Manual/Manual.md')
+    webbrowser.open('https://github.com/sam-mahdi/Peaklist_Assignment_Library/blob/master/AC/HELP/Manual.md')
 
 def nmrstar():
     fullpath = filedialog.askopenfilename(parent=root, title='Choose a file')
@@ -122,7 +136,7 @@ def checker():
                 converted=acid_map[residue_type]
                 chemical_shift=C[7]
                 G=[amino_acid_number]+[converted]+[atom_type]+[chemical_shift]
-                if atom_type == 'N' or atom_type == 'HA' or atom_type =='CA' or atom_type == 'CB' or atom_type=='H' or atom_type=='C':
+                if atom_type == 'N' or atom_type == 'HA' or atom_type =='CA' or atom_type == 'CB' or atom_type=='HN' or atom_type=='C':
                     joined=' '.join(G)
                     final_list.append(joined)
         final_list2=[]
@@ -142,14 +156,14 @@ def checker():
                     temp_list2.clear()
                     temp_list3.clear()
                     atom_number_list.append(splitter2[0])
-                    if splitter2[2] == 'H':
+                    if splitter2[2] == 'HN':
                         temp_list.append(amino_acids)
                     elif splitter2[2] == 'N':
                         temp_list2.append(amino_acids)
                     else:
                         temp_list3.append(amino_acids)
                 else:
-                    if splitter2[2] == 'H':
+                    if splitter2[2] == 'HN':
                         temp_list.append(amino_acids)
                     elif splitter2[2] == 'N':
                         temp_list2.append(amino_acids)
@@ -157,7 +171,7 @@ def checker():
                         temp_list3.append(amino_acids)
             else:
                 atom_number_list.append(splitter2[0])
-                if splitter2[2] == 'H':
+                if splitter2[2] == 'HN':
                     temp_list.append(amino_acids)
                 elif splitter2[2] == 'N':
                     temp_list2.append(amino_acids)
@@ -221,12 +235,12 @@ def checker():
                     final_list4.append(temp_list[0]+'-CB'+' 1000'+'\n')
                     count+=1
             if count == 6:
-                if re.findall('-H\s',values) != []:
+                if re.findall('-HN',values) != []:
                     final_list4.append(values+'\n')
                     count=0
                     temp_list.clear()
                 else:
-                    final_list4.append(temp_list[0]+'-H'+' 1000'+'\n')
+                    final_list4.append(temp_list[0]+'-HN'+' 1000'+'\n')
                     temp_list.clear()
                     if re.findall('-N',values) != []:
                         final_list4.append(values+'\n')
@@ -331,4 +345,3 @@ tk.Button(root,text='Quit',command=root.quit).grid(row=4,column=1)
 tk.Button(root,text='Run Checker',command=checker).grid(row=4,column=0)
 tk.Button(root,text='Help',command=help).grid(row=5,column=0)
 root.mainloop()
-
