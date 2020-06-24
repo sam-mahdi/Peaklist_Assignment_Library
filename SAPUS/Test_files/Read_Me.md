@@ -1,5 +1,5 @@
 These tests show both the capabilites of confirming assignments, and assigning peaks even when you only have the i and i-1
-Using the SAVUS_sparta_input file with assigned_peak_list file with a threshold of 2, generates this output
+Using the avs_sparta_input file with assigned_peak_list file with a threshold of 2, generates this output
 Diagonal Sum
 ```
 Diagonal Sum (sorted by rmsd value)
@@ -30,7 +30,7 @@ Combined sum (sorted by rmsd)
 233S-237V rmsd=1.97
 ```
 
-Using the SAVUS_sparta_input file with the unassigned_peak_list file (generated using SAG) using a threshold of 1.2, generates this output:
+Using the avs_sparta_input file with the unassigned_peak_list file (generated using SAG) using a threshold of 1.2, generates this output:
 
 Diagonal Sum
 ```
