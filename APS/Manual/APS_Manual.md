@@ -1,9 +1,9 @@
 
-This is the manual for SAPUS (Sparky Assignment prediction using SPARTA+). This was written in python3 and uses numpy, matplotlib, tkinter, webbrowser, and mplcursors. The program requires a modified SPARTA+ file generated from SAVUS, and a chemical shift file of your unknown assignment(s). It calculates the rmsd value of your unknown peaks with predicted SPARTA+ values to determine which amino acid your unknowns would be.   
+This is the manual for APS (Sparky Assignment prediction using SPARTA+). This was written in python3 and uses numpy, matplotlib, tkinter, webbrowser, and mplcursors. The program requires a modified SPARTA+ file generated from AVS, and a chemical shift file of your unknown assignment(s). It calculates the rmsd value of your unknown peaks with predicted SPARTA+ values to determine which amino acid your unknowns would be.   
 
 Requirements: 
-1. SPARTA+ file must be formatted properly (use SAVUS)
-2. Peaklist file formatting must match SPARTA+ formatting (you can use SAVUS for peaks you have assigned, and SAG for unknowns)
+1. SPARTA+ file must be formatted properly (use AVS)
+2. Peaklist file formatting must match SPARTA+ formatting (you can use AVS for peaks you have assigned, and AG for unknowns)
 
 To run the program simply upload the sparta file and peaklist file to predict. Set the threshold rmsd value, and pick which calculation you want done. A list of rmsd sorted from best match to worst (low to high rmsd) will be printed, and a plot of those rmsds will be generated.
 
@@ -26,11 +26,11 @@ To quick search the manual, ctrl+f search these titles for each section:
 
 #############SPARTA File###########
 
-The SPARTA+ format must follow the SAVUS format. There is an option in SAVUS to only generate a SPARTA+ file. Simply upload the raw pred.tab SPARTA+ file with your sequence, indicate sequence number and any mutations in you sample that deviate from the crystal structure used for SPARTA. 
+The SPARTA+ format must follow the AVS format. There is an option in AVS to only generate a SPARTA+ file. Simply upload the raw pred.tab SPARTA+ file with your sequence, indicate sequence number and any mutations in you sample that deviate from the crystal structure used for SPARTA. 
 
 #############Chemical shift File###########
 
-You may make your own chemical shift file, or use SAG to generate one. SAVUS also generates a compiled chemical shift file from the NHSQC, HNCA, HNCO, HNCACB peaklists that is properly formatted. To make your own, the format must follow **The i-1 amino acid must be first, followed by the i amino acid**:
+You may make your own chemical shift file, or use SAG to generate one. AVS also generates a compiled chemical shift file from the NHSQC, HNCA, HNCO, HNCACB peaklists that is properly formatted. To make your own, the format must follow **The i-1 amino acid must be first, followed by the i amino acid**:
 
 ```
 X1N-HN 113.882
@@ -117,7 +117,7 @@ To maximize the differentiaton between various potential matches, you can combin
 
 #############Use for i+1 or i-1##########
 
-When trying to find an i-1 or i+1 of an amino acid, you may have multiple potential options. To narrow down your options and find the best fit, you can generate a file of your assigned amino acids using SAVUS, then the chemical shift values of your various potentials and determine which gives the lowest rmsd value. 
+When trying to find an i-1 or i+1 of an amino acid, you may have multiple potential options. To narrow down your options and find the best fit, you can generate a file of your assigned amino acids using AVS, then the chemical shift values of your various potentials and determine which gives the lowest rmsd value. 
 ```
 Known/Assigned peaks
 R86N-HN 117.438
@@ -213,7 +213,7 @@ X2N-HN 7.837
 In other cases you may have 3 or 4 matches, however the chemical shifts are all in non-unique ranges. SPARTA is also particular useful for this as well. 
 #############Confirming Assignment of peaks##########
 
-During the assignment process, there are many isntances where you may doubt a series of your assignmnents or question their validity. While SAVUS can be used, that is designed more for the entire protein. Use SAVUS to generate a properly formatted/compiled peaklist file. Then use SAPUS to confirm the range of amino acids you are looking for has the lowest rmsd value. 
+During the assignment process, there are many isntances where you may doubt a series of your assignmnents or question their validity. While AVS can be used, that is designed more for the entire protein. Use AVS to generate a properly formatted/compiled peaklist file. Then use APS to confirm the range of amino acids you are looking for has the lowest rmsd value. 
 
 ```
 Assigned amino acids
