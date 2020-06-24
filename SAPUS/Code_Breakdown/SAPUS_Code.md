@@ -89,3 +89,27 @@ The sparta file is going to have error values as well:
 4QCB 32.000 1.586
 ```
 Thus these are each stored seperately. The RMSD is then taken. If an atom is missing, each atom type will have a value of 1000, thus it will be ignored and not added to a list. As a result, the list will be empty. These atoms will have an rmsd of 0. These values are then added to a list. When you have gone through every amino acid in the sparta file, the list is then converted into an array, and stored into the matrix. The iteration counter will be used to add it into the appropriate row (row 1 is the first amino acid, row 2 the 2nd, etc.). The list is then cleared and we start over. 
+
+Now we want to take the diagonal sum. To do this, we can use the built in diagonal option of numpy:
+```
+list1=[]
+    for i in range(columns_divided):
+        diagonal=np.diag(matrix,i)
+        if len(diagonal)==rows_divided:
+            summed_diagonal=(sum(diagonal))/(len(diagonal))
+            if summed_diagonal<set_threshold:
+                ax.scatter(i,summed_diagonal)
+                tuples=(f'{dict[i]}-{dict[i+rows_divided-1]} rmsd=',summed_diagonal)
+                list1.append(tuples)
+        else:
+            break
+```
+This takes the diagonal, starting at index i in our matrix. Thus, we go through the number of amino acids we have, and take the sum of the diagonal. However, what would be more useful is the average value of that sum. (easier to compare 1.1 and 2.4 than 50.5 and 53.2). Then we filter using a threshold the user sets, and use a tuple to store it. Using a tuple will enable us to then sort it from lowest rmsd to highest. 
+``
+A=sorted(list1, key=lambda rmsd:rmsd[1])
+    listed=list(A)
+    for value in listed:
+        two_decimal_points='%.2f' % value[1]
+        text_area.insert(tk.INSERT,f'{value[0]}{two_decimal_points}\n')
+```
+This basically just sorts the list using the rmsd falue. 
