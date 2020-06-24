@@ -1,4 +1,4 @@
-Using SAVUS, the sparta file and peaklist file are now the proper format. Both have 6 atoms for each amino acid, and are the same size. 
+Using AVS, the sparta file and peaklist file are now the proper format. Both have 6 atoms for each amino acid, and are the same size. 
 
 There are a variety of ways to calculate the rmsd. 
 
