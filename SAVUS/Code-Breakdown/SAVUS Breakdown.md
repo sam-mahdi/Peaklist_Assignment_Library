@@ -268,4 +268,115 @@ A number of things are going on here, so we'll break it down. The peaklists may 
            Y3N-HN    121.699      7.992 
            Q4N-HN    121.973      8.343 
 ```
-We use a regex search to first eliminate that, and only focus on the assigned peaks. What
+We use a regex search to first eliminate that, and only focus on the assigned peaks. The loop will go through every amide, and continue down to the other peaklists, however, it appends as it goes. Thus, any missing amino acids need to be added within the loop (as it goes). Thus, we have another loop setup. 
+```
+                    C=re.search(r'-*\d+',modifications)
+                    for a in list2:
+                        if a == int(C.group(0)):
+                            break
+                        elif a>int(C.group(0)):
+                            break
+                        else:
+                            for z in list5:
+                                if re.findall(f'^[A-Z]{a}N',z):
+                                    break
+                            else:
+                                list5.append(f'{dict[a]}{a}N-HN' + ' 1000' + '\n')
+                                list5.append(f'{dict[a]}{a}N-HA' + ' 1000' +'\n')
+                                list5.append(f'{dict[a]}{a}N-C' + ' 1000' +'\n')
+                                list5.append(f'{dict[a]}{a}N-CA' + ' 1000' +'\n')
+                                list5.append(f'{dict[a]}{a}N-CB' + ' 1000' +'\n')
+                                list5.append(f'{dict[a]}{a}N-HN' + ' 1000' +'\n')
+                                
+```
+List2 is the size of your sequence, indicating how many peaks/amino acids you should have. C is a regex that isolates the residue number. So if you have the amide for a particular amino acid, the loop is broken and it is added to the overall list. There may be instances where your sequence has values that are beyond your peaklist, if that is the case, but since we only care about the values within your peaklist, then those are removed. Otherwise, then you go to the 2nd loop. This first searches through the overall list to search for the value of a. If it finds it, it breaks the loop. This is to ensure you don't get duplicate additions (since you will go through your sequence list for every amide in your peaklist). If it doesn't find it, it adds the placeholder values using the dictionary to determine the residue type. 
+
+The next few lines then use the amide as a base template, search through the other peaklist files using the amides residue number+type, and extract the required info. 
+```
+                    splitting1=modifications.split()
+                    list5.append(splitting1[0]+ ' '+ splitting1[1] + '\n')
+                    A=re.search(r'[A-Z]-*\d+',modifications)
+                    list5.append(f'{A.group(0)}N-HA'+ ' 1000' + '\n')
+                    glycine_search=re.search(r'^G',modifications)
+                    if glycine_search != None:
+                        list5.append(f'{A.group(0)}N-HA2'+ ' 1000' + '\n')
+                    with open(HNCA_file) as HNCA,open(HNCO_file) as HNCO, open (HNCACB_file) as HNCACB:
+                        for line3 in HNCO:
+                            modifications3=line3.strip().upper()
+                            if re.findall(f'{A.group(0)}C',modifications3):
+                                splitting3=modifications3.split()
+                                list5.append(f'{A.group(0)}C' + ' '+  splitting3[2]+'\n')
+                                break
+                        else:
+                            list5.append(f'{A.group(0)}C-HN'+ ' 1000' +'\n')
+                        for line2 in HNCA:
+                            modifications2=line2.strip().upper()
+                            if re.findall(f'{A.group(0)}N-CA',modifications2):
+                                splitting2=modifications2.split()
+                                list5.append(splitting2[0] + ' ' + splitting2[2]+ '\n')
+                                break
+                        else:
+                            list5.append(f'{A.group(0)}N-CA'+ ' 1000' +'\n')
+                        for line4 in HNCACB:
+                            modifications4=line4.strip().upper()
+                            splitting4=modifications4.split()
+                            if glycine_search != None:
+                                break
+                            if re.findall(f'{A.group(0)}N-CB',modifications4):
+                                list5.append(splitting4[0] + ' '+splitting4[2]+'\n')
+                                break
+                        else:
+                            list5.append(f'{A.group(0)}N-CB'+ ' 1000' +'\n')
+                    list5.append(splitting1[0]+ ' '+ splitting1[2] + '\n')
+```
+
+   Again, you add as you go along. First you add the Nitrogen value, or a place holder if its missing, then you add the alpha hydrogen, carbonyl carbon, alpha carbon, beta carbon, and finally the amid enitrogen. Placeholders are added at each place if the value is missing. Glycines have an HA2 and don't have an CB, as a result, a search is also done for glycines to add HA2 values, and break the loop for the CBs (since it won't be there). 
+   
+ Each amino acid should have its 6 values now ordered N,HA,C,CA,CB. Thus the peaklists are compiled into the proper format. The next step is to modify the peaklist files, so it only contains values within sparta. Chemical shifts for solubility tags, or other domains present in your protein but not in the crystal structure (and thus the sparta file), are removed.  
+ 
+ ```
+        for lines in list5:
+            modify=lines.strip()
+            splitting5=modify.split()
+            number_search=re.search('\d+',splitting5[0])
+            amino_acid_search=re.search('^[A-Z]',splitting5[0])
+            string_to_be_searched=number_search.group(0)+amino_acid_search.group(0)+'N'
+            r=re.compile(string_to_be_searched)
+            comparison_to_sparta=list(filter(r.match,sparta_file_list3))
+            if comparison_to_sparta != []:
+                list3.append(modify)
+            else:
+                count+=1
+                if count==6:
+                    #if any amino acid is the peaklist, but not SPARTA file, it will be excluded and printed out here
+                    count=0
+                    text_area.insert(tk.INSERT,f'{splitting5[0]} was excluded\n')
+```
+The amino acids in your peaklists however are formatted residue type first, followed by residue number (Y3N), whereas in sparta they are reveresed (3YN). Thus first the peaklist factors are flipped to match sparta. Then you go through each amino acid, and search the sparta file to see if its there. If it is, they are added to the list, otherwise they are excluded and a printout to tell the user what has been excluded. Since you don't want duplicates being printed, you only print the amide hydrogen value. 
+
+Now that the sparta file and compiled peaklist files are the same size and formatted properly, we can go through them and calculate the rmsd of each amino acid with its predicted sparta value. 
+
+```
+        list4=[]
+        number=0
+        for experimental,predictions in zip(list3,sparta_file_list3):
+            number+=1
+            splitting6=experimental.split()
+            splitting7=predictions.split()
+            square_deviation=((float(splitting7[1])-float(splitting6[1]))**2)/((float(splitting7[2]))**2)
+            if square_deviation>100:
+                square_deviation=0
+            else:
+                list4.append(square_deviation)
+            if number%6 ==0:
+                if len(list4)==0:
+                    continue
+                else:
+                    rmsd=math.sqrt((1/int(len(list4)))*sum(list4))
+                    list4.clear()
+                    if rmsd>float(set_threshold):
+                        text_area.insert(tk.INSERT,f'{splitting6[0]} had a rmsd of {rmsd}\n')
+```
+Since the sizes of the 2 files are the same. We can simply go through each, calculate the square deviation, store it in a list, and take the sum of that list to get the rmsd. The reason the placeholders were 1000 were to eliminate them from the calculations. If the square deviation is above 1000, then the value is not used for calculatons. 
+
+
