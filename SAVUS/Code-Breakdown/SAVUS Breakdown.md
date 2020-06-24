@@ -31,7 +31,7 @@ Thus the first loop:
 ```
 for amino_acid in sequence_file:
         stripped_amino_acid=amino_acid.strip().upper()
-        ```
+ ```
 Will go line by line, and remove leading or trailing white spaces. It will also convert all letters to uppercase (peaklists and all files below only use upper case letters for residues). 
 The 2nd loop:
 ```
