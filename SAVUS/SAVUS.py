@@ -1687,7 +1687,7 @@ tk.Button(root,text='Run using NMRSTAR V3 file',command=nmrstarrun3).grid(row=14
 tk.Button(root,text='Run using NMRSTAR V2 file',command=nmrstarrun2).grid(row=14,column=2)
 tk.Button(root,text='Run using SPARKY converted NMRSTAR V3 file',command=sparky_to_nmrstar).grid(row=15,column=2)
 tk.Button(root,text='Help',command=help).grid(row=15,column=0)
-tk.Button(root,text='Generate SPARTA file only (for SOPUS)',command=sparta_gen_only).grid(row=15,column=1)
+tk.Button(root,text='Generate SPARTA file only (for SAPUS)',command=sparta_gen_only).grid(row=15,column=1)
 
 root.mainloop()
 #tk.mainloop()
