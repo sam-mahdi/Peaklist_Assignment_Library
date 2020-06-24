@@ -38,8 +38,8 @@ The 2nd loop:
 for word in stripped_amino_acid:
             amino_acid_count+=1
             sequence_list.append(str(amino_acid_count)+word)
-            ```
- The 2nd loop will go through the every single amino acid. Rather than using a residue number list, one is instead generated with amino_acid_count. The user inputs the starting residue number, and it simply adds upon that. This is then concatenated with the amino acid to give a singular output. ```1Y```` Thus, now we have a sequence list we can later use to indicate which amino acids in the sparta file we want to use. 
+ ```
+ The 2nd loop will go through the every single amino acid. Rather than using a residue number list, one is instead generated with amino_acid_count. The user inputs the starting residue number, and it simply adds upon that. This is then concatenated with the amino acid to give a singular output. ```1Y``` Thus, now we have a sequence list we can later use to indicate which amino acids in the sparta file we want to use. 
  
  
  The next set is doing a variety of things. It is extracting the requried parameters from sparta, in addition to filling in missing info for prolines. 
