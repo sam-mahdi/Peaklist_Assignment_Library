@@ -11,14 +11,14 @@ import numpy as np
 import matplotlib.pyplot as plt
 import mplcursors
 import webbrowser
-#from PIL import ImageTk, Image
+from PIL import ImageTk, Image
 
 
 
 
 
 root = tk.Tk()
-root.title('SAPUS')
+root.title('APS')
 root.geometry('800x600')
 
 def on_resize(event):
@@ -26,10 +26,10 @@ def on_resize(event):
     l.image = ImageTk.PhotoImage(image)
     l.config(image=l.image)
 
-#bgimg = Image.open('thunderstorm.jpg')
-#l = tk.Label(root)
-#l.place(x=0, y=0, relwidth=1, relheight=1)
-#l.bind('<Configure>', on_resize)
+bgimg = Image.open('beach.jpg')
+l = tk.Label(root)
+l.place(x=0, y=0, relwidth=1, relheight=1)
+l.bind('<Configure>', on_resize)
 
 class ReadOnlyText(st.ScrolledText):
     def __init__(self, *args, **kwargs):
@@ -60,8 +60,8 @@ dat_file=()
 dat_directory=()
 set_threshold=()
 
-tk.Label(root, text="Sparta File (use SAVUS to generate proper SPARTA format)").grid(row=0)
-tk.Label(root, text="Chemical shift file\n Ensure in proper format (check manual or use SAG to generate)").grid(row=1)
+tk.Label(root, text="Sparta File (use AVS to generate proper SPARTA format)").grid(row=0)
+tk.Label(root, text="Chemical shift file\n Ensure in proper format (check manual or use AG to generate)").grid(row=1)
 tk.Label(root, text="Set RMSD Threshold (click enter when done)").grid(row=2)
 
 e1 = tk.Entry(root)
@@ -86,7 +86,7 @@ def threshold():
     text_area.insert(tk.INSERT,f'RMSD Threshold set: {threshold_input} \n')
 
 def help():
-    webbrowser.open('https://github.com/sam-mahdi/SPARKY-Assignment-Tools/blob/master/SAPUS/Manual/SAPUS_Manual.md')
+    webbrowser.open('https://github.com/sam-mahdi/Peaklist_Assignment_Library/blob/master/APS/Manual/APS_Manual.md')
 
 def clear_option():
     text_area.delete(1.0,END)
@@ -328,7 +328,6 @@ def combined_sum():
     count=0
     numpy_list=[]
     iterations=-1
-    shit=0
     for experiments in experimental_values:
         modifier=experiments.strip()
         splitting=modifier.split()
@@ -345,7 +344,6 @@ def combined_sum():
                 count+=1
                 if count ==6:
                     count=0
-                    shit+=1
                     for predict,experiment,error in zip(predict_value,experiment_value,error_value):
                         square_deviation=(((float(predict)-float(experiment))**2)/((float(error))**2))
                         if square_deviation>100:
