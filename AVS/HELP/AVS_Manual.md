@@ -23,6 +23,7 @@ To quick search the manual, ctrl+f search these titles for each section:
 6. #Mutations#
 7. #Sequence Number Start#
 8. #Threshold#
+
 9.#NMRSTAR V2,V3, or SPARKY Converted V3#
 
 
