@@ -51,23 +51,19 @@ text_area.grid(column = 0,columnspan=2,sticky=W+E,pady = 10, padx = 10)
 tk.Label(root, text="Sequence File").grid(row=0)
 tk.Label(root, text="NMR_STAR V3 SPARKY converted File").grid(row=1)
 tk.Label(root, text="Please type in what residue number the first amino acid in the sequence file is\nI.E. if the first amino acid in the sequence file is 20, type in 20\n Click enter when done").grid(row=2)
-tk.Label(root, text="Offset value (if protein contains tag, indicate how many amino acids in tag e.g. His-Tag pETDeut is 14)\n If no tag, leave blank. Click enter when done. ").grid(row=3)
 
 e1 = tk.Entry(root)
 e2 = tk.Entry(root)
 e3 = tk.Entry(root)
-e4 = tk.Entry(root)
 e1.grid(row=0, column=1)
 e2.grid(row=1, column=1)
 e3.grid(row=2, column=1)
-e4.grid(row=3, column=1)
 
 seq_file=()
 seq_directory=()
 seq_start=()
 nmrstarfile=()
 nmrstarfile_directory=()
-offset_value=()
 
 def input_seq():
     fullpath = filedialog.askopenfilename(parent=root, title='Choose a file')
@@ -82,12 +78,6 @@ def seq_number():
     global seq_start
     seq_start=int(seq_input)
     text_area.insert(tk.INSERT,f'number entered: {seq_input} \n')
-
-def offset_fun():
-    offset_input=e4.get()
-    global offset_value
-    offset_value=int(offset_input)
-    text_area.insert(tk.INSERT,f'Offset Value set: {offset_value} \n')
 
 def help():
     webbrowser.open('https://github.com/sam-mahdi/Peaklist_Assignment_Library/blob/master/AC/HELP/Manual.md')
@@ -127,16 +117,13 @@ def checker():
             if A != None:
                 atom_search=A.string
                 C=atom_search.split()
-                if offset_value == ():
-                    amino_acid_number=C[2]
-                else:
-                    amino_acid_number=str(int(C[2])-offset_value)
+                amino_acid_number=str(int(C[2])+int(seq_start)-1)
                 residue_type=C[3]
                 atom_type=C[4]
                 converted=acid_map[residue_type]
                 chemical_shift=C[7]
                 G=[amino_acid_number]+[converted]+[atom_type]+[chemical_shift]
-                if atom_type == 'N' or atom_type == 'HA' or atom_type =='CA' or atom_type == 'CB' or atom_type=='HN' or atom_type=='C':
+                if atom_type == 'N' or atom_type == 'HA' or atom_type =='CA' or atom_type == 'CB' or atom_type=='H' or atom_type=='C':
                     joined=' '.join(G)
                     final_list.append(joined)
         final_list2=[]
@@ -156,14 +143,14 @@ def checker():
                     temp_list2.clear()
                     temp_list3.clear()
                     atom_number_list.append(splitter2[0])
-                    if splitter2[2] == 'HN':
+                    if splitter2[2] == 'H':
                         temp_list.append(amino_acids)
                     elif splitter2[2] == 'N':
                         temp_list2.append(amino_acids)
                     else:
                         temp_list3.append(amino_acids)
                 else:
-                    if splitter2[2] == 'HN':
+                    if splitter2[2] == 'H':
                         temp_list.append(amino_acids)
                     elif splitter2[2] == 'N':
                         temp_list2.append(amino_acids)
@@ -171,7 +158,7 @@ def checker():
                         temp_list3.append(amino_acids)
             else:
                 atom_number_list.append(splitter2[0])
-                if splitter2[2] == 'HN':
+                if splitter2[2] == 'H':
                     temp_list.append(amino_acids)
                 elif splitter2[2] == 'N':
                     temp_list2.append(amino_acids)
@@ -235,12 +222,12 @@ def checker():
                     final_list4.append(temp_list[0]+'-CB'+' 1000'+'\n')
                     count+=1
             if count == 6:
-                if re.findall('-HN',values) != []:
+                if re.findall('-H\s',values) != []:
                     final_list4.append(values+'\n')
                     count=0
                     temp_list.clear()
                 else:
-                    final_list4.append(temp_list[0]+'-HN'+' 1000'+'\n')
+                    final_list4.append(temp_list[0]+'-N'+' 1000'+'\n')
                     temp_list.clear()
                     if re.findall('-N',values) != []:
                         final_list4.append(values+'\n')
@@ -249,7 +236,7 @@ def checker():
                         final_list4.append(atom_find.group(0)+'-N'+' 1000'+'\n')
                         final_list4.append(values+'\n')
                         count=2
-                    if re.findall('-C',values) != []:
+                    if re.findall('-C\s',values) != []:
                         final_list4.append(atom_find.group(0)+'-N'+' 1000'+'\n')
                         final_list4.append(atom_find.group(0)+'-HA'+' 1000'+'\n')
                         final_list4.append(values+'\n')
@@ -340,7 +327,6 @@ def checker():
 tk.Button(root,text='browse',command=input_seq).grid(row=0,column=2)
 tk.Button(root,text='enter',command=seq_number).grid(row=2,column=2)
 tk.Button(root,text='browse',command=nmrstar).grid(row=1,column=2)
-tk.Button(root,text='enter',command=offset_fun).grid(row=3,column=2)
 tk.Button(root,text='Quit',command=root.quit).grid(row=4,column=1)
 tk.Button(root,text='Run Checker',command=checker).grid(row=4,column=0)
 tk.Button(root,text='Help',command=help).grid(row=5,column=0)
