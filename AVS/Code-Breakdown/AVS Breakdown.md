@@ -92,7 +92,7 @@ with open('sparta_pred.tab') as sparta_predictions:
     for line in sparta_predictions:
         modifier=line.strip().upper()
         if re.findall('^\d+',modifier):
-        ````
+ ````
 Additionally, the leading/trailing white lines are removed (otherwise the lines would all start with white spaces instead of numbers). 
 The sparta prediction have a variety of info, from errors, to a range of chemical shift values, etc. We only care about 1 chemical shift value, the residue number, residue type, and atom type. 
 ```
@@ -106,10 +106,10 @@ A=modifier.split()
             A[0:3]=["".join(A[0:3])]
             joined=" ".join(A)
             sparta_file_list1.append(joined)
-            ```
+```
             
  Gives the output:
- ```
+```
  ['368', 'P', 'CB', '0.000', '31.693', '31.700', '-0.012', '0.000', '0.726']
  ```
  Additionally, we want to combine the residue type, number, and atom type but have it seperate from the chemical shift value ```3YHA 4.561```
