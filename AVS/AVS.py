@@ -1533,7 +1533,7 @@ def sparky_to_nmrstar():
                     final_list4.append(atom_find.group(0)+'-N'+' 1000'+'\n')
                     final_list4.append(values+'\n')
                     count=2
-                if re.findall('-C',values) != []:
+                if re.findall('-C\s',values) != []:
                     final_list4.append(atom_find.group(0)+'-N'+' 1000'+'\n')
                     final_list4.append(atom_find.group(0)+'-HA'+' 1000'+'\n')
                     final_list4.append(values+'\n')
