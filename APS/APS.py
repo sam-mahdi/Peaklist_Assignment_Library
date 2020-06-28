@@ -299,10 +299,16 @@ def combined_sum():
     dict={}
     amino_acid_number=-1
     counter=0
+    first_value=[]
+    first_value_counter=0
     with open(sparta_file) as predictions, open(dat_file) as experimental:
         rows=0
         columns=0
         for lines in predictions:
+            first_value_counter+=1
+            if first_value_counter<2:
+                first_value_search=re.search('^\d+',lines)
+                first_value.append(first_value_search.group(0))
             dict_modifier=lines.strip()
             counter+=1
             if counter==6:
@@ -445,7 +451,7 @@ def combined_sum():
     plt.ylabel('RMSD')
     crs = mplcursors.cursor(ax,hover=True)
     crs.connect("add", lambda sel: sel.annotation.set_text(
-        'Point {},{}'.format(dict[sel.target[0]-4], '%.2f' % sel.target[1])))
+        'Point {},{}'.format(dict[sel.target[0]-int(first_value[0])], '%.2f' % sel.target[1])))
     plt.show()
 
 
