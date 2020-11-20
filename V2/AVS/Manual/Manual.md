@@ -5,6 +5,7 @@ While a lot under the hood has changed, the general use of the program is still 
 There are 9 lines. 
 
 Line 1 ***If Using SPARKY Peaklist Files***
+
 This will open a new window, where one may upload SPARKY peaklist files. Currently NHSQC, HNCA, HNCACB, HNCO, HNCOCA, HBHACONH, CHSQC, CCH_TOCSY, and CCC_TOCSYs are accepted. 
 
 The sequence list must be single-letter format with no headers or symbols. 
@@ -25,6 +26,7 @@ The standard deviation value will print anything above the set value. Chemical s
 You may add a BMRB file for your peaks to be compared to (make sure you download and use the csv). https://bmrb.io/ref_info/csstats.php?set=full&restype=aa&output=html
 
 ***Output***
+
 A series of outputs will be printed out. 
 
 The program will go through and check the labeling first. If anything is mislabeled, it will tell you want spectra the unlabeled peak is in, and what the error is. 
@@ -76,6 +78,7 @@ This can be readily inputted into multiple programs (including AVS) and run.
 
 
 ***Line 2 Sparta or BMRB file***
+
 A pred.tab file generated from sparta+ can be inputted here. If a structure of the protein is unavailable, then a csv https://bmrb.io/ref_info/csstats.php?set=full&restype=aa&output=html file can be added. Simply browse and click the desired file. 
 
 ***Line 3 Sequence File***
@@ -86,26 +89,33 @@ MSQYSDSG
 ```
 
 ***Line 4 Save Sparta or BMRB file***
+
 This will generate a Sparta or BMRB file that is in the appropriate format for APS (if you wish to use that). 
 
 ***Line 5 Save Peaklist File***
+
 This will generate a file of your peaklists (from the NMRSTAR file you inputted) that is in the appropriate format for APS. 
 
 ***Line 6 Mutations***
+
 If there are any variations between your sequence and the PDB file used, they can be added here. If there are multiple, simply seaparate with a space. 
 ```
 R133A Q234T
 ```
 ***Line 7 Sequence Start***
+
 Type in whatever the first sequence number in the provided sequence is. Make sure this coincides with the PDB file if using Sparta+. I.E. Amino acid 1 should be the same residue as whatever amino acid 1 in the PDB file is (i.E. 1M in your assignments should be 1M in the pdb). 
 
 ***Line 8 Set Threshold***
+
 Any value above this RMSD threshold will be printed out. These RMSDs are calculated from either SPARTA+ or BMRB values depending on which option was selected. 
 
 ***Line 9 NMRSTAR Files***
+
 This is where the peaklist is uploaded. Only 3 formats are currently accepted. BMRB NMRSTAR V2 and V3, as well as the NMRSTAR 3.1 that is generated from uploading SPARKY files.
 
 ***Button Options***
+
 There are 4 options. 
 You may calculate RMSDs from either SPARTA+ or BMRB using your experimental data. 
 Or 
