@@ -148,7 +148,7 @@ def threshold():
     text_area.insert(tk.INSERT,f'RMSD Threshold set: {threshold_input} \n')
 
 def help():
-    webbrowser.open('https://github.com/sam-mahdi/Peaklist_Assignment_Library/blob/master/AVS/HELP/AVS_Manual.md')
+    webbrowser.open('https://github.com/sam-mahdi/Peaklist_Assignment_Library-PAL-/blob/master/V2/AVS/Manual/Manual.md')
 
 def nmrstar():
     fullpath = filedialog.askopenfilename(parent=root, title='Choose a file')
