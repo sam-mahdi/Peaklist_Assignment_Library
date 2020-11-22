@@ -120,3 +120,26 @@ There are 4 options.
 You may calculate RMSDs from either SPARTA+ or BMRB using your experimental data. 
 Or 
 You may generate only the SPARTA+ or BMRB files that are in the appropriate for APS, and skip the RMSD calculations to your peaklists. 
+
+****Assignment Percentage Completion****
+To calculate assignment completion, upload the converted NMRSTAR file (you don't need to rerun the converter program if you have the NMRSTAR file), and sequence file (same format as for AVS)
+The program will calculate heavy atoms (N,C) backbone, alpha+beta,gamma,epislon, ILV methyls, and an all-atom percentage. 
+
+***Custom Percentage***
+You may decide to calculate your own custom percantage. To do so, simply upload your sequence (single letter, no header/symbols) and NMRSTAR file, and click custom. 
+
+You may assign a value to each amino acid, for the atom which you want to search. Separate each atom with a space. 
+I.E.
+If you want to look for backbone assignment using Nitrogen. Input the number 1 for every amino acid (except proline), and in the atom list, type 'N'. 
+If you want to look for alphas and betas, type in 2 for every amino acid except glycine (type in 1 for glycine since it lacks a CB). And type in 'CA CB'
+
+If the amino acid has no value (i.e. you wish to search for CBs, but glycine doesn't have a CB) simply leave it blank
+
+You can search any atom you wish. It's important to note, the 'enter' option is not amino acid specific, it is atom specific. 
+I.E. If you look up CG2, remember to give THR a value of 1, since it also has a CG2.
+
+If you wish to have amino acid AND atom specific, you may use the special run. This will look at any amino acid which has a value, using the specified atoms. 
+I.E. If you want to know how many CG1 of Valines you've assigned (and not other CG1 such as LEU), add a value of 1 only to VAL, and type CG1 into the atom list. 
+
+You may search multiple atoms for multiple amino acids. 
+I.E. CG1 CG2 CD1 CD2 for VAL, LEU, ILE can be searched (keep in mind LEU has a CG1 that is not a methyl, so use the ILV methyl from the default percantage completion for methyls). 
