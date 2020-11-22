@@ -103,7 +103,7 @@ def nmrstar(residues,amino_acids,atoms,shifts,regex_search,nmrstarfile):
                                 if values == atom:
                                     missing_flag=False
                             if missing_flag is True:
-                                list_containing_desired_atoms.append(f'{number} {residue} {values} 1000')
+                                list_containing_desired_atoms.append(f'{number} {residue} {values} 1000.00')
                         list_in_proper_format+=sorted(list_containing_desired_atoms,key=format_order_glycine)
                         temp_list.clear()
                         list_containing_desired_atoms.clear()
@@ -121,7 +121,7 @@ def nmrstar(residues,amino_acids,atoms,shifts,regex_search,nmrstarfile):
                                 if values == atom:
                                     missing_flag=False
                             if missing_flag is True:
-                                list_containing_desired_atoms.append(f'{number} {residue} {values} 1000')
+                                list_containing_desired_atoms.append(f'{number} {residue} {values} 1000.00')
                         list_in_proper_format+=sorted(list_containing_desired_atoms,key=format_order)
                         temp_list.clear()
                         list_containing_desired_atoms.clear()
@@ -170,6 +170,6 @@ def fill_in_missing_data(seq_file,nmrstarfile,seq_start,text_area):
                     break
             else:
                 for items in desired_format:
-                    completed_list.append(f'{values} {items} 1000')
+                    completed_list.append(f'{values} {items} 1000.00')
                 break
     return completed_list
