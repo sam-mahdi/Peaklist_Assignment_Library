@@ -41,5 +41,6 @@ In the diagonal sum, N is 6 and X is 1 since you are only looking at a single am
 However, for combined sum, N and X are the number of amino acids in the file. 
 
 ****Combined Sum****
+
 This combines the above two methods. This can be useful since sometimes an RMSD value might be calculated higher using one method than the other. Thus filtering out bad mathces.
 However, one method may give you a better answer than the other, thus combining them may cause you to get a higher RMSD than accurate. 
