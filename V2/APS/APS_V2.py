@@ -88,7 +88,7 @@ def threshold():
     text_area.insert(tk.INSERT,f'RMSD Threshold set: {threshold_input} \n')
 
 def help():
-    webbrowser.open('https://github.com/sam-mahdi/Peaklist_Assignment_Library/blob/master/APS/Manual/APS_Manual.md')
+    webbrowser.open('https://github.com/sam-mahdi/Peaklist_Assignment_Library-PAL-/blob/master/V2/APS/Manual/Manual.md')
 
 def clear_option():
     text_area.delete(1.0,END)
