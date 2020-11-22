@@ -28,6 +28,7 @@ Diagonal Vector 2 = 2.38 2.65, ...etc.
 The diagonal vector where all the RMSD values are below the threshold, will be displayed. 
 
 ****RMSD Sum****
+
 Instead of calculating the RMSD of each un(assigned) amino acid individually, they are now calculated as a group. 
 I.E. If you have 6 amino acids in your file, the RMSD equation is now being calculated with 6 amino acids from SPARTA+/BMRB. 
 
