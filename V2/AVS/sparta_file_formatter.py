@@ -31,11 +31,11 @@ def format_sparta(sparta_file,sparta_directory):
                 if amino_acid == 'P':
                     proline_counter+=1
                     if proline_counter<2:
-                        sparta_extracted_value_list.append(f'{residue_number} P N'+' 1000'+' 1000')
+                        sparta_extracted_value_list.append(f'{residue_number} P N'+' 1000.00'+' 1000.00')
                     else:
                         if proline_counter == 4:
                             sparta_extracted_value_list.append(new_line)
-                            sparta_extracted_value_list.append(f'{residue_number} P HN'+' 1000'+' 1000')
+                            sparta_extracted_value_list.append(f'{residue_number} P HN'+' 1000.00'+' 1000.00')
                             proline_counter=0
                             continue
                 sparta_extracted_value_list.append(new_line)
