@@ -58,8 +58,8 @@ class newTopLevel(object):
     def __init__(self, root):
         global text_area
         self.newWindow = Toplevel(root)
-        self.newWindow.title("New Window")
-        self.newWindow.geometry("800x800")
+        self.newWindow.title("SPARKY to NMRSTAR 3.1")
+        self.newWindow.geometry("1200x800")
         tk.Label(self.newWindow, text="Sequence File").grid(row=0)
         tk.Label(self.newWindow, text="NHSQC Peaklist").grid(row=1)
         tk.Label(self.newWindow, text="HNCA  Peaklist").grid(row=2)
@@ -113,15 +113,21 @@ class newTopLevel(object):
         self.newWindow.btn.grid(row=11,column=2)
         self.newWindow.btn = tk.Button(self.newWindow,text='browse',command=self.bmrb_file)
         self.newWindow.btn.grid(row=12,column=2)
-        self.newWindow.btn = tk.Button(self.newWindow,text='run',command=self.run_spartytonmrstar)
+        self.newWindow.btn = tk.Button(self.newWindow,text='Run',command=self.run_spartytonmrstar)
+        self.newWindow.btn.grid(row=13,column=1)
+        self.newWindow.btn = tk.Button(self.newWindow,text='Quit',command=self.newWindow.destroy)
+        self.newWindow.btn.grid(row=14,column=1)
+        self.newWindow.btn = tk.Button(self.newWindow,text='Assignment Completion',command=self.assignment_completion)
         self.newWindow.btn.grid(row=13,column=2)
+        self.newWindow.btn = tk.Button(self.newWindow,text='Custom Percent Calculator',command=self.custom_assignment_completion)
+        self.newWindow.btn.grid(row=14,column=2)
 
 
         ttk.Label(self.newWindow,text = "Program Output",font = ("Times New Roman", 15),background = 'green',foreground = "white").grid(column = 0, row = 15)
 
-        text_area = ReadOnlyText(self.newWindow,width = 100,height = 20,font = ("Times New Roman",12))
+        text_area = ReadOnlyText(self.newWindow,height=17,font = ("Times New Roman",12))
 
-        text_area.grid(column = 0,columnspan=2,sticky=W+E,pady = 10, padx = 10)
+        text_area.grid(column = 0,columnspan=5,sticky=W+E)
     def input_seq(self):
         fullpath = filedialog.askopenfilename(parent=self.newWindow, title='Choose a file')
         global sequence_file
@@ -232,3 +238,15 @@ class newTopLevel(object):
                 main_loop(sequence_file,seq_directory,NHSQC_file,HNCA_file,HNCACB_file,HNCO_file,HNCOCA_file,NHSQC_directory,HNCA_directory,HNCACB_directory,HNCO_directory,HNCOCA_directory,text_area,CHSQC_file,CHSQC_directory,HBHACONH_file,HBHACONH_directory,CCH_TOCSY_file,CCH_TOCSY_directory,HCCH_TOCSY_file,HCCH_TOCSY_directory,save_file,save_directory,standard_deviation_value,bmrb_file,bmrb_directory)
             except:
                 print(traceback.print_exc())
+    def assignment_completion(self):
+        from percent_assigned import calculate_percentage
+        calculate_percentage(sequence_file,seq_directory,save_file,save_directory,text_area)
+    def custom_assignment_completion(self):
+        if sequence_file == ():
+            text_area.insert(tk.INSERT,'please upload your seq file (make sure to use browse)\n')
+        if save_file == ():
+            text_area.insert(tk.INSERT,'please add the save file (make sure to use browse)\n')
+        else:
+            from sparky_assiment_window import SparkyWindow
+            sparky_top = SparkyWindow(self.newWindow,sequence_file,seq_directory,save_file,save_directory)
+            newSparkyWindow = sparky_top.sparky_assign_window
