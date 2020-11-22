@@ -6,7 +6,9 @@ There are 9 lines.
 
 Line 1 ***If Using SPARKY Peaklist Files***
 
-This will open a new window, where one may upload SPARKY peaklist files. Currently NHSQC, HNCA, HNCACB, HNCO, HNCOCA, HBHACONH, CHSQC, CCH_TOCSY, and CCC_TOCSYs are accepted. 
+This will open a new window, where one may upload SPARKY peaklist files. Currently NHSQC, HNCA, HNCACB, HNCO, HNCOCA, HBHACONH, CHSQC, CCH_TOCSY, and CCC_TOCSYs are accepted.
+
+Peaklists should be labeled using the IUPAC for atoms. I.E. GLY HA2/HA3, ASP HB2/HB3, you may use SPARKYs dummy graph for a full list. 
 
 The sequence list must be single-letter format with no headers or symbols. 
 ```
