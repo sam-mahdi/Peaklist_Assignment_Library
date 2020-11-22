@@ -247,6 +247,6 @@ class newTopLevel(object):
         if save_file == ():
             text_area.insert(tk.INSERT,'please add the save file (make sure to use browse)\n')
         else:
-            from sparky_assiment_window import SparkyWindow
+            from sparky_assingment_window import SparkyWindow
             sparky_top = SparkyWindow(self.newWindow,sequence_file,seq_directory,save_file,save_directory)
             newSparkyWindow = sparky_top.sparky_assign_window
