@@ -59,7 +59,6 @@ def get_assigned_count_special(ALA,ARG,ASN,ASP,CYS,GLN,GLU,GLY,HIS,ILE,LEU,LYS,M
 def custom_assignment(ALA,ARG,ASN,ASP,CYS,GLN,GLU,GLY,HIS,ILE,LEU,LYS,MET,PHE,PRO,SER,THR,TRP,TYR,VAL,atom_list,save_file,save_directory,sequence_file,seq_directory,text_area):
     assigned=get_assigned_count(atom_list,save_file,save_directory)
     theoretical=set_count(ALA,ARG,ASN,ASP,CYS,GLN,GLU,GLY,HIS,ILE,LEU,LYS,MET,PHE,PRO,SER,THR,TRP,TYR,VAL,sequence_file,seq_directory)
-    print(assigned,theoretical)
     percent_assigned=int((assigned/theoretical)*100)
     text_area.insert(tk.INSERT,f'\nPercent Assigned: {percent_assigned}%\n')
 
