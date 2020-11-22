@@ -4,6 +4,10 @@ Most of the program is the same, the old AG has merged with this, and the files 
 
 This program can be used for calculating the RMSD from either SPARTA+ or the BMRB average chemical shift files generated from AVS, to assist in assigning unknown peaks. 
 
+If you are looking for RMSD calculation option to use, or how they work, look here: https://github.com/sam-mahdi/Peaklist_Assignment_Library-PAL-/blob/master/V2/APS/Manual/Calculation_Options.MD
+
+In short, all 3 methods should give relatively similar methods. 
+
 ***Line 1 Upload SPARTA+ or BMRB File***
 These files are generated from AVS, and can be inputted as is. 
 
