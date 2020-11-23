@@ -113,3 +113,13 @@ I X H 7.956
 ```
 
 There are multiple ways to use this information to assist in assignment. 
+
+
+***CH3 Shift***
+
+This uses the direct output from CH3 shift, to calculate the RMSD between the inputted carbon and hydrogen values, to the CH3 Shift predicted values. 
+RMSD values are sorted lowest to highest, and you can choose how many are displayed. 
+
+Sometimes the CH3Shift spectra does not overlap with the CHSQC. You may use the carbon and hydrogen adjustment values to reference the CH3 Shift values to the experimental. 
+
+Personally have not had much luck with CH3Shift, but it is there for those who may wish to use it. 
