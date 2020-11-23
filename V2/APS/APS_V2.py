@@ -88,7 +88,7 @@ def threshold():
     text_area.insert(tk.INSERT,f'RMSD Threshold set: {threshold_input} \n')
 
 def help():
-    webbrowser.open('https://github.com/sam-mahdi/Peaklist_Assignment_Library-PAL-/blob/master/V2/APS/Manual/Manual.md')
+    webbrowser.open('https://github.com/sam-mahdi/Peaklist_Assignment_Library/blob/master/APS/Manual/APS_Manual.md')
 
 def clear_option():
     text_area.delete(1.0,END)
@@ -199,6 +199,11 @@ def file_generator():
     new_top = newTopLevel(root)
     newWindow = new_top.newWindow
 
+def CH3_shift_window():
+    from CH3_shift_window import CH3Shift
+    new_window=CH3Shift(root)
+    ch3shift_window=new_window.CH3_shift_window
+
 
 tk.Button(root,text='browse',command=input_file).grid(row=0,column=2)
 tk.Button(root,text='browse',command=data_file).grid(row=1,column=2)
@@ -210,6 +215,7 @@ tk.Button(root,text='run using combined sum',command=combined_sum).grid(row=4,co
 tk.Button(root,text='Clear',command=clear_option).grid(row=5,column=1)
 tk.Button(root,text='quit',command=root.quit).grid(row=5,column=2)
 tk.Button(root,text='help',command=help).grid(row=5,column=0)
+tk.Button(root,text='CH3 Shift',command=CH3_shift_window).grid(row=5,column=3)
 
 
 
