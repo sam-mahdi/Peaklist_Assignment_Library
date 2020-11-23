@@ -1,1 +1,1 @@
-matplotlib Pillow numpy
+matplotlib Pillow numpy mplcursors
