@@ -308,7 +308,7 @@ def compare_to_bmrb(bmrb_file,bmrb_directory,save_file,save_directory,text_area)
                             text_area.insert(tk.INSERT,f'{star_amino_acid} {star_residue} {star_atom} value {star_value} is outside of range {round(lower_half,3)}-{round(upper_half,3)}\n')
                             text_area.update_idletasks()
 
-def main_loop(sequence_file,seq_directory,NHSQC_file,HNCA_file,HNCACB_file,HNCO_file,HNCOCA_file,NHSQC_directory,HNCA_directory,HNCACB_directory,HNCO_directory,HNCOCA_directory,text_area,CHSQC_file,CHSQC_directory,HBHACONH_file,HBHACONH_directory,CCH_TOCSY_file,CCH_TOCSY_directory,HCCH_TOCSY_file,HCCH_TOCSY_directory,save_file,save_directory,standard_deviation_value,bmrb_file,bmrb_directory):
+def main_loop(sequence_file,seq_directory,NHSQC_file,HNCA_file,HNCACB_file,HNCO_file,HNCOCA_file,NHSQC_directory,HNCA_directory,HNCACB_directory,HNCO_directory,HNCOCA_directory,text_area,CHSQC_file,CHSQC_directory,HBHACONH_file,HBHACONH_directory,CCH_TOCSY_file,CCH_TOCSY_directory,HCCH_TOCSY_file,HCCH_TOCSY_directory,save_file,save_directory,standard_deviation_value,bmrb_file,bmrb_directory,terminal_flag):
     text_area.insert(tk.INSERT,'Starting Program\n')
     text_area.insert(tk.INSERT,f'\n Any Errors found will pop here. Please wait until program is finished before interacting with window.\n')
     text_area.insert(tk.INSERT,f'\nChecking proper labeling and formatting in peaklists\n')
@@ -316,6 +316,10 @@ def main_loop(sequence_file,seq_directory,NHSQC_file,HNCA_file,HNCACB_file,HNCO_
     check_peaklist_labels(NHSQC_file,HNCA_file,HNCACB_file,HNCO_file,HNCOCA_file,NHSQC_directory,HNCA_directory,HNCACB_directory,HNCO_directory,HNCOCA_directory,text_area,CHSQC_file,CHSQC_directory,HBHACONH_file,HBHACONH_directory,CCH_TOCSY_file,CCH_TOCSY_directory,HCCH_TOCSY_file,HCCH_TOCSY_directory)
     text_area.insert(tk.INSERT,'\nCheck Complete\n')
     text_area.insert(tk.INSERT,'\nIf any errors were found, please correct and rerun \n')
+    if terminal_flag is True:
+        question=input('If no errors were found, type "continue". Otherwise, type "quit", correct errors, and rerun: ')
+        if question=='quit':
+            sys.exit()
     text_area.insert(tk.INSERT,'\nGenerating NMRSTAR File (Takes a minute depending on size of protein)\n')
     text_area.update_idletasks()
     nmrstar_file(sequence_file,seq_directory,NHSQC_file,HNCA_file,HNCACB_file,HNCO_file,HNCOCA_file,NHSQC_directory,HNCA_directory,HNCACB_directory,HNCO_directory,HNCOCA_directory,text_area,CHSQC_file,CHSQC_directory,HBHACONH_file,HBHACONH_directory,CCH_TOCSY_file,CCH_TOCSY_directory,HCCH_TOCSY_file,HCCH_TOCSY_directory,save_file,save_directory,standard_deviation_value)
