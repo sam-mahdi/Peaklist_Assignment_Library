@@ -71,7 +71,7 @@ def filter_sparta_using_seq(seq_file,seq_directory,mutation_list,sparta_file,spa
         compiler=re.compile((residue_number+amino_acid_type))
         sparta_sequence_comparison=list(filter(compiler.match,sparta_comparison))
         if sparta_sequence_comparison != []:
-            sparta_filtered_list.append(amino_acid)
+            sparta_filtered_list.append(amino_acid)      
     return sparta_filtered_list
 
 #The first amino acid and last amino acid will only have 4 and 5 atom respectively, breaking the rule of 6
