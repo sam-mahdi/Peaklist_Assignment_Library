@@ -45,6 +45,7 @@ def format_sparta(sparta_file,sparta_directory):
 #The sparta predicted value for that mutant is useless, thus it is replaced with a placeholder
 def add_mutation(mutation_list,sparta_file,sparta_directory):
     sparta_mutations_added_list=[]
+    counter=0
     if mutation_list==():
         for amino_acids in format_sparta(sparta_file,sparta_directory):
             sparta_mutations_added_list.append(amino_acids)
@@ -54,10 +55,20 @@ def add_mutation(mutation_list,sparta_file,sparta_directory):
             new_amino_acid=mutations[-1]
             residue_number=mutations[1:-1]
             for amino_acids in format_sparta(sparta_file,sparta_directory):
+                if amino_acids in sparta_mutations_added_list:
+                    continue
                 if residue_number + original_amino_acid == ''.join(amino_acids.split()[0:2]):
                     split_line_to_list=amino_acids.split()
                     split_line_to_list[1] = new_amino_acid
-                    sparta_mutations_added_list.append(' '.join(split_line_to_list))
+                    sparta_mutations_added_list.append(f"{' '.join(split_line_to_list[0:3])} 1000 1000")
+                    counter+=1
+                    if mutations == mutation_list.split()[-1]:
+                        counter=0
+                    if counter == 6:
+                        counter=0
+                        break
+                elif residue_number == amino_acids.split()[0]:
+                    continue
                 else:
                     sparta_mutations_added_list.append(amino_acids)
     return sparta_mutations_added_list
