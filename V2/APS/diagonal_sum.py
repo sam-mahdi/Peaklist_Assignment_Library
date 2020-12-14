@@ -61,7 +61,7 @@ def calculate_rmsd(sparta_file,sparta_directory,data_file,data_directory,set_thr
                     count=0
                     for predict,experiment,error in zip(predict_value,experiment_value,error_value):
                         square_deviation=(((float(predict)-float(experiment))**2)/((float(error))**2))
-                        if square_deviation>100:
+                        if square_deviation>500:
                             pass
                         else:
                             square_deviations.append(square_deviation)
@@ -84,6 +84,7 @@ def find_diagonal(sparta_file,sparta_directory,data_file,data_directory,set_thre
     residues=[]
     rmsd=[]
     list_of_matches=[]
+    x_axis=[]
     experimental_values=extract_experimental(data_file,data_directory)
     dict,predicted_values=extract_predictions(sparta_file,sparta_directory)
     rows_divided=int(len(predicted_values)/6)
@@ -94,10 +95,11 @@ def find_diagonal(sparta_file,sparta_directory,data_file,data_directory,set_thre
         if len(diagonal)==columns_divided:
             summed_diagonal=(sum(diagonal))/(len(diagonal))
             if summed_diagonal<set_threshold:
+                x_axis.append(int((re.search('\d+',dict[i])).group(0)))
                 residues.append(dict[i])
                 rmsd.append(summed_diagonal)
                 tuples=(f'{dict[i]}-{dict[i+columns_divided-1]} rmsd=',summed_diagonal)
                 list_of_matches.append(tuples)
         else:
             break
-    return residues,rmsd,list_of_matches,dict
+    return residues,rmsd,list_of_matches,x_axis
