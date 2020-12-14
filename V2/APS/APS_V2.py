@@ -106,9 +106,9 @@ def diag_sum():
     #This is sorting the rmsd from lowest to highest, then plotting them
     from diagonal_sum import find_diagonal
     fig,ax=plt.subplots()
-    residues,rmsd,list_of_matches,dict=find_diagonal(sparta_file,sparta_directory,data_file,data_directory,set_threshold)
+    residues,rmsd,list_of_matches,x_axis=find_diagonal(sparta_file,sparta_directory,data_file,data_directory,set_threshold)
     colors = np.random.rand(len(residues),3)
-    ax.scatter(residues,rmsd,c=colors)
+    ax.scatter(x_axis,rmsd,c=colors)
     sort_lowrmsd_highrmsd=sorted(list_of_matches, key=lambda rmsd:rmsd[1])
     listed=list(sort_lowrmsd_highrmsd)
     for value in listed:
@@ -118,7 +118,7 @@ def diag_sum():
     plt.xlabel('Amino Acids')
     plt.ylabel('RMSD')
     dict={}
-    for number,values in enumerate(residues):
+    for number,values in zip(x_axis,residues):
         dict[number]=values
     #This is a function designed to enable you highlight over the point in the plot and see its value
     crs = mplcursors.cursor(ax,hover=True)
@@ -131,16 +131,16 @@ def rmsd_summed():
     text_area.insert(tk.INSERT,'Collective RMSD (sorted by rmsd value)\n')
 #Sorting the rmsd values from lowest to highest
     fig,ax=plt.subplots()
-    residues,rmsd,list_of_matches,dict=calculate_combined_rmsd(sparta_file,sparta_directory,data_file,data_directory,set_threshold)
+    residues,rmsd,list_of_matches,x_axis=calculate_combined_rmsd(sparta_file,sparta_directory,data_file,data_directory,set_threshold)
     colors = np.random.rand(len(residues),3)
-    ax.scatter(residues,rmsd,c=colors)
+    ax.scatter(x_axis,rmsd,c=colors)
     sort_lowrmsd_highrmsd=sorted(list_of_matches, key=lambda rmsd:rmsd[1])
     listed=list(sort_lowrmsd_highrmsd)
     for value in listed:
         two_decimal_points='%.2f' % value[1]
         text_area.insert(tk.INSERT,f'{value[0]}{two_decimal_points}\n')
     dict={}
-    for number,values in enumerate(residues):
+    for number,values in zip(x_axis,residues):
         dict[number]=values
     plt.title('Assigned-SPARTA RMSD values (Using RMSD_Sum)')
     plt.xlabel('Amino Acids')
@@ -153,10 +153,10 @@ def rmsd_summed():
 def combined_sum():
     from diagonal_sum import find_diagonal
     from combined_rmsd import calculate_combined_rmsd
-    residues,rmsd,list_of_matches,dict=find_diagonal(sparta_file,sparta_directory,data_file,data_directory,set_threshold)
+    residues,rmsd,list_of_matches,x_axis=find_diagonal(sparta_file,sparta_directory,data_file,data_directory,set_threshold)
     sort_lowrmsd_highrmsd=sorted(list_of_matches, key=lambda rmsd:rmsd[1])
     listed=list(sort_lowrmsd_highrmsd)
-    residues,rmsd,list_of_matches,dict=calculate_combined_rmsd(sparta_file,sparta_directory,data_file,data_directory,set_threshold)
+    residues,rmsd,list_of_matches,x_axis=calculate_combined_rmsd(sparta_file,sparta_directory,data_file,data_directory,set_threshold)
     sort_lowrmsd_highrmsd=sorted(list_of_matches, key=lambda rmsd:rmsd[1])
     listed2=list(sort_lowrmsd_highrmsd)
 #This combines the rmsd obtained from the diagonal sum, and the RMSD whole
@@ -177,12 +177,15 @@ def combined_sum():
 #The x value needs to be specified, thus in the first string that contains that value, it is extracted and plotted
     x=[]
     y=[]
+    dict={}
     for values4 in for_plotting:
         x_axis=(re.search('^\d+',values4)).group(0)
         y_axis=(re.search('\d+\.\d+',values4)).group(0)
+        dict_value=re.search('(^\d+)\s+([A-Z])',values4)
+        dict[int(x_axis)]=f'{dict_value.group(1)}{dict_value.group(2)}'
         x.append(float(x_axis))
         y.append(float(y_axis))
-    for values3 in combined_list:
+    for values3 in for_plotting:
         text_area.insert(tk.INSERT,f'{values3}\n')
     plt.title('Assigned-SPARTA RMSD values (Using Combined_Sum)')
     plt.xlabel('Amino Acids')
@@ -191,7 +194,7 @@ def combined_sum():
     ax.scatter(x,y,c=colors)
     crs = mplcursors.cursor(ax,hover=True)
     crs.connect("add", lambda sel: sel.annotation.set_text(
-        'Point {},{}'.format(dict[sel.target[0]-int(dict[0].split()[0])], '%.2f' % sel.target[1])))
+        'Point {},{}'.format(dict[sel.target[0]], '%.2f' % sel.target[1])))
     plt.show()
 
 def file_generator():
