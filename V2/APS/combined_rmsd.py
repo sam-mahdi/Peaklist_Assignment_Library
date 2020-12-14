@@ -40,6 +40,7 @@ def calculate_combined_rmsd(sparta_file,sparta_directory,data_file,data_director
     square_deviation_list=[]
     residues=[]
     rmsd=[]
+    x_axis=[]
     for i in range(len(predict_value)):
         temp_predict_value=predict_value[(i*6):(i*6)+len(experiment_values)]
         temp_error_value=error_value[(i*6):(i*6)+len(experiment_values)]
@@ -48,7 +49,7 @@ def calculate_combined_rmsd(sparta_file,sparta_directory,data_file,data_director
         else:
             for predict,experiment,error in zip(temp_predict_value,experiment_values,temp_error_value):
                 square_deviation=(((float(predict)-float(experiment))**2)/((float(error))**2))
-                if square_deviation>100:
+                if square_deviation>500:
                     pass
                 else:
                     square_deviation_list.append(square_deviation)
@@ -57,9 +58,10 @@ def calculate_combined_rmsd(sparta_file,sparta_directory,data_file,data_director
             else:
                 summed_rmsd=math.sqrt(((1/int(len(square_deviation_list)))*(sum(square_deviation_list))))
                 if summed_rmsd<set_threshold:
+                    x_axis.append(int((re.search('\d+',dict[i])).group(0)))
                     residues.append(dict[i])
                     rmsd.append(summed_rmsd)
                     tuples=(f'{dict[i]}-{dict[i+(len(experiment_values)/6)-1]} rmsd=',summed_rmsd)
                     list_of_matches.append(tuples)
             square_deviation_list.clear()
-    return residues,rmsd,list_of_matches,dict
+    return residues,rmsd,list_of_matches,x_axis
