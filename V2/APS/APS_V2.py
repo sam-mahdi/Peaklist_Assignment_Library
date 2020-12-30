@@ -173,7 +173,7 @@ def combined_sum():
                     summed_values='%.2f' % ((values[1]+values2[1])/2)
                     combined_list.append(f'{values2[0]}{summed_values}')
     text_area.insert(tk.INSERT,'Combined sum (sorted by rmsd)\n')
-    for_plotting=sorted(combined_list,key = lambda s: (s[:s.find("-")-1]))
+    for_plotting=sorted(combined_list,key = lambda s: (s[s.find("=")+1:]))
 #The x value needs to be specified, thus in the first string that contains that value, it is extracted and plotted
     x=[]
     y=[]
