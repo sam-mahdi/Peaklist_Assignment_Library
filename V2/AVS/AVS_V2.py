@@ -12,11 +12,6 @@ import webbrowser
 import sys
 
 
-if sys.argv != ['AVS_V2.py']:
-    from terminal import terminal_run
-    terminal_run()
-    sys.exit()
-
 root = tk.Tk()
 root.title('AVS_V2')
 #This is for fitting the image to the size of the GUI
