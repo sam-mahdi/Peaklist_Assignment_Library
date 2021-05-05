@@ -39,7 +39,7 @@ def NHSQC_checker(nhsqc_file,NHSQC_directory,text_area):
               if atom_one not in {'N','NE2','ND2'}:
                   text_area.insert(tk.INSERT,f'Amino Acid {nhsqc_split[0]} amide nitrogen is improperly labeled (NH2 should be NE2/ND2)\n')
                   text_area.update_idletasks()
-              if atom_two not in {'HN','HE21','HE22','HD21','HD22'}:
+              if atom_two not in {'H','HE21','HE22','HD21','HD22'}:
                   text_area.insert(tk.INSERT,f'Amino Acid {nhsqc_split[0]} amide hydrogen is improperly labeled (NH2 should be labeled HE/D 21/22)\n')
                   text_area.update_idletasks()
           except:
@@ -65,10 +65,10 @@ def HNCA_checker(hnca_file,HNCA_directory,text_area):
                 if re.search('[A-Z]\d+\w+',hnca_lines.strip().split()[0]) is None:
                     text_area.insert(tk.INSERT,f'Amino Acid {hnca_split[0]} format is wrong\n')
                     text_area.update_idletasks()
-                if hnca_split[0].split('-')[1] != 'CA' and hnca_split[0].split('-')[2] == 'HN':
+                if hnca_split[0].split('-')[1] != 'CA' and hnca_split[0].split('-')[2] == 'H':
                     text_area.insert(tk.INSERT,f"Amino Acid {hnca_split[0]} CA is improperly labeled\n")
                     text_area.update_idletasks()
-                if hnca_split[0].split('-')[2] != 'HN':
+                if hnca_split[0].split('-')[2] != 'H':
                     if (re.search('^\w+\d+',hnca_split[0].split('-')[0])).group(0) != (re.search('^\w+\d+',hnca_split[0].split('-')[2])).group(0):
                         text_area.insert(tk.INSERT,f"Amino Acid {hnca_split[0]} nitrogen or amide is improperly labeled\n")
                         text_area.update_idletasks()
@@ -104,10 +104,10 @@ def HNCACB_checker(hncacb_file,HNCACB_directory,text_area):
                 if re.search('[A-Z]\d+\w+',hncacb_lines.strip().split()[0]) is None:
                     text_area.insert(tk.INSERT,f'Amino Acid {hncacb_split[0]} format is wrong\n')
                     text_area.update_idletasks()
-                if hncacb_split[0].split('-')[1] not in {'CA','CB'} and hncacb_split[0].split('-')[2] == 'HN':
+                if hncacb_split[0].split('-')[1] not in {'CA','CB'} and hncacb_split[0].split('-')[2] == 'H':
                     text_area.insert(tk.INSERT,f"Amino Acid {hncacb_split[0]} CA is improperly labeled\n")
                     text_area.update_idletasks()
-                if hncacb_split[0].split('-')[2] != 'HN':
+                if hncacb_split[0].split('-')[2] != 'H':
                     if hncacb_split[0].split('-')[2] == 'N':
                         text_area.insert(tk.INSERT,f"Amino Acid {hncacb_split[0]} amide is improperly labeled\n")
                         text_area.update_idletasks()
@@ -147,7 +147,7 @@ def HNCOCA_checker(hncoca_file,HNCOCA_directory,text_area):
                 if re.search('[A-Z]\d+\w+',hnca1_lines.strip().split()[0]) is None:
                     text_area.insert(tk.INSERT,f'Amino Acid {hnca1_split[0]} format is wrong\n')
                     text_area.update_idletasks()
-                if hnca1_split[0].split('-')[2] in {'N','HN'}:
+                if hnca1_split[0].split('-')[2] in {'N','H'}:
                     text_area.insert(tk.INSERT,f"Amino Acid {hnca1_split[0]} amide is improperly labeled\n")
                     text_area.update_idletasks()
                     continue
@@ -185,7 +185,7 @@ def HNCO_checker(hnco_file,HNCO_directory,text_area):
                 if re.search('[A-Z]\d+\w+',hnco_lines.strip().split()[0]) is None:
                     text_area.insert(tk.INSERT,f'Amino Acid {hnco_split[0]} format is wrong\n')
                     text_area.update_idletasks()
-                if hnco_split[0].split('-')[2] in {'N','HN'}:
+                if hnco_split[0].split('-')[2] in {'N','H'}:
                     text_area.insert(tk.INSERT,f"Amino Acid {hnco_split[0]} amide is improperly labeled\n")
                     text_area.update_idletasks()
                     continue
@@ -339,7 +339,7 @@ def HBHACONH_checker(hbhaconh_file,HBHACONH_directory,text_area):
                 if re.search('[A-Z]\d+\w+',hbhaconh_lines.strip().split()[0]) is None:
                     text_area.insert(tk.INSERT,f'Amino Acid {hbhaconh_split[0]} format is wrong')
                     text_area.update_idletasks()
-                if hbhaconh_split[0].split('-')[2] in {'N','HN'}:
+                if hbhaconh_split[0].split('-')[2] in {'N','H'}:
                     text_area.insert(tk.INSERT,f"Amino Acid {hbhaconh_split[0]} amide is improperly labeled\n")
                     text_area.update_idletasks()
                     continue
