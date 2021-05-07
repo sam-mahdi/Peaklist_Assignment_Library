@@ -46,6 +46,8 @@ def calculate_rmsd(sparta_file,sparta_directory,data_file,data_directory,set_thr
     numpy_list=[]
     iterations=-1
     for experiments in experimental_values:
+        if experiments == '' or experiments == '\n':
+            continue
         experiment_value.append(re.search('\d+\.\d+',experiments).group(0))
         number+=1
         if number == 6:
