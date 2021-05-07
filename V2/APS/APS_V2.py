@@ -104,51 +104,57 @@ def data_file():
 def diag_sum():
     text_area.insert(tk.INSERT,'Diagonal Sum (sorted by rmsd value)\n')
     #This is sorting the rmsd from lowest to highest, then plotting them
-    from diagonal_sum import find_diagonal
-    fig,ax=plt.subplots()
+   from diagonal_sum import find_diagonal
     residues,rmsd,list_of_matches,x_axis=find_diagonal(sparta_file,sparta_directory,data_file,data_directory,set_threshold)
-    colors = np.random.rand(len(residues),3)
-    ax.scatter(x_axis,rmsd,c=colors)
-    sort_lowrmsd_highrmsd=sorted(list_of_matches, key=lambda rmsd:rmsd[1])
-    listed=list(sort_lowrmsd_highrmsd)
-    for value in listed:
-        two_decimal_points='%.2f' % value[1]
-        text_area.insert(tk.INSERT,f'{value[0]}{two_decimal_points}\n')
-    plt.title('Assigned-SPARTA RMSD values (Using Diagonal Sum)')
-    plt.xlabel('Amino Acids')
-    plt.ylabel('RMSD')
-    dict={}
-    for number,values in zip(x_axis,residues):
-        dict[number]=values
-    #This is a function designed to enable you highlight over the point in the plot and see its value
-    crs = mplcursors.cursor(ax,hover=True)
-    crs.connect("add", lambda sel: sel.annotation.set_text(
-        'Point {},{}'.format(dict[sel.target[0]], '%.2f' % sel.target[1])))
-    plt.show()
+    if len(list_of_matches) == 0:
+        text_area.insert(tk.INSERT,'No Matches Found. Try increasing RMSD\n')
+    else:
+        fig,ax=plt.subplots()
+        colors = np.random.rand(len(residues),3)
+        ax.scatter(x_axis,rmsd,c=colors)
+        sort_lowrmsd_highrmsd=sorted(list_of_matches, key=lambda rmsd:rmsd[1])
+        listed=list(sort_lowrmsd_highrmsd)
+        for value in listed:
+            two_decimal_points='%.2f' % value[1]
+            text_area.insert(tk.INSERT,f'{value[0]}{two_decimal_points}\n')
+        plt.title('Assigned-SPARTA RMSD values (Using Diagonal Sum)')
+        plt.xlabel('Amino Acids')
+        plt.ylabel('RMSD')
+        dict={}
+        for number,values in zip(x_axis,residues):
+            dict[number]=values
+        #This is a function designed to enable you highlight over the point in the plot and see its value
+        crs = mplcursors.cursor(ax,hover=True)
+        crs.connect("add", lambda sel: sel.annotation.set_text(
+            'Point {},{}'.format(dict[sel.target[0]], '%.2f' % sel.target[1])))
+        plt.show()
 
 def rmsd_summed():
     from combined_rmsd import calculate_combined_rmsd
     text_area.insert(tk.INSERT,'Collective RMSD (sorted by rmsd value)\n')
 #Sorting the rmsd values from lowest to highest
-    fig,ax=plt.subplots()
-    residues,rmsd,list_of_matches,x_axis=calculate_combined_rmsd(sparta_file,sparta_directory,data_file,data_directory,set_threshold)
-    colors = np.random.rand(len(residues),3)
-    ax.scatter(x_axis,rmsd,c=colors)
-    sort_lowrmsd_highrmsd=sorted(list_of_matches, key=lambda rmsd:rmsd[1])
-    listed=list(sort_lowrmsd_highrmsd)
-    for value in listed:
-        two_decimal_points='%.2f' % value[1]
-        text_area.insert(tk.INSERT,f'{value[0]}{two_decimal_points}\n')
-    dict={}
-    for number,values in zip(x_axis,residues):
-        dict[number]=values
-    plt.title('Assigned-SPARTA RMSD values (Using RMSD_Sum)')
-    plt.xlabel('Amino Acids')
-    plt.ylabel('RMSD')
-    crs = mplcursors.cursor(ax,hover=True)
-    crs.connect("add", lambda sel: sel.annotation.set_text(
-        'Point {},{}'.format(dict[sel.target[0]], '%.2f' % sel.target[1])))
-    plt.show()
+   residues,rmsd,list_of_matches,x_axis=calculate_combined_rmsd(sparta_file,sparta_directory,data_file,data_directory,set_threshold)
+    if len(list_of_matches) == 0:
+        text_area.insert(tk.INSERT,'No Matches Found. Try increasing RMSD\n')
+    else:
+        fig,ax=plt.subplots()
+        colors = np.random.rand(len(residues),3)
+        ax.scatter(x_axis,rmsd,c=colors)
+        sort_lowrmsd_highrmsd=sorted(list_of_matches, key=lambda rmsd:rmsd[1])
+        listed=list(sort_lowrmsd_highrmsd)
+        for value in listed:
+            two_decimal_points='%.2f' % value[1]
+            text_area.insert(tk.INSERT,f'{value[0]}{two_decimal_points}\n')
+        dict={}
+        for number,values in zip(x_axis,residues):
+            dict[number]=values
+        plt.title('Assigned-SPARTA RMSD values (Using RMSD_Sum)')
+        plt.xlabel('Amino Acids')
+        plt.ylabel('RMSD')
+        crs = mplcursors.cursor(ax,hover=True)
+        crs.connect("add", lambda sel: sel.annotation.set_text(
+            'Point {},{}'.format(dict[sel.target[0]], '%.2f' % sel.target[2])))
+        plt.show()
 
 def combined_sum():
     from diagonal_sum import find_diagonal
