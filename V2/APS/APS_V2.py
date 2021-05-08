@@ -20,7 +20,7 @@ from matplotlib import rcParams, cycler
 
 root = tk.Tk()
 root.title('APS')
-root.geometry('800x600')
+root.geometry('1200x800')
 
 def on_resize(event):
     image = bgimg.resize((event.width, event.height), Image.ANTIALIAS)
@@ -52,9 +52,9 @@ class ReadOnlyText(st.ScrolledText):
 
 ttk.Label(root,text = "Program Output",font = ("Times New Roman", 15),background = 'green',foreground = "white").grid(column = 0, row = 14)
 
-text_area = ReadOnlyText(root,width = 40,height = 10,font = ("Times New Roman",12))
+text_area = ReadOnlyText(root,width = 80,height = 10,font = ("Times New Roman",12))
 
-text_area.grid(column = 0,columnspan=2,sticky=W+E,pady = 10, padx = 10)
+text_area.grid(column = 0,columnspan=4,sticky=W+E,pady = 10, padx = 10)
 sparta_file=()
 sparta_directory=()
 data_file=()
@@ -88,7 +88,7 @@ def threshold():
     text_area.insert(tk.INSERT,f'RMSD Threshold set: {threshold_input} \n')
 
 def help():
-    webbrowser.open('https://github.com/sam-mahdi/Peaklist_Assignment_Library-PAL-/tree/master/V2/APS/Manual')
+    webbrowser.open('https://github.com/sam-mahdi/Peaklist_Assignment_Library/blob/master/APS/Manual/APS_Manual.md')
 
 def clear_option():
     text_area.delete(1.0,END)
@@ -102,9 +102,30 @@ def data_file():
     label3=Label(root,text=fullpath).grid(row=1,column=1)
 
 def diag_sum():
-    text_area.insert(tk.INSERT,'Diagonal Sum (sorted by rmsd value)\n')
+    if sparta_file == ():
+        text_area.insert(tk.INSERT,'\nPlease input a sparta file. Make sure to use the Browse button')
+        return
+    if isinstance(data_file,str) is False:
+        text_area.insert(tk.INSERT,'\nPlease input a peaklist file. Make sure to use the Browse button ')
+        return
+    if set_threshold == ():
+        text_area.insert(tk.INSERT,'\nPlease input an rmsd number. Make sure to click Enter.')
+        return
+    text_area.insert(tk.INSERT,'\nDiagonal Sum (sorted by rmsd value)\n')
     #This is sorting the rmsd from lowest to highest, then plotting them
-   from diagonal_sum import find_diagonal
+    from check_file_format import check
+    sparta,data=check(sparta_file,sparta_directory,data_file,data_directory)
+    if sparta != []:
+        for sparta_errors in sparta:
+            text_area.insert(tk.INSERT, sparta_errors)
+        text_area.insert(tk.INSERT, '\nPlease correct above errors and try again')
+        return
+    if data != []:
+        for data_errors in data:
+            text_area.insert(tk.INSERT, data_errors)
+        text_area.insert(tk.INSERT, '\nPlease correct above errors and try again')
+        return
+    from diagonal_sum import find_diagonal
     residues,rmsd,list_of_matches,x_axis=find_diagonal(sparta_file,sparta_directory,data_file,data_directory,set_threshold)
     if len(list_of_matches) == 0:
         text_area.insert(tk.INSERT,'No Matches Found. Try increasing RMSD\n')
@@ -122,7 +143,10 @@ def diag_sum():
         plt.ylabel('RMSD')
         dict={}
         for number,values in zip(x_axis,residues):
-            dict[number]=values
+            for amino_acids in listed:
+                regex_search=re.search('(\d+\s+\w)(-\d+\s+\w+)',amino_acids[0])
+                if regex_search.group(1) == values:
+                    dict[number]=values+regex_search.group(2)
         #This is a function designed to enable you highlight over the point in the plot and see its value
         crs = mplcursors.cursor(ax,hover=True)
         crs.connect("add", lambda sel: sel.annotation.set_text(
@@ -130,10 +154,33 @@ def diag_sum():
         plt.show()
 
 def rmsd_summed():
+    if sparta_file == ():
+        text_area.insert(tk.INSERT,'\nPlease input a sparta file. Make sure to use the Browse button')
+        return
+    if isinstance(data_file,str) is False:
+        text_area.insert(tk.INSERT,'\nPlease input a peaklist file. Make sure to use the Browse button ')
+        return
+    if set_threshold == ():
+        text_area.insert(tk.INSERT,'\nPlease input an rmsd number. Make sure to click Enter.')
+        return
+    from check_file_format import check
+    sparta,data=check(sparta_file,sparta_directory,data_file,data_directory)
+    if sparta != []:
+        for sparta_errors in sparta:
+            text_area.insert(tk.INSERT, sparta_errors)
+        text_area.insert(tk.INSERT, '\nPlease correct above errors and try again')
+        return
+    if data != []:
+        for data_errors in data:
+            text_area.insert(tk.INSERT, data_errors)
+        text_area.insert(tk.INSERT, '\nPlease correct above errors and try again')
+        return
+    text_area.insert(tk.INSERT,'\nDiagonal Sum (sorted by rmsd value)\n')
+
     from combined_rmsd import calculate_combined_rmsd
     text_area.insert(tk.INSERT,'Collective RMSD (sorted by rmsd value)\n')
 #Sorting the rmsd values from lowest to highest
-   residues,rmsd,list_of_matches,x_axis=calculate_combined_rmsd(sparta_file,sparta_directory,data_file,data_directory,set_threshold)
+    residues,rmsd,list_of_matches,x_axis=calculate_combined_rmsd(sparta_file,sparta_directory,data_file,data_directory,set_threshold)
     if len(list_of_matches) == 0:
         text_area.insert(tk.INSERT,'No Matches Found. Try increasing RMSD\n')
     else:
@@ -147,16 +194,40 @@ def rmsd_summed():
             text_area.insert(tk.INSERT,f'{value[0]}{two_decimal_points}\n')
         dict={}
         for number,values in zip(x_axis,residues):
-            dict[number]=values
+            for amino_acids in listed:
+                regex_search=re.search('(\d+\s+\w)(-\d+\s+\w+)',amino_acids[0])
+                if regex_search.group(1) == values:
+                    dict[number]=values+regex_search.group(2)
         plt.title('Assigned-SPARTA RMSD values (Using RMSD_Sum)')
         plt.xlabel('Amino Acids')
         plt.ylabel('RMSD')
         crs = mplcursors.cursor(ax,hover=True)
         crs.connect("add", lambda sel: sel.annotation.set_text(
-            'Point {},{}'.format(dict[sel.target[0]], '%.2f' % sel.target[2])))
+            'Point {},{}'.format(dict[sel.target[0]], '%.2f' % sel.target[1])))
         plt.show()
 
 def combined_sum():
+    if sparta_file == ():
+        text_area.insert(tk.INSERT,'\nPlease input a sparta file. Make sure to use the Browse button')
+        return
+    if isinstance(data_file,str) is False:
+        text_area.insert(tk.INSERT,'\nPlease input a peaklist file. Make sure to use the Browse button ')
+        return
+    if set_threshold == ():
+        text_area.insert(tk.INSERT,'\nPlease input an rmsd number. Make sure to click Enter.')
+        return
+    from check_file_format import check
+    sparta,data=check(sparta_file,sparta_directory,data_file,data_directory)
+    if sparta != []:
+        for sparta_errors in sparta:
+            text_area.insert(tk.INSERT, sparta_errors)
+        text_area.insert(tk.INSERT, '\nPlease correct above errors and try again')
+        return
+    if data != []:
+        for data_errors in data:
+            text_area.insert(tk.INSERT, data_errors)
+        text_area.insert(tk.INSERT, '\nPlease correct above errors and try again')
+        return
     from diagonal_sum import find_diagonal
     from combined_rmsd import calculate_combined_rmsd
     residues,rmsd,list_of_matches,x_axis=find_diagonal(sparta_file,sparta_directory,data_file,data_directory,set_threshold)
@@ -167,41 +238,44 @@ def combined_sum():
     listed2=list(sort_lowrmsd_highrmsd)
 #This combines the rmsd obtained from the diagonal sum, and the RMSD whole
     combined_list=[]
-    fig,ax=plt.subplots()
-    for values in listed:
-        amino_acid_search=re.search('\d+\s+[A-Z]',values[0])
-        r=re.compile(amino_acid_search.group(0))
-        rmsd_find=list(filter(r.match,[i[0] for i in listed2]))
-        if rmsd_find !=[]:
-            rmsd_find_string=''.join(rmsd_find)
-            for values2 in listed2:
-                if values2[0]==rmsd_find_string:
-                    summed_values='%.2f' % ((values[1]+values2[1])/2)
-                    combined_list.append(f'{values2[0]}{summed_values}')
-    text_area.insert(tk.INSERT,'Combined sum (sorted by rmsd)\n')
-    for_plotting=sorted(combined_list,key = lambda s: (s[s.find("=")+1:]))
-#The x value needs to be specified, thus in the first string that contains that value, it is extracted and plotted
-    x=[]
-    y=[]
-    dict={}
-    for values4 in for_plotting:
-        x_axis=(re.search('^\d+',values4)).group(0)
-        y_axis=(re.search('\d+\.\d+',values4)).group(0)
-        dict_value=re.search('(^\d+)\s+([A-Z])',values4)
-        dict[int(x_axis)]=f'{dict_value.group(1)}{dict_value.group(2)}'
-        x.append(float(x_axis))
-        y.append(float(y_axis))
-    for values3 in for_plotting:
-        text_area.insert(tk.INSERT,f'{values3}\n')
-    plt.title('Assigned-SPARTA RMSD values (Using Combined_Sum)')
-    plt.xlabel('Amino Acids')
-    plt.ylabel('RMSD')
-    colors = np.random.rand(len(x),3)
-    ax.scatter(x,y,c=colors)
-    crs = mplcursors.cursor(ax,hover=True)
-    crs.connect("add", lambda sel: sel.annotation.set_text(
-        'Point {},{}'.format(dict[sel.target[0]], '%.2f' % sel.target[1])))
-    plt.show()
+    if len(listed) == 0 or len(listed2) == 0:
+        text_area.insert(tk.INSERT,'No Matches Found. Try increasing RMSD\n')
+    else:
+        fig,ax=plt.subplots()
+        for values in listed:
+            amino_acid_search=re.search('\d+\s+[A-Z]',values[0])
+            r=re.compile(amino_acid_search.group(0))
+            rmsd_find=list(filter(r.match,[i[0] for i in listed2]))
+            if rmsd_find !=[]:
+                rmsd_find_string=''.join(rmsd_find)
+                for values2 in listed2:
+                    if values2[0]==rmsd_find_string:
+                        summed_values='%.2f' % ((values[1]+values2[1])/2)
+                        combined_list.append(f'{values2[0]}{summed_values}')
+        text_area.insert(tk.INSERT,'Combined sum (sorted by rmsd)\n')
+        for_plotting=sorted(combined_list,key = lambda s: (s[s.find("=")+1:]))
+    #The x value needs to be specified, thus in the first string that contains that value, it is extracted and plotted
+        x=[]
+        y=[]
+        dict={}
+        for values4 in for_plotting:
+            x_axis=(re.search('^\d+',values4)).group(0)
+            y_axis=(re.search('\d+\.\d+',values4)).group(0)
+            dict_value=re.search('(\d+\s+\w)(-\d+\s+\w+)',values4)
+            dict[int(x_axis)]=f'{dict_value.group(1)}{dict_value.group(2)}'
+            x.append(float(x_axis))
+            y.append(float(y_axis))
+        for values3 in for_plotting:
+            text_area.insert(tk.INSERT,f'{values3}\n')
+        plt.title('Assigned-SPARTA RMSD values (Using Combined_Sum)')
+        plt.xlabel('Amino Acids')
+        plt.ylabel('RMSD')
+        colors = np.random.rand(len(x),3)
+        ax.scatter(x,y,c=colors)
+        crs = mplcursors.cursor(ax,hover=True)
+        crs.connect("add", lambda sel: sel.annotation.set_text(
+            'Point {},{}'.format(dict[sel.target[0]], '%.2f' % sel.target[1])))
+        plt.show()
 
 def file_generator():
     from newWindow import newTopLevel
