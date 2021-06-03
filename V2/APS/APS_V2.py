@@ -175,7 +175,6 @@ def rmsd_summed():
             text_area.insert(tk.INSERT, data_errors)
         text_area.insert(tk.INSERT, '\nPlease correct above errors and try again')
         return
-    text_area.insert(tk.INSERT,'\nDiagonal Sum (sorted by rmsd value)\n')
 
     from combined_rmsd import calculate_combined_rmsd
     text_area.insert(tk.INSERT,'Collective RMSD (sorted by rmsd value)\n')
