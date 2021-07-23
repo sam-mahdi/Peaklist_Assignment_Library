@@ -41,12 +41,13 @@ def regex_list(sequence_file,seq_directory):
     Proline_Values=['C','CA','CB','CD','CG','HA','HB2','HB3','HD2','HD3','HG2','HG3','H','N']
     Serine_Values=['C','CA','CB','HA','HB2','HB3','H','N']
     Threanine_Values=['C','CA','CB','CG2','HA','HB','HG2','H','N']
+    Tryptophan_Values=['C','CA','CB','HA','HB2','HB3','H','HE1','N','NE1]
     Valine_Values=['C','CA','CB','CG1','CG2','HA','HB','HG2','H','N']
     for amino_acids in sequence_list(sequence_file,seq_directory):
         if amino_acids[-1] == 'M':
             methionine=[amino_acids+'-'+atom for atom in Methionine_Values]
             new_list+=methionine
-        if amino_acids[-1] in {'D','N','C','F','S','W','Y','H'}:
+        if amino_acids[-1] in {'D','N','C','F','S','Y','H'}:
             aspartic_acid=[amino_acids+'-'+atom for atom in Aspartic_Acid_Values]
             new_list+=aspartic_acid
         if amino_acids[-1] == 'A':
@@ -79,6 +80,9 @@ def regex_list(sequence_file,seq_directory):
         if amino_acids[-1] == 'V':
             valine=[amino_acids+'-'+atom for atom in Valine_Values]
             new_list+=valine
+        if amino_acids[-1] == 'W':
+            tryptophan=[amino_acids+'-'+atom for atom in Tryptophan_Values]
+            new_list+=tryptophan        
     return new_list
 
 def NHSQC_peaklist(amino_acid,residue_number,atom,temp_list,spectra_list,NHSQC_file,NHSQC_directory):
