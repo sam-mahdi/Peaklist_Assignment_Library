@@ -41,7 +41,7 @@ def regex_list(sequence_file,seq_directory):
     Proline_Values=['C','CA','CB','CD','CG','HA','HB2','HB3','HD2','HD3','HG2','HG3','H','N']
     Serine_Values=['C','CA','CB','HA','HB2','HB3','H','N']
     Threanine_Values=['C','CA','CB','CG2','HA','HB','HG2','H','N']
-    Tryptophan_Values=['C','CA','CB','HA','HB2','HB3','H','HE1','N','NE1]
+    Tryptophan_Values=['C','CA','CB','HA','HB2','HB3','H','HE1','N','NE1']
     Valine_Values=['C','CA','CB','CG1','CG2','HA','HB','HG2','H','N']
     for amino_acids in sequence_list(sequence_file,seq_directory):
         if amino_acids[-1] == 'M':
