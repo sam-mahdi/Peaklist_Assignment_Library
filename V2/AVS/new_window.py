@@ -238,7 +238,8 @@ class newTopLevel(object):
                 from SPARKYtoNMRSTAR3p1 import main_loop
                 main_loop(sequence_file,seq_directory,NHSQC_file,HNCA_file,HNCACB_file,HNCO_file,HNCOCA_file,NHSQC_directory,HNCA_directory,HNCACB_directory,HNCO_directory,HNCOCA_directory,text_area,CHSQC_file,CHSQC_directory,HBHACONH_file,HBHACONH_directory,CCH_TOCSY_file,CCH_TOCSY_directory,HCCH_TOCSY_file,HCCH_TOCSY_directory,save_file,save_directory,standard_deviation_value,bmrb_file,bmrb_directory,terminal_flag)
             except:
-                print(traceback.print_exc())
+                print('error')
+                #print(traceback.print_exc())
     def assignment_completion(self):
         from percent_assigned import calculate_percentage
         calculate_percentage(sequence_file,seq_directory,save_file,save_directory,text_area)
