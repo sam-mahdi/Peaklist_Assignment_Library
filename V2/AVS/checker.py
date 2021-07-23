@@ -36,11 +36,11 @@ def NHSQC_checker(nhsqc_file,NHSQC_directory,text_area):
               if re.search('[A-Z]\d+\w+',nhsqc_lines.strip().split()[0]) is None:
                   text_area.insert(tk.INSERT,f'Amino Acid {nhsqc_split[0]} format is wrong\n')
                   text_area.update_idletasks()
-              if atom_one not in {'N','NE2','ND2'}:
-                  text_area.insert(tk.INSERT,f'Amino Acid {nhsqc_split[0]} amide nitrogen is improperly labeled (NH2 should be NE2/ND2)\n')
+              if atom_one not in {'N','NE2','ND2','NE1}:
+                  text_area.insert(tk.INSERT,f'Amino Acid {nhsqc_split[0]} amide nitrogen is improperly labeled (GLN/ASN/TRP side chain nitrogen should be NE2/ND2/NE1)\n')
                   text_area.update_idletasks()
-              if atom_two not in {'H','HE21','HE22','HD21','HD22'}:
-                  text_area.insert(tk.INSERT,f'Amino Acid {nhsqc_split[0]} amide hydrogen is improperly labeled (NH2 should be labeled HE/D 21/22)\n')
+              if atom_two not in {'H','HE21','HE22','HD21','HD22','HE1'}:
+                  text_area.insert(tk.INSERT,f'Amino Acid {nhsqc_split[0]} amide hydrogen is improperly labeled (GLN/ASN/TRP side chain nitrogen HE/HD/HE 21/22/1)\n')
                   text_area.update_idletasks()
           except:
               text_area.insert(tk.INSERT,f'Program could not analyze, stopped at \n {nhsqc_lines}please check peak, correct, and rerun\n')
