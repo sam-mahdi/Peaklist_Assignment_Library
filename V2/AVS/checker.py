@@ -105,7 +105,7 @@ def HNCACB_checker(hncacb_file,HNCACB_directory,text_area):
                     text_area.insert(tk.INSERT,f'Amino Acid {hncacb_split[0]} format is wrong\n')
                     text_area.update_idletasks()
                 if hncacb_split[0].split('-')[1] not in {'CA','CB'} and hncacb_split[0].split('-')[2] == 'H':
-                    text_area.insert(tk.INSERT,f"Amino Acid {hncacb_split[0]} CA is improperly labeled\n")
+                    text_area.insert(tk.INSERT,f"Amino Acid {hncacb_split[0]} Carbon is improperly labeled\n")
                     text_area.update_idletasks()
                 if hncacb_split[0].split('-')[2] != 'H':
                     if hncacb_split[0].split('-')[2] == 'N':
@@ -126,6 +126,46 @@ def HNCACB_checker(hncacb_file,HNCACB_directory,text_area):
                         text_area.update_idletasks()
             except:
                 text_area.insert(tk.INSERT,f'Program could not analyze, stopped at \n {hncacb_lines}please check peak, correct, and rerun\n')
+                text_area.update_idletasks()
+
+def CBCACONH_checker(CBCACONH_file,CBCACONH_directory,text_area):
+    text_area.insert(tk.INSERT,f'Checking CBCACONH\n')
+    text_area.update_idletasks()
+    os.chdir(CBCACONH_directory)
+    with open(CBCACONH_file) as CBCACONH:
+        for CBCACONH_lines in CBCACONH:
+            if CBCACONH_lines.strip().split() == []:
+                continue
+            if CBCACONH_lines.strip().split()[0] in {'Assignment','?-?-?'}:
+                continue
+            CBCACONH_split=CBCACONH_lines.strip().split()
+            try:
+                amino_acid=CBCACONH_lines.strip().split()[0][0]
+                if amino_acid not in accepted_letters:
+                    text_area.insert(tk.INSERT,f'Amino Acid {CBCACONH_split[0]} amino acid is improperly labeled\n')
+                    text_area.update_idletasks()
+                if re.search('[A-Z]\d+\w+',CBCACONH_lines.strip().split()[0]) is None:
+                    text_area.insert(tk.INSERT,f'Amino Acid {CBCACONH_split[0]} format is wrong\n')
+                    text_area.update_idletasks()
+                if CBCACONH_split[0].split('-')[2] != 'H':
+                    if CBCACONH_split[0].split('-')[2] == 'N':
+                        text_area.insert(tk.INSERT,f"Amino Acid {CBCACONH_split[0]} amide is improperly labeled\n")
+                        text_area.update_idletasks()
+                        continue
+                    if (re.search('^\w+\d+',CBCACONH_split[0].split('-')[0])).group(0) != (re.search('^\w+\d+',CBCACONH_split[0].split('-')[2])).group(0):
+                        text_area.insert(tk.INSERT,f"Amino Acid {CBCACONH_split[0]} nitrogen or amide is improperly labeled\n")
+                        text_area.update_idletasks()
+                        continue
+                    i_atom=re.search('(\d+)(\w+)',CBCACONH_split[0].split('-')[0])
+                    i_minus_atom=re.search('(\d+)(\w+)',CBCACONH_split[0].split('-')[1])
+                    if int(i_atom.group(1)) != int(i_minus_atom.group(1))+1:
+                        text_area.insert(tk.INSERT,f"Amino Acid {CBCACONH_split[0]} i-1 is improperly labeled (it is not labeled as the i-1)\n")
+                        text_area.update_idletasks()
+                    if i_minus_atom.group(2) not in {'CA','CB'}:
+                        text_area.insert(tk.INSERT,f"Amino Acid {CBCACONH_split[0]} CA or CB is not labeled properly\n")
+                        text_area.update_idletasks()
+            except:
+                text_area.insert(tk.INSERT,f'Program could not analyze, stopped at \n {CBCACONH_lines}please check peak, correct, and rerun\n')
                 text_area.update_idletasks()
 
 def HNCOCA_checker(hncoca_file,HNCOCA_directory,text_area):
@@ -202,6 +242,92 @@ def HNCO_checker(hnco_file,HNCO_directory,text_area):
                     text_area.update_idletasks()
             except:
                 text_area.insert(tk.INSERT,f'Program could not analyze, stopped at \n {hnco_lines}please check peak, correct, and rerun\n')
+                text_area.update_idletasks()
+
+def HCCONH_checker(hcconh_file,hcconh_directory,text_area):
+    text_area.insert(tk.INSERT,f'Checking hcconh\n')
+    text_area.update_idletasks()
+    os.chdir(hcconh_directory)
+    with open(hcconh_file) as hcconh:
+        for hcconh_lines in hcconh:
+            if hcconh_lines.strip().split() == []:
+                continue
+            if hcconh_lines.strip().split()[0] in {'Assignment','?-?-?'}:
+                continue
+            hcconh_split=hcconh_lines.strip().split()
+            try:
+                amino_acid=hcconh_lines.strip().split()[0][0]
+                if amino_acid not in accepted_letters:
+                    text_area.insert(tk.INSERT,f'Amino Acid {hcconh_split[0]} amino acid is improperly labeled\n')
+                    text_area.update_idletasks()
+                if re.search('[A-Z]\d+\w+',hcconh_lines.strip().split()[0]) is None:
+                    text_area.insert(tk.INSERT,f'Amino Acid {hcconh_split[0]} format is wrong\n')
+                    text_area.update_idletasks()
+                if hcconh_split[0].split('-')[2] != 'H':
+                    if hcconh_split[0].split('-')[2] == 'N':
+                        text_area.insert(tk.INSERT,f"Amino Acid {hcconh_split[0]} amide is improperly labeled\n")
+                        text_area.update_idletasks()
+                        continue
+                    if (re.search('^\w+\d+',hcconh_split[0].split('-')[0])).group(0) != (re.search('^\w+\d+',hcconh_split[0].split('-')[2])).group(0):
+                        text_area.insert(tk.INSERT,f"Amino Acid {hcconh_split[0]} nitrogen or amide is improperly labeled\n")
+                        text_area.update_idletasks()
+                        continue
+                    i_atom=re.search('(\d+)(\w+)',hcconh_split[0].split('-')[0])
+                    i_minus_atom=re.search('(\d+)(\w+)',hcconh_split[0].split('-')[1])
+                    i_minus_amino_acid=re.search('^[A-Z]',hcconh_split[0].split('-')[1])
+                    if int(i_atom.group(1)) != int(i_minus_atom.group(1))+1:
+                        text_area.insert(tk.INSERT,f"Amino Acid {hcconh_split[0]} i-1 is improperly labeled (it is not labeled as the i-1)\n")
+                        text_area.update_idletasks()
+                    if i_minus_amino_acid == 'A':
+                        if i_minus_atom.group(2) not in {'CA','CB'}:
+                            text_area.insert(tk.INSERT,f'Amino Acid {chsqc_split[0]} carbon improperly labeled\n')
+                            text_area.update_idletasks()
+                    if i_minus_amino_acid == 'R':
+                        if i_minus_atom.group(2) not in {'CA','CB','CG','CD'}:
+                            text_area.insert(tk.INSERT,f'Amino Acid {chsqc_split[0]} carbon improperly labeled\n')
+                            text_area.update_idletasks()
+                    if i_minus_amino_acid in {'N','D','W','S','F','H','C'}:
+                        if i_minus_atom.group(2) not in {'CA','CB'}:
+                            text_area.insert(tk.INSERT,f'Amino Acid {chsqc_split[0]} carbon improperly labeled\n')
+                            text_area.update_idletasks()
+                    if i_minus_amino_acid in {'Q','E'}:
+                        if i_minus_atom.group(2) not in {'CA','CB','CG'}:
+                            text_area.insert(tk.INSERT,f'Amino Acid {chsqc_split[0]} carbon improperly labeled\n')
+                            text_area.update_idletasks()
+                    if i_minus_amino_acid == 'G':
+                        if i_minus_atom.group(2) not in {'CA'}:
+                            text_area.insert(tk.INSERT,f'Amino Acid {chsqc_split[0]} carbon improperly labeled\n')
+                            text_area.update_idletasks()
+                    if i_minus_amino_acid == 'I':
+                        if i_minus_atom.group(2) not in {'CA','CB','CG1','CG2','CD1'}:
+                            text_area.insert(tk.INSERT,f'Amino Acid {chsqc_split[0]} carbon improperly labeled\n')
+                            text_area.update_idletasks()
+                    if i_minus_amino_acid == 'L':
+                        if i_minus_atom.group(2) not in {'CA','CB','CG','CD1','CD2'}:
+                            text_area.insert(tk.INSERT,f'Amino Acid {chsqc_split[0]} carbon improperly labeled\n')
+                            text_area.update_idletasks()
+                    if i_minus_amino_acid == 'K':
+                        if i_minus_atom.group(2) not in {'CA','CB','CG','CD','CE'}:
+                            text_area.insert(tk.INSERT,f'Amino Acid {chsqc_split[0]} carbon improperly labeled\n')
+                            text_area.update_idletasks()
+                    if i_minus_amino_acid == 'M':
+                        if i_minus_atom.group(2) not in {'CA','CB','CG','CE'}:
+                            text_area.insert(tk.INSERT,f'Amino Acid {chsqc_split[0]} carbon improperly labeled\n')
+                            text_area.update_idletasks()
+                    if i_minus_amino_acid == 'P':
+                        if i_minus_atom.group(2) not in {'CA','CB','CG','CD'}:
+                            text_area.insert(tk.INSERT,f'Amino Acid {chsqc_split[0]} carbon improperly labeled\n')
+                            text_area.update_idletasks()
+                    if i_minus_amino_acid == 'T':
+                        if i_minus_atom.group(2) not in {'CA','CB','CG2'}:
+                            text_area.insert(tk.INSERT,f'Amino Acid {chsqc_split[0]} carbon improperly labeled\n')
+                            text_area.update_idletasks()
+                    if i_minus_amino_acid == 'V':
+                        if i_minus_atom.group(2) not in {'CA','CB','CG1','CG2'}:
+                            text_area.insert(tk.INSERT,f'Amino Acid {chsqc_split[0]} carbon improperly labeled\n')
+                            text_area.update_idletasks()
+            except:
+                text_area.insert(tk.INSERT,f'Program could not analyze, stopped at \n {hcconh_lines}please check peak, correct, and rerun\n')
                 text_area.update_idletasks()
 
 def CHSQC_checker(chsqc_file,CHSQC_directory,text_area):
