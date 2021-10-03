@@ -19,6 +19,12 @@ HNCO_file=()
 HNCO_directory=()
 HNCOCA_file=()
 HNCOCA_directory=()
+CBCACONH_file=()
+CBCACONH_directory=()
+HNCACO_file=()
+HNCACO_directory=()
+HCCONH_file=()
+HCCONH_directory=()
 CHSQC_file=()
 CHSQC_directory=()
 HBHACONH_file=()
@@ -34,6 +40,9 @@ save_directory=()
 text_area=()
 bmrb_file=()
 bmrb_directory=()
+seq_start_value=()
+Bruker_check= IntVar()
+Keep_file_check= IntVar()
 
 standard_deviation_value=()
 
@@ -65,27 +74,28 @@ class newTopLevel(object):
         tk.Label(self.newWindow, text="HNCA  Peaklist").grid(row=2)
         tk.Label(self.newWindow, text="HNCACB  Peaklist").grid(row=3)
         tk.Label(self.newWindow, text="HNCO  Peaklist").grid(row=4)
-        tk.Label(self.newWindow, text="HNCOCA  Peaklist").grid(row=5)
-        tk.Label(self.newWindow, text="CHSQC  Peaklist").grid(row=6)
-        tk.Label(self.newWindow, text="HBHACONH  Peaklist").grid(row=7)
-        tk.Label(self.newWindow, text="CCH_TOCSY  Peaklist").grid(row=8)
-        tk.Label(self.newWindow, text="HCCH_TOCSY  Peaklist").grid(row=9)
-        tk.Label(self.newWindow, text="NMRSTAR Save File").grid(row=10)
-        tk.Label(self.newWindow, text="Set Standard Deviation (click enter when done)").grid(row=11)
+        tk.Label(self.newWindow, text="CHSQC  Peaklist").grid(row=5)
+        tk.Label(self.newWindow, text="HBHACONH  Peaklist").grid(row=6)
+        tk.Label(self.newWindow, text="CCH_TOCSY  Peaklist").grid(row=7)
+        tk.Label(self.newWindow, text="HCCH_TOCSY  Peaklist").grid(row=8)
+        tk.Label(self.newWindow, text="NMRSTAR Save File").grid(row=9)
+        tk.Label(self.newWindow, text="Set Standard Deviation (click enter when done)").grid(row=10)
+        tk.Label(self.newWindow, text="Sequence Start Value").grid(row=11)
         tk.Label(self.newWindow, text="If BMRB Comparison is desired, upload BMRB file here").grid(row=12)
         seq_line = tk.Entry(self.newWindow).grid(row=0, column=1)
         nhsqc_line = tk.Entry(self.newWindow).grid(row=1, column=1)
         hnca_line = tk.Entry(self.newWindow).grid(row=2, column=1)
         hncacb_line = tk.Entry(self.newWindow).grid(row=3, column=1)
         hnco_line = tk.Entry(self.newWindow).grid(row=4, column=1)
-        hncoca_line = tk.Entry(self.newWindow).grid(row=5, column=1)
-        chsqc_line = tk.Entry(self.newWindow).grid(row=6, column=1)
-        hbhaconh_line = tk.Entry(self.newWindow).grid(row=7, column=1)
-        cch_tocsy_line = tk.Entry(self.newWindow).grid(row=8, column=1)
-        hcch_tocsy_line = tk.Entry(self.newWindow).grid(row=9, column=1)
-        save_file_line = tk.Entry(self.newWindow).grid(row=10, column=1)
+        chsqc_line = tk.Entry(self.newWindow).grid(row=5, column=1)
+        hbhaconh_line = tk.Entry(self.newWindow).grid(row=6, column=1)
+        cch_tocsy_line = tk.Entry(self.newWindow).grid(row=7, column=1)
+        hcch_tocsy_line = tk.Entry(self.newWindow).grid(row=8, column=1)
+        save_file_line = tk.Entry(self.newWindow).grid(row=9, column=1)
         self.standard_deviation_line = tk.Entry(self.newWindow)
-        self.standard_deviation_line.grid(row=11, column=1)
+        self.standard_deviation_line.grid(row=10, column=1)
+        self.seq_start_line = tk.Entry(self.newWindow)
+        self.seq_start_line.grid(row=11, column=1)
         bmrb_file_line = tk.Entry(self.newWindow).grid(row=12, column=1)
         self.newWindow.btn = tk.Button(self.newWindow,text='browse',command=self.input_seq)
         self.newWindow.btn.grid(row=0,column=2)
@@ -97,30 +107,35 @@ class newTopLevel(object):
         self.newWindow.btn.grid(row=3,column=2)
         self.newWindow.btn = tk.Button(self.newWindow,text='browse',command=self.HNCO)
         self.newWindow.btn.grid(row=4,column=2)
-        self.newWindow.btn = tk.Button(self.newWindow,text='browse',command=self.HNCOCA)
-        self.newWindow.btn.grid(row=5,column=2)
         self.newWindow.btn = tk.Button(self.newWindow,text='browse',command=self.CHSQC)
-        self.newWindow.btn.grid(row=6,column=2)
+        self.newWindow.btn.grid(row=5,column=2)
         self.newWindow.btn = tk.Button(self.newWindow,text='browse',command=self.HBHACONH)
-        self.newWindow.btn.grid(row=7,column=2)
+        self.newWindow.btn.grid(row=6,column=2)
         self.newWindow.btn = tk.Button(self.newWindow,text='browse',command=self.CCH_TOCSY)
-        self.newWindow.btn.grid(row=8,column=2)
+        self.newWindow.btn.grid(row=7,column=2)
         self.newWindow.btn = tk.Button(self.newWindow,text='browse',command=self.HCCH_TOCSY)
-        self.newWindow.btn.grid(row=9,column=2)
+        self.newWindow.btn.grid(row=8,column=2)
         self.newWindow.btn = tk.Button(self.newWindow,text='browse',command=self.save_file)
-        self.newWindow.btn.grid(row=10,column=2)
+        self.newWindow.btn.grid(row=9,column=2)
         self.newWindow.btn = tk.Button(self.newWindow,text='Enter',command=self.standard_deviation)
+        self.newWindow.btn.grid(row=10,column=2)
+        self.newWindow.btn = tk.Button(self.newWindow,text='Enter',command=self.seq_start)
         self.newWindow.btn.grid(row=11,column=2)
         self.newWindow.btn = tk.Button(self.newWindow,text='browse',command=self.bmrb_file)
         self.newWindow.btn.grid(row=12,column=2)
         self.newWindow.btn = tk.Button(self.newWindow,text='Run',command=self.run_spartytonmrstar)
-        self.newWindow.btn.grid(row=13,column=1)
-        self.newWindow.btn = tk.Button(self.newWindow,text='Quit',command=self.newWindow.destroy)
         self.newWindow.btn.grid(row=14,column=1)
+        self.newWindow.btn = tk.Button(self.newWindow,text='Quit',command=self.newWindow.destroy)
+        self.newWindow.btn.grid(row=15,column=1)
         self.newWindow.btn = tk.Button(self.newWindow,text='Assignment Completion',command=self.assignment_completion)
-        self.newWindow.btn.grid(row=13,column=2)
-        self.newWindow.btn = tk.Button(self.newWindow,text='Custom Percent Calculator',command=self.custom_assignment_completion)
         self.newWindow.btn.grid(row=14,column=2)
+        self.newWindow.btn = tk.Button(self.newWindow,text='Custom Percent Calculator',command=self.custom_assignment_completion)
+        self.newWindow.btn.grid(row=15,column=2)
+        self.newWindow.btn = tk.Button(self.newWindow,text='Additional_NMR_Experiments',command=self.nmr_experiments)
+        self.newWindow.btn.grid(row=13,column=1)
+        tk.Checkbutton(self.newWindow, text="Bruker", variable=Bruker_check).grid(row=13,column=0,stick=W)
+        tk.Checkbutton(self.newWindow, text="Keep Varian Files", variable=Keep_file_check).grid(row=13,column=0)
+
 
 
         ttk.Label(self.newWindow,text = "Program Output",font = ("Times New Roman", 15),background = 'green',foreground = "white").grid(column = 0, row = 15)
@@ -166,41 +181,34 @@ class newTopLevel(object):
         HNCO_directory=os.path.dirname(fullpath)
         HNCO_file= os.path.basename(fullpath)
         label7=Label(self.newWindow,text=fullpath).grid(row=4,column=1)
-    def HNCOCA(self):
-        fullpath = filedialog.askopenfilename(parent=self.newWindow, title='Choose a file')
-        global HNCOCA_file
-        global HNCOCA_directory
-        HNCOCA_directory=os.path.dirname(fullpath)
-        HNCOCA_file= os.path.basename(fullpath)
-        label7=Label(self.newWindow,text=fullpath).grid(row=5,column=1)
     def CHSQC(self):
         fullpath = filedialog.askopenfilename(parent=self.newWindow, title='Choose a file')
         global CHSQC_file
         global CHSQC_directory
         CHSQC_directory=os.path.dirname(fullpath)
         CHSQC_file= os.path.basename(fullpath)
-        label7=Label(self.newWindow,text=fullpath).grid(row=6,column=1)
+        label7=Label(self.newWindow,text=fullpath).grid(row=5,column=1)
     def HBHACONH(self):
         fullpath = filedialog.askopenfilename(parent=self.newWindow, title='Choose a file')
         global HBHACONH_file
         global HBHACONH_directory
         HBHACONH_directory=os.path.dirname(fullpath)
         HBHACONH_file= os.path.basename(fullpath)
-        label7=Label(self.newWindow,text=fullpath).grid(row=7,column=1)
+        label7=Label(self.newWindow,text=fullpath).grid(row=6,column=1)
     def CCH_TOCSY(self):
         fullpath = filedialog.askopenfilename(parent=self.newWindow, title='Choose a file')
         global CCH_TOCSY_file
         global CCH_TOCSY_directory
         CCH_TOCSY_directory=os.path.dirname(fullpath)
         CCH_TOCSY_file= os.path.basename(fullpath)
-        label7=Label(self.newWindow,text=fullpath).grid(row=8,column=1)
+        label7=Label(self.newWindow,text=fullpath).grid(row=7,column=1)
     def HCCH_TOCSY(self):
         fullpath = filedialog.askopenfilename(parent=self.newWindow, title='Choose a file')
         global HCCH_TOCSY_file
         global HCCH_TOCSY_directory
         HBHACONH_directory=os.path.dirname(fullpath)
         HBHACONH_file= os.path.basename(fullpath)
-        label7=Label(self.newWindow,text=fullpath).grid(row=9,column=1)
+        label7=Label(self.newWindow,text=fullpath).grid(row=8,column=1)
     def save_file(self):
         myFormats = [('Text File','*.txt'),]
         fullpath = tk.filedialog.asksaveasfilename(parent=self.newWindow,filetypes=myFormats ,title="Save the file as...")
@@ -208,14 +216,18 @@ class newTopLevel(object):
         global save_directory
         save_directory=os.path.dirname(fullpath)
         save_file=os.path.basename(fullpath)
-        label8=Label(self.newWindow,text=fullpath).grid(row=10,column=1)
+        label8=Label(self.newWindow,text=fullpath).grid(row=9,column=1)
     def bmrb_file(self):
         fullpath = filedialog.askopenfilename(parent=self.newWindow, title='Choose a file')
         global bmrb_file
         global bmrb_directory
         bmrb_directory=os.path.dirname(fullpath)
         bmrb_file= os.path.basename(fullpath)
-        label7=Label(self.newWindow,text=fullpath).grid(row=12,column=1)
+        label7=Label(self.newWindow,text=fullpath).grid(row=11,column=1)
+    def nmr_experiments(self):
+        from additional_nmr_experiments_window import nmr_experiment_window
+        experiments_window = nmr_experiment_window(self.newWindow)
+        experimentswindow = experiments_window.experimentswindow
 
 
     def standard_deviation(self):
@@ -224,19 +236,29 @@ class newTopLevel(object):
         standard_deviation_value=float(standard_deviation_input)
         text_area.insert(tk.INSERT,f'Standard Deviation set: {standard_deviation_input} \n')
 
+    def seq_start(self):
+        seq_start_input=self.seq_start_line.get()
+        global seq_start_value
+        seq_start_value=float(seq_start_input)
+        text_area.insert(tk.INSERT,f'Sequence starts at: {seq_start_input} \n')
+
     def run_spartytonmrstar(self):
         text_area.delete(1.0,END)
         if sequence_file == ():
             text_area.insert(tk.INSERT,'please upload your seq file (make sure to use browse)\n')
         if standard_deviation_value == ():
             text_area.insert(tk.INSERT,'please enter a standard devation value (make sure to click enter)\n')
+        if seq_start_value == ():
+            text_area.insert(tk.INSERT,'please enter a sequence start value (make sure to click enter)\n')
         if save_file == ():
             text_area.insert(tk.INSERT,'please add the save file (make sure to use browse)\n')
         else:
             try:
                 terminal_flag=False
                 from SPARKYtoNMRSTAR3p1 import main_loop
-                main_loop(sequence_file,seq_directory,NHSQC_file,HNCA_file,HNCACB_file,HNCO_file,HNCOCA_file,NHSQC_directory,HNCA_directory,HNCACB_directory,HNCO_directory,HNCOCA_directory,text_area,CHSQC_file,CHSQC_directory,HBHACONH_file,HBHACONH_directory,CCH_TOCSY_file,CCH_TOCSY_directory,HCCH_TOCSY_file,HCCH_TOCSY_directory,save_file,save_directory,standard_deviation_value,bmrb_file,bmrb_directory,terminal_flag)
+                from additional_nmr_experiments_window import get_variables
+                HNCACO_file,HNCACO_directory,HNCOCA_file,HNCOCA_directory,CBCACONH_file,CBCACONH_directory,HCCONH_file,HCCONH_directory=get_variables()
+                main_loop(sequence_file,seq_directory,NHSQC_file,HNCA_file,HNCACB_file,HNCO_file,NHSQC_directory,HNCA_directory,HNCACB_directory,HNCO_directory,text_area,CHSQC_file,CHSQC_directory,HBHACONH_file,HBHACONH_directory,CCH_TOCSY_file,CCH_TOCSY_directory,HCCH_TOCSY_file,HCCH_TOCSY_directory,save_file,save_directory,standard_deviation_value,bmrb_file,bmrb_directory,terminal_flag,HNCACO_file,HNCACO_directory,HNCOCA_file,HNCOCA_directory,CBCACONH_file,CBCACONH_directory,HCCONH_file,HCCONH_directory,seq_start_value,Bruker_check,Keep_file_check)
             except:
                 text_area.insert(tk.INSERT,'Unknown Error, Program could not run. Please Contact Support')
                 #print(traceback.print_exc())
