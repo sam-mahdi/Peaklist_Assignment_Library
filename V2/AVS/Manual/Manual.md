@@ -1,4 +1,4 @@
-This is the AVS Version 2 Manual
+This is the AVS Version 3 Manual
 
 While a lot under the hood has changed, the general use of the program is still relatively similar. There are still only 3 format accepted. BMRB NMRSTAR V2 and V3, as well as the NMRSTAR 3.1 that is generated from uploading SPARKY files. 
 
@@ -25,7 +25,11 @@ The NMRSTAR save file just designates filename and location the NMRSTAR file wil
 
 The standard deviation value will print anything above the set value. Chemical shifts from multiple spectra are averaged, however if peaks in some spectra are not aligned or centered properly, then you will get a high deviation. Peaks should not have a deviation above 0.2
 
+The Seq Start line determines what number the amino acid in your sequence file is. I.E. The sequence numbering must match the peaklist numbering. If your protein has no tag, then this number would be 1. If your protein has no tag, and you are assigning a domain of your protein (i.e. first amino acid is 212 in the protien sequence), then this number would be 212. If your sequence contains the tag, make sure to include this in your number (i.e. if the tag is 5 amino acids, your sequence number would be -4). 
+
 You may add a BMRB file for your peaks to be compared to (make sure you download and use the csv). https://bmrb.io/ref_info/csstats.php?set=full&restype=aa&output=html
+
+Data obtained using Bruker systems has different dimensions than Varians. If you are using data that is from Bruker, make sure to check the Bruker check box in the bottom corner. This will convert your Bruker peaklist formats to Varians. If you wish to keep this format, check the "Keep" button next to it. ***Do not use Bruker and Varian files together. If you have data in both formats, convert the Bruker to Varian first, and then upload these new Varian files)***
 
 ***Output***
 
