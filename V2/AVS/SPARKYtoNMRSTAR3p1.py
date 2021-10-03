@@ -16,10 +16,10 @@ standard_deviation_value is the cutoff for the standard deviation of yoru values
 I would not recommend going above a standard deviation of 0.25
 """
 
-def sequence_list(sequence_file,seq_directory):
+def sequence_list(sequence_file,seq_directory,seq_start_value):
     os.chdir(seq_directory)
     seq_list=[]
-    counter=0
+    counter=int(seq_start_value)-1
     with open(sequence_file) as file:
         for values in file:
             strip_values=values.strip()
@@ -27,7 +27,7 @@ def sequence_list(sequence_file,seq_directory):
                 counter+=1
                 seq_list.append(f'{counter}{entries}')
     return seq_list
-def regex_list(sequence_file,seq_directory):
+def regex_list(sequence_file,seq_directory,seq_start_value):
     new_list=[]
     Alanine_Values=['C','CA','CB','HA','HB','HD21','HD22','H','N','ND2']
     Arganine_Values=['C','CA','CB','CD','CG','HA','HB2','HB3','HD2','HD3','HG2','HG3','H','N']
@@ -43,7 +43,7 @@ def regex_list(sequence_file,seq_directory):
     Threanine_Values=['C','CA','CB','CG2','HA','HB','HG2','H','N']
     Tryptophan_Values=['C','CA','CB','HA','HB2','HB3','H','HE1','N','NE1']
     Valine_Values=['C','CA','CB','CG1','CG2','HA','HB','HG2','H','N']
-    for amino_acids in sequence_list(sequence_file,seq_directory):
+    for amino_acids in sequence_list(sequence_file,seq_directory,seq_start_value):
         if amino_acids[-1] == 'M':
             methionine=[amino_acids+'-'+atom for atom in Methionine_Values]
             new_list+=methionine
@@ -82,7 +82,7 @@ def regex_list(sequence_file,seq_directory):
             new_list+=valine
         if amino_acids[-1] == 'W':
             tryptophan=[amino_acids+'-'+atom for atom in Tryptophan_Values]
-            new_list+=tryptophan        
+            new_list+=tryptophan
     return new_list
 
 def NHSQC_peaklist(amino_acid,residue_number,atom,temp_list,spectra_list,NHSQC_file,NHSQC_directory):
@@ -121,6 +121,39 @@ def HNCACB_peaklist(amino_acid,residue_number,atom,temp_list,spectra_list,HNCACB
             if amino_acid+residue_number+atom == hncacb_split[0].split('-')[1]:
                 temp_list.append(float(hncacb_split[2]))
                 spectra_list.append('HNCACB')
+def CBCACONH_peaklist(amino_acid,residue_number,atom,temp_list,spectra_list,CBCACONH_file,CBCACONH_directory):
+    with open(CBCACONH_file) as cbcaconh:
+        for cbcaconh_lines in cbcaconh:
+            if re.search('^\w\d+\w+',cbcaconh_lines.strip()) is None:
+                continue
+            cbcaconh_split=cbcaconh_lines.strip().split()
+            if amino_acid+residue_number == cbcaconh_split[0].split('-')[0][0:-1] and atom == cbcaconh_split[0].split('-')[1]:
+                temp_list.append(float(cbcaconh_split[2]))
+                spectra_list.append('CBCACONH')
+            if amino_acid+residue_number+atom == cbcaconh_split[0].split('-')[1]:
+                temp_list.append(float(cbcaconh_split[2]))
+                spectra_list.append('CBCACONH')
+def HCCONH_peaklist(amino_acid,residue_number,atom,temp_list,spectra_list,HCCONH_file,HCCONH_directory):
+    with open(HCCONH_file) as hcconh:
+        for hcconh_lines in hcconh:
+            if re.search('^\w\d+\w+',hcconh_lines.strip()) is None:
+                continue
+            hcconh_split=hcconh_lines.strip().split()
+            if amino_acid+residue_number == hcconh_split[0].split('-')[0][0:-1] and atom == hcconh_split[0].split('-')[1]:
+                temp_list.append(float(hcconh_split[2]))
+                spectra_list.append('HCCONH')
+            if amino_acid+residue_number+atom == hcconh_split[0].split('-')[1]:
+                temp_list.append(float(hcconh_split[2]))
+                spectra_list.append('HCCONH')
+def HNCACO_peaklist(amino_acid,residue_number,atom,temp_list,spectra_list,HNCACO_file,HNCACO_directory):
+    with open(HNCACO_file) as hnco_i:
+        for hnco_i_lines in hnco_i:
+            if re.search('^\w\d+\w+',hnco_i_lines.strip()) is None:
+                continue
+            hnco_i_split=hnco_i_lines.strip().split()
+            if amino_acid+residue_number+atom == hnco_i_split[0].split('-')[1]:
+                temp_list.append(float(hnco_i_split[2]))
+                spectra_list.append('HNCACO')
 def HNCOCA_peaklist(amino_acid,residue_number,atom,temp_list,spectra_list,HNCOCA_file,HNCOCA_directory):
     with open(HNCOCA_file) as hnca1:
         for hnca1_lines in hnca1:
@@ -179,7 +212,7 @@ def HCCH_TOCSY_peaklist(amino_acid,residue_number,atom,temp_list,spectra_list,HC
                 temp_list.append(float(hcch_tocsy_split[3]))
                 spectra_list.append('HCCH TOCSY')
 
-def check_peaklist_labels(NHSQC_file,HNCA_file,HNCACB_file,HNCO_file,HNCOCA_file,NHSQC_directory,HNCA_directory,HNCACB_directory,HNCO_directory,HNCOCA_directory,text_area,CHSQC_file,CHSQC_directory,HBHACONH_file,HBHACONH_directory,CCH_TOCSY_file,CCH_TOCSY_directory,HCCH_TOCSY_file,HCCH_TOCSY_directory):
+def check_peaklist_labels(NHSQC_file,HNCA_file,HNCACB_file,HNCO_file,NHSQC_directory,HNCA_directory,HNCACB_directory,HNCO_directory,text_area,CHSQC_file,CHSQC_directory,HBHACONH_file,HBHACONH_directory,CCH_TOCSY_file,CCH_TOCSY_directory,HCCH_TOCSY_file,HCCH_TOCSY_directory,HNCACO_file,HNCACO_directory,HNCOCA_file,HNCOCA_directory,CBCACONH_file,CBCACONH_directory,HCCONH_file,HCCONH_directory):
     import checker as ch
     if NHSQC_file != ():
         ch.NHSQC_checker(NHSQC_file,NHSQC_directory,text_area)
@@ -189,6 +222,12 @@ def check_peaklist_labels(NHSQC_file,HNCA_file,HNCACB_file,HNCO_file,HNCOCA_file
         ch.HNCACB_checker(HNCACB_file,HNCACB_directory,text_area)
     if HNCOCA_file != ():
         ch.HNCOCA_checker(HNCOCA_file,HNCOCA_directory,text_area)
+    if HNCACO_file != ():
+        ch.HNCACO_checker(HNCACO_file,HNCACO_directory,text_area)
+    if CBCACONH_file != ():
+        ch.CBCACONH_checker(CBCACONH_file,CBCACONH_directory,text_area)
+    if HCCONH_file != ():
+        ch.HCCONH_checker(HCCONH_file,HCCONH_directory,text_area)
     if HNCO_file != ():
         ch.HNCO_checker(HNCO_file,HNCO_directory,text_area)
     if CHSQC_file != ():
@@ -200,15 +239,62 @@ def check_peaklist_labels(NHSQC_file,HNCA_file,HNCACB_file,HNCO_file,HNCOCA_file
     if HCCH_TOCSY_file != ():
         ch.HCCH_TOCSY_checker(HCCH_TOCSY_file,HCCH_TOCSY_directory,text_area)
 
+def convert_bruker_files(HNCA_file,HNCACB_file,HNCO_file,HNCA_directory,HNCACB_directory,HNCO_directory,HBHACONH_file,HBHACONH_directory,CCH_TOCSY_file,CCH_TOCSY_directory,HCCH_TOCSY_file,HCCH_TOCSY_directory,HNCACO_file,HNCACO_directory,HNCOCA_file,HNCOCA_directory,CBCACONH_file,CBCACONH_directory,HCCONH_file,HCCONH_directory):
+    import convert_bruker as cb
+    if HNCA_file != ():
+        HNCA_file=cb.write_varian_file(HNCA_file,HNCA_directory)
+    if HNCACB_file != ():
+        HNCACB_file=cb.write_varian_file(HNCACB_file,HNCACB_directory)
+    if HNCOCA_file != ():
+        HNCOCA_file=cb.write_varian_file(HNCOCA_file,HNCOCA_directory)
+    if HNCACO_file != ():
+        HNCACO_file=cb.write_varian_file(HNCACO_file,HNCACO_directory)
+    if CBCACONH_file != ():
+        CBCACONH_file=cb.write_varian_file(CBCACONH_file,CBCACONH_directory)
+    if HCCONH_file != ():
+        HCCONH_file=cb.write_varian_file(HCCONH_file,HCCONH_directory)
+    if HNCO_file != ():
+        HNCO_file=cb.write_varian_file(HNCO_file,HNCO_directory)
+    if HBHACONH_file != ():
+        HBHACONH_file=cb.write_varian_file(HBHACONH_file,HBHACONH_directory)
+    if CCH_TOCSY_file != ():
+        CCH_TOCSY_file=cb.write_varian_file(CCH_TOCSY_file,CCH_TOCSY_directory)
+    if HCCH_TOCSY_file != ():
+        HCCH_TOCSY_file=cb.write_varian_file(HCCH_TOCSY_file,HCCH_TOCSY_directory)
+    return HNCA_file, HNCACB_file, HNCOCA_file, HNCACO_file, HNCO_file, CBCACONH_file, HCCONH_file, HBHACONH_file, CCH_TOCSY_file, HCCH_TOCSY_file
 
-def nmrstar_file(sequence_file,seq_directory,NHSQC_file,HNCA_file,HNCACB_file,HNCO_file,HNCOCA_file,NHSQC_directory,HNCA_directory,HNCACB_directory,HNCO_directory,HNCOCA_directory,text_area,CHSQC_file,CHSQC_directory,HBHACONH_file,HBHACONH_directory,CCH_TOCSY_file,CCH_TOCSY_directory,HCCH_TOCSY_file,HCCH_TOCSY_directory,save_file,save_directory,standard_deviation_value):
+def remove_converted_varian_files(HNCA_file,HNCACB_file,HNCO_file,HNCA_directory,HNCACB_directory,HNCO_directory,HBHACONH_file,HBHACONH_directory,CCH_TOCSY_file,CCH_TOCSY_directory,HCCH_TOCSY_file,HCCH_TOCSY_directory,HNCACO_file,HNCACO_directory,HNCOCA_file,HNCOCA_directory,CBCACONH_file,CBCACONH_directory,HCCONH_file,HCCONH_directory):
+    import convert_bruker as cb
+    if HNCA_file != ():
+        HNCA_file=cb.delete_varian_file(HNCA_file,HNCA_directory)
+    if HNCACB_file != ():
+        HNCACB_file=cb.delete_varian_file(HNCACB_file,HNCACB_directory)
+    if HNCOCA_file != ():
+        HNCOCA_file=cb.delete_varian_file(HNCOCA_file,HNCOCA_directory)
+    if HNCACO_file != ():
+        HNCACO_file=cb.delete_varian_file(HNCACO_file,HNCACO_directory)
+    if CBCACONH_file != ():
+        CBCACONH_file=cb.delete_varian_file(CBCACONH_file,CBCACONH_directory)
+    if HCCONH_file != ():
+        HCCONH_file=cb.delete_varian_file(HCCONH_file,HCCONH_directory)
+    if HNCO_file != ():
+        HNCO_file=cb.delete_varian_file(HNCO_file,HNCO_directory)
+    if HBHACONH_file != ():
+        HBHACONH_file=cb.delete_varian_file(HBHACONH_file,HBHACONH_directory)
+    if CCH_TOCSY_file != ():
+        CCH_TOCSY_file=cb.delete_varian_file(CCH_TOCSY_file,CCH_TOCSY_directory)
+    if HCCH_TOCSY_file != ():
+        HCCH_TOCSY_file=cb.delete_varian_file(HCCH_TOCSY_file,HCCH_TOCSY_directory)
+
+
+def nmrstar_file(sequence_file,seq_directory,NHSQC_file,HNCA_file,HNCACB_file,HNCO_file,NHSQC_directory,HNCA_directory,HNCACB_directory,HNCO_directory,text_area,CHSQC_file,CHSQC_directory,HBHACONH_file,HBHACONH_directory,CCH_TOCSY_file,CCH_TOCSY_directory,HCCH_TOCSY_file,HCCH_TOCSY_directory,save_file,save_directory,standard_deviation_value,HNCACO_file,HNCACO_directory,HNCOCA_file,HNCOCA_directory,CBCACONH_file,CBCACONH_directory,HCCONH_file,HCCONH_directory,seq_start_value):
     aa_dict={'D':'Asp','T':'Thr','S':'Ser','E':'Glu','P':'Pro','G':'Gly','A':'Ala','C':'Cys','V':'Val',
     'M':'Met','I':'Ile','L':'Leu','Y':'Tyr','F':'Phe','H':'His','K':'Lys','R':'Arg','W':'Trp','Q':'Gln','N':'Asn'}
     temp_list=[]
     nmrstar_list=[]
     spectra_list=[]
     counter=0
-    for values in regex_list(sequence_file,seq_directory):
+    for values in regex_list(sequence_file,seq_directory,seq_start_value):
         split_values=values.split('-')
         amino_acid=split_values[0][-1]
         residue_number=split_values[0][0:-1]
@@ -222,6 +308,15 @@ def nmrstar_file(sequence_file,seq_directory,NHSQC_file,HNCA_file,HNCACB_file,HN
         if HNCACB_file != ():
             os.chdir(HNCACB_directory)
             HNCACB_peaklist(amino_acid,residue_number,atom,temp_list,spectra_list,HNCACB_file,HNCACB_directory)
+        if CBCACONH_file !=():
+            os.chdir(CBCACONH_directory)
+            CBCACONH_peaklist(amino_acid,residue_number,atom,temp_list,spectra_list,CBCACONH_file,CBCACONH_directory)
+        if HCCONH_file !=():
+            os.chdir(HCCONH_directory)
+            HCCONH_peaklist(amino_acid,residue_number,atom,temp_list,spectra_list,HCCONH_file,HCCONH_directory)
+        if HNCACO_file !=():
+            os.chdir(HNCACO_directory)
+            HNCACO_peaklist(amino_acid,residue_number,atom,temp_list,spectra_list,HNCACO_file,HNCACO_directory)
         if HNCOCA_file != ():
             os.chdir(HNCOCA_directory)
             HNCOCA_peaklist(amino_acid,residue_number,atom,temp_list,spectra_list,HNCOCA_file,HNCOCA_directory)
@@ -312,12 +407,15 @@ def compare_to_bmrb(bmrb_file,bmrb_directory,save_file,save_directory,text_area)
                             text_area.insert(tk.INSERT,f'{star_amino_acid} {star_residue} {star_atom} value {star_value} is outside of range {round(lower_half,3)}-{round(upper_half,3)}\n')
                             text_area.update_idletasks()
 
-def main_loop(sequence_file,seq_directory,NHSQC_file,HNCA_file,HNCACB_file,HNCO_file,HNCOCA_file,NHSQC_directory,HNCA_directory,HNCACB_directory,HNCO_directory,HNCOCA_directory,text_area,CHSQC_file,CHSQC_directory,HBHACONH_file,HBHACONH_directory,CCH_TOCSY_file,CCH_TOCSY_directory,HCCH_TOCSY_file,HCCH_TOCSY_directory,save_file,save_directory,standard_deviation_value,bmrb_file,bmrb_directory,terminal_flag):
+def main_loop(sequence_file,seq_directory,NHSQC_file,HNCA_file,HNCACB_file,HNCO_file,NHSQC_directory,HNCA_directory,HNCACB_directory,HNCO_directory,text_area,CHSQC_file,CHSQC_directory,HBHACONH_file,HBHACONH_directory,CCH_TOCSY_file,CCH_TOCSY_directory,HCCH_TOCSY_file,HCCH_TOCSY_directory,save_file,save_directory,standard_deviation_value,bmrb_file,bmrb_directory,terminal_flag,HNCACO_file,HNCACO_directory,HNCOCA_file,HNCOCA_directory,CBCACONH_file,CBCACONH_directory,HCCONH_file,HCCONH_directory,seq_start_value,Bruker_check,Keep_file_check):
     text_area.insert(tk.INSERT,'Starting Program\n')
+    if Bruker_check.get() != 0:
+        text_area.insert(tk.INSERT,'Converting from Bruker format to Varian\n')
+        HNCA_file, HNCACB_file, HNCOCA_file, HNCACO_file, HNCO_file, CBCACONH_file, HCCONH_file, HBHACONH_file, CCH_TOCSY_file, HCCH_TOCSY_file = convert_bruker_files(HNCA_file,HNCACB_file,HNCO_file,HNCA_directory,HNCACB_directory,HNCO_directory,HBHACONH_file,HBHACONH_directory,CCH_TOCSY_file,CCH_TOCSY_directory,HCCH_TOCSY_file,HCCH_TOCSY_directory,HNCACO_file,HNCACO_directory,HNCOCA_file,HNCOCA_directory,CBCACONH_file,CBCACONH_directory,HCCONH_file,HCCONH_directory)
+    check_peaklist_labels(NHSQC_file,HNCA_file,HNCACB_file,HNCO_file,NHSQC_directory,HNCA_directory,HNCACB_directory,HNCO_directory,text_area,CHSQC_file,CHSQC_directory,HBHACONH_file,HBHACONH_directory,CCH_TOCSY_file,CCH_TOCSY_directory,HCCH_TOCSY_file,HCCH_TOCSY_directory,HNCACO_file,HNCACO_directory,HNCOCA_file,HNCOCA_directory,CBCACONH_file,CBCACONH_directory,HCCONH_file,HCCONH_directory)
     text_area.insert(tk.INSERT,f'\n Any Errors found will pop here. Please wait until program is finished before interacting with window.\n')
     text_area.insert(tk.INSERT,f'\nChecking proper labeling and formatting in peaklists\n')
     text_area.update_idletasks()
-    check_peaklist_labels(NHSQC_file,HNCA_file,HNCACB_file,HNCO_file,HNCOCA_file,NHSQC_directory,HNCA_directory,HNCACB_directory,HNCO_directory,HNCOCA_directory,text_area,CHSQC_file,CHSQC_directory,HBHACONH_file,HBHACONH_directory,CCH_TOCSY_file,CCH_TOCSY_directory,HCCH_TOCSY_file,HCCH_TOCSY_directory)
     text_area.insert(tk.INSERT,'\nCheck Complete\n')
     text_area.insert(tk.INSERT,'\nIf any errors were found, please correct and rerun \n')
     if terminal_flag is True:
@@ -326,9 +424,13 @@ def main_loop(sequence_file,seq_directory,NHSQC_file,HNCA_file,HNCACB_file,HNCO_
             sys.exit()
     text_area.insert(tk.INSERT,'\nGenerating NMRSTAR File (Takes a minute depending on size of protein)\n')
     text_area.update_idletasks()
-    nmrstar_file(sequence_file,seq_directory,NHSQC_file,HNCA_file,HNCACB_file,HNCO_file,HNCOCA_file,NHSQC_directory,HNCA_directory,HNCACB_directory,HNCO_directory,HNCOCA_directory,text_area,CHSQC_file,CHSQC_directory,HBHACONH_file,HBHACONH_directory,CCH_TOCSY_file,CCH_TOCSY_directory,HCCH_TOCSY_file,HCCH_TOCSY_directory,save_file,save_directory,standard_deviation_value)
+    nmrstar_file(sequence_file,seq_directory,NHSQC_file,HNCA_file,HNCACB_file,HNCO_file,NHSQC_directory,HNCA_directory,HNCACB_directory,HNCO_directory,text_area,CHSQC_file,CHSQC_directory,HBHACONH_file,HBHACONH_directory,CCH_TOCSY_file,CCH_TOCSY_directory,HCCH_TOCSY_file,HCCH_TOCSY_directory,save_file,save_directory,standard_deviation_value,HNCACO_file,HNCACO_directory,HNCOCA_file,HNCOCA_directory,CBCACONH_file,CBCACONH_directory,HCCONH_file,HCCONH_directory,seq_start_value)
     try:
         compare_to_bmrb(bmrb_file,bmrb_directory,save_file,save_directory,text_area)
     except:
+        if Keep_file_check.get() == 0:
+            remove_converted_varian_files(HNCA_file,HNCACB_file,HNCO_file,HNCA_directory,HNCACB_directory,HNCO_directory,HBHACONH_file,HBHACONH_directory,CCH_TOCSY_file,CCH_TOCSY_directory,HCCH_TOCSY_file,HCCH_TOCSY_directory,HNCACO_file,HNCACO_directory,HNCOCA_file,HNCOCA_directory,CBCACONH_file,CBCACONH_directory,HCCONH_file,HCCONH_directory)
+        else:
+            text_area.insert(tk.INSERT,'Converted Bruker files are in the same directory as original files\n')
         text_area.insert(tk.INSERT,'Program Complete, Please exit window\n')
         text_area.update_idletasks()
