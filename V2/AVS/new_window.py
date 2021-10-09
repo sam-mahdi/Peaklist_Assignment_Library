@@ -149,6 +149,9 @@ class newTopLevel(object):
         global seq_directory
         seq_directory=os.path.dirname(fullpath)
         sequence_file= os.path.basename(fullpath)
+        if sequence_file == '' or seq_directory == '':
+            sequence_file=()
+            seq_directory=()
         label3=Label(self.newWindow,text=fullpath).grid(row=0,column=1)
 
     def NHSQC(self):
@@ -157,6 +160,9 @@ class newTopLevel(object):
         global NHSQC_directory
         NHSQC_directory=os.path.dirname(fullpath)
         NHSQC_file= os.path.basename(fullpath)
+        if NHSQC_file == '' or NHSQC_directory == '':
+            NHSQC_file=()
+            NHSQC_directory=()
         label4=Label(self.newWindow,text=fullpath).grid(row=1,column=1)
     def HNCA(self):
         fullpath = filedialog.askopenfilename(parent=self.newWindow, title='Choose a file')
@@ -164,6 +170,9 @@ class newTopLevel(object):
         global HNCA_directory
         HNCA_directory=os.path.dirname(fullpath)
         HNCA_file= os.path.basename(fullpath)
+        if HNCA_file == '' or HNCA_directory == '':
+            HNCA_file=()
+            HNCA_directory=()
         label5=Label(self.newWindow,text=fullpath).grid(row=2,column=1)
 
     def HNCACB(self):
@@ -172,6 +181,9 @@ class newTopLevel(object):
         global HNCACB_directory
         HNCACB_directory=os.path.dirname(fullpath)
         HNCACB_file= os.path.basename(fullpath)
+        if HNCACB_file == '' or HNCACB_directory == '':
+            HNCACB_file=()
+            HNCACB_file=()
         label6=Label(self.newWindow,text=fullpath).grid(row=3,column=1)
 
     def HNCO(self):
@@ -180,6 +192,9 @@ class newTopLevel(object):
         global HNCO_directory
         HNCO_directory=os.path.dirname(fullpath)
         HNCO_file= os.path.basename(fullpath)
+        if HNCO_file == '' or HNCO_directory == '':
+            HNCO_file=()
+            HNCO_directory=()
         label7=Label(self.newWindow,text=fullpath).grid(row=4,column=1)
     def CHSQC(self):
         fullpath = filedialog.askopenfilename(parent=self.newWindow, title='Choose a file')
@@ -187,6 +202,9 @@ class newTopLevel(object):
         global CHSQC_directory
         CHSQC_directory=os.path.dirname(fullpath)
         CHSQC_file= os.path.basename(fullpath)
+        if CHSQC_directory == '' or CHSQC_file == '':
+            CHSQC_file=()
+            CHSQC_directory=()
         label7=Label(self.newWindow,text=fullpath).grid(row=5,column=1)
     def HBHACONH(self):
         fullpath = filedialog.askopenfilename(parent=self.newWindow, title='Choose a file')
@@ -194,6 +212,9 @@ class newTopLevel(object):
         global HBHACONH_directory
         HBHACONH_directory=os.path.dirname(fullpath)
         HBHACONH_file= os.path.basename(fullpath)
+        if HBHACONH_file == '' or HBHACONH_directory == '':
+            HBHACONH_file=()
+            HBHACONH_directory=()
         label7=Label(self.newWindow,text=fullpath).grid(row=6,column=1)
     def CCH_TOCSY(self):
         fullpath = filedialog.askopenfilename(parent=self.newWindow, title='Choose a file')
@@ -201,13 +222,19 @@ class newTopLevel(object):
         global CCH_TOCSY_directory
         CCH_TOCSY_directory=os.path.dirname(fullpath)
         CCH_TOCSY_file= os.path.basename(fullpath)
+        if CCH_TOCSY_file == '' or CCH_TOCSY_directory =='':
+            CCH_TOCSY_file=()
+            CCH_TOCSY_directory=()
         label7=Label(self.newWindow,text=fullpath).grid(row=7,column=1)
     def HCCH_TOCSY(self):
         fullpath = filedialog.askopenfilename(parent=self.newWindow, title='Choose a file')
         global HCCH_TOCSY_file
         global HCCH_TOCSY_directory
-        HBHACONH_directory=os.path.dirname(fullpath)
-        HBHACONH_file= os.path.basename(fullpath)
+        HCCH_TOCSY_directory=os.path.dirname(fullpath)
+        HCCH_TOCSY_file= os.path.basename(fullpath)
+        if HCCH_TOCSY_file == '' or HCCH_TOCSY_directory == '':
+            HCCH_TOCSY_file=()
+            HCCH_TOCSY_directory=()
         label7=Label(self.newWindow,text=fullpath).grid(row=8,column=1)
     def save_file(self):
         myFormats = [('Text File','*.txt'),]
@@ -216,6 +243,9 @@ class newTopLevel(object):
         global save_directory
         save_directory=os.path.dirname(fullpath)
         save_file=os.path.basename(fullpath)
+        if save_file == '' or save_directory == '':
+            save_file=()
+            save_directory=()
         label8=Label(self.newWindow,text=fullpath).grid(row=9,column=1)
     def bmrb_file(self):
         fullpath = filedialog.askopenfilename(parent=self.newWindow, title='Choose a file')
