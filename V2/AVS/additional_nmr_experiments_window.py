@@ -42,6 +42,9 @@ class nmr_experiment_window(object):
         global HNCOCA_directory
         HNCOCA_directory=os.path.dirname(fullpath)
         HNCOCA_file= os.path.basename(fullpath)
+        if HNCOCA_directory == '' or HNCOCA_file == '':
+            HNCOCA_file=()
+            HNCOCA_directory=()
         label7=Label(self.experimentswindow,text=fullpath).grid(row=0,column=1)
 
     def HNCACO(self):
@@ -50,6 +53,9 @@ class nmr_experiment_window(object):
         global HNCACO_directory
         HNCACO_directory=os.path.dirname(fullpath)
         HNCACO_file= os.path.basename(fullpath)
+        if HNCACO_file == '' or HNCACO_directory == '':
+            HNCACO_file=()
+            HNCACO_directory=()
         label7=Label(self.experimentswindow,text=fullpath).grid(row=1,column=1)
 
     def CBCACONH(self):
@@ -58,6 +64,9 @@ class nmr_experiment_window(object):
         global CBCACONH_directory
         CBCACONH_directory=os.path.dirname(fullpath)
         CBCACONH_file= os.path.basename(fullpath)
+        if CBCACONH_file=='' or CBCACONH_directory == '':
+            CBCACONH_file=()
+            CBCACONH_directory=()
         label7=Label(self.experimentswindow,text=fullpath).grid(row=2,column=1)
 
     def HCCONH(self):
@@ -66,6 +75,9 @@ class nmr_experiment_window(object):
         global HCCONH_directory
         HCCONH_directory=os.path.dirname(fullpath)
         HCCONH_file= os.path.basename(fullpath)
+        if HCCONH_file =='' or HCCONH_directory == '':
+            HCCONH_file=()
+            HCCONH_directory=()
         label7=Label(self.experimentswindow,text=fullpath).grid(row=3,column=1)
 
 def get_variables():
