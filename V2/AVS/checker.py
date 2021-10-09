@@ -639,11 +639,10 @@ def CCH_TOCSY_checker(cch_tocsy_file,CCH_TOCSY_directory,text_area):
                 text_area.insert(tk.INSERT,f'Program could not analyze, stopped at \n {ccc_tocsy_lines}please check peak, correct, and rerun\n')
                 text_area.update_idletasks()
 
-def HCCH_TOCSY_checker(hcch_tocsy_file):
+def HCCH_TOCSY_checker(hcch_tocsy_file,HCCH_TOCSY_directory,text_area):
     text_area.insert(tk.INSERT,f'Checking HCCH_TOCSY\n')
     text_area.update_idletasks()
     os.chdir(HCCH_TOCSY_directory)
-    print('Checking HCCH_TOCSY')
     with open(hcch_tocsy_file) as hcch_tocsy:
         for hcch_tocsy_lines in hcch_tocsy:
             if hcch_tocsy_lines.strip().split() == []:
