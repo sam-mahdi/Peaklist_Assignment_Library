@@ -20,3 +20,4 @@ Version 3:
 
 1. New experiment options have been added (HNCACO, CBCACONH, HCCONH) and program has been slightly rewritten to easily include more if desired. 
 2. Bruker dimenions vary from Varians. A converter has been added so you may now input peaklists obtained from Bruker data. You may choose to keep this converted format if you had a mixture of Bruker and Varian data. 
+3. Progress bar has been added for the Sparky NMRSTAR conversion. 
