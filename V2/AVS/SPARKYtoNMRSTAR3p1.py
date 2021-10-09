@@ -2,6 +2,9 @@ import re
 import sys
 import os
 import tkinter as tk
+from tkinter import *
+from tkinter import ttk
+import time
 
 """
 Parameters
@@ -15,6 +18,20 @@ save file is the name of your nmrstar HNCA_file
 standard_deviation_value is the cutoff for the standard deviation of yoru values, if you have a peak that is improperly labeled or has proper labeling but simply has a improper value, this will be conveyed here.
 I would not recommend going above a standard deviation of 0.25
 """
+
+class ProgressBar(object):
+    def __init__(self, second_window):
+        self.pbWindow = Toplevel(second_window)
+        self.pbWindow.update_bar=Label(self.pbWindow,text='')
+        self.pbWindow.update_bar.grid(column=0,row=3)
+        self.pbWindow.progress=Label(self.pbWindow,text='0%')
+        self.pbWindow.progress.grid(row=3,column=2)
+        self.pbWindow.pb=ttk.Progressbar(self.pbWindow, orient='horizontal',mode='determinate',length=280)
+        self.pbWindow.pb.grid(row=2,column=0)
+        self.pbWindow.pb2=ttk.Progressbar(self.pbWindow, orient='horizontal',mode='determinate',length=280)
+        self.pbWindow.pb2.grid(row=0,column=0)
+        self.pbWindow.progress2=Label(self.pbWindow,text='0%')
+        self.pbWindow.progress2.grid(row=1,column=2)
 
 def sequence_list(sequence_file,seq_directory,seq_start_value):
     os.chdir(seq_directory)
@@ -212,31 +229,70 @@ def HCCH_TOCSY_peaklist(amino_acid,residue_number,atom,temp_list,spectra_list,HC
                 temp_list.append(float(hcch_tocsy_split[3]))
                 spectra_list.append('HCCH TOCSY')
 
-def check_peaklist_labels(NHSQC_file,HNCA_file,HNCACB_file,HNCO_file,NHSQC_directory,HNCA_directory,HNCACB_directory,HNCO_directory,text_area,CHSQC_file,CHSQC_directory,HBHACONH_file,HBHACONH_directory,CCH_TOCSY_file,CCH_TOCSY_directory,HCCH_TOCSY_file,HCCH_TOCSY_directory,HNCACO_file,HNCACO_directory,HNCOCA_file,HNCOCA_directory,CBCACONH_file,CBCACONH_directory,HCCONH_file,HCCONH_directory):
+def check_peaklist_labels(NHSQC_file,HNCA_file,HNCACB_file,HNCO_file,NHSQC_directory,HNCA_directory,HNCACB_directory,HNCO_directory,text_area,CHSQC_file,CHSQC_directory,HBHACONH_file,HBHACONH_directory,CCH_TOCSY_file,CCH_TOCSY_directory,HCCH_TOCSY_file,HCCH_TOCSY_directory,HNCACO_file,HNCACO_directory,HNCOCA_file,HNCOCA_directory,CBCACONH_file,CBCACONH_directory,HCCONH_file,HCCONH_directory,progress_bar):
     import checker as ch
+    progress_bar.update_idletasks()
+    progress_bar.pb2['value'] = 0
+    progress_bar.progress2['text']=int(progress_bar.pb['value']),'%'
     if NHSQC_file != ():
+        progress_bar.update_idletasks()
+        progress_bar.pb2['value'] == 8.3
+        progress_bar.progress2['text']=int(progress_bar.pb['value']),'%'
         ch.NHSQC_checker(NHSQC_file,NHSQC_directory,text_area)
     if HNCA_file != ():
+        progress_bar.update_idletasks()
+        progress_bar.pb2['value'] == 16.6
+        progress_bar.progress2['text']=int(progress_bar.pb['value']),'%'
         ch.HNCA_checker(HNCA_file,HNCA_directory,text_area)
     if HNCACB_file != ():
+        progress_bar.update_idletasks()
+        progress_bar.pb2['value'] == 24.9
+        progress_bar.progress2['text']=int(progress_bar.pb['value']),'%'
         ch.HNCACB_checker(HNCACB_file,HNCACB_directory,text_area)
     if HNCOCA_file != ():
+        progress_bar.update_idletasks()
+        progress_bar.pb2['value'] == 33.2
+        progress_bar.progress2['text']=int(progress_bar.pb['value']),'%'
         ch.HNCOCA_checker(HNCOCA_file,HNCOCA_directory,text_area)
     if HNCACO_file != ():
+        progress_bar.update_idletasks()
+        progress_bar.pb2['value'] == 41.6
+        progress_bar.progress2['text']=int(progress_bar.pb['value']),'%'
         ch.HNCACO_checker(HNCACO_file,HNCACO_directory,text_area)
     if CBCACONH_file != ():
+        progress_bar.update_idletasks()
+        progress_bar.pb2['value'] == 49.8
+        progress_bar.progress2['text']=int(progress_bar.pb['value']),'%'
         ch.CBCACONH_checker(CBCACONH_file,CBCACONH_directory,text_area)
     if HCCONH_file != ():
+        progress_bar.update_idletasks()
+        progress_bar.pb2['value'] == 58.1
+        progress_bar.progress2['text']=int(progress_bar.pb['value']),'%'
         ch.HCCONH_checker(HCCONH_file,HCCONH_directory,text_area)
     if HNCO_file != ():
+        progress_bar.update_idletasks()
+        progress_bar.pb2['value'] == 66.4
+        progress_bar.progress2['text']=int(progress_bar.pb['value']),'%'
         ch.HNCO_checker(HNCO_file,HNCO_directory,text_area)
     if CHSQC_file != ():
+        progress_bar.update_idletasks()
+        progress_bar.pb2['value'] == 74.7
+        progress_bar.progress2['text']=int(progress_bar.pb['value']),'%'
         ch.CHSQC_checker(CHSQC_file,CHSQC_directory,text_area)
     if HBHACONH_file != ():
+        progress_bar.update_idletasks()
+        progress_bar.pb2['value'] == 83
+        progress_bar.progress2['text']=int(progress_bar.pb['value']),'%'
         ch.HBHACONH_checker(HBHACONH_file,HBHACONH_directory,text_area)
     if CCH_TOCSY_file != ():
+        progress_bar.update_idletasks()
+        progress_bar.pb2['value'] == 91.3
+        progress_bar.progress2['text']=int(progress_bar.pb['value']),'%'
         ch.CCH_TOCSY_checker(CCH_TOCSY_file,CCH_TOCSY_directory,text_area)
     if HCCH_TOCSY_file != ():
+        progress_bar.update_idletasks()
+        progress_bar.pb2['value'] == 100
+        progress_bar.progress2['text']=int(progress_bar.pb['value']),'%'
         ch.HCCH_TOCSY_checker(HCCH_TOCSY_file,HCCH_TOCSY_directory,text_area)
 
 def convert_bruker_files(HNCA_file,HNCACB_file,HNCO_file,HNCA_directory,HNCACB_directory,HNCO_directory,HBHACONH_file,HBHACONH_directory,CCH_TOCSY_file,CCH_TOCSY_directory,HCCH_TOCSY_file,HCCH_TOCSY_directory,HNCACO_file,HNCACO_directory,HNCOCA_file,HNCOCA_directory,CBCACONH_file,CBCACONH_directory,HCCONH_file,HCCONH_directory):
@@ -287,14 +343,22 @@ def remove_converted_varian_files(HNCA_file,HNCACB_file,HNCO_file,HNCA_directory
         HCCH_TOCSY_file=cb.delete_varian_file(HCCH_TOCSY_file,HCCH_TOCSY_directory)
 
 
-def nmrstar_file(sequence_file,seq_directory,NHSQC_file,HNCA_file,HNCACB_file,HNCO_file,NHSQC_directory,HNCA_directory,HNCACB_directory,HNCO_directory,text_area,CHSQC_file,CHSQC_directory,HBHACONH_file,HBHACONH_directory,CCH_TOCSY_file,CCH_TOCSY_directory,HCCH_TOCSY_file,HCCH_TOCSY_directory,save_file,save_directory,standard_deviation_value,HNCACO_file,HNCACO_directory,HNCOCA_file,HNCOCA_directory,CBCACONH_file,CBCACONH_directory,HCCONH_file,HCCONH_directory,seq_start_value):
+def nmrstar_file(sequence_file,seq_directory,NHSQC_file,HNCA_file,HNCACB_file,HNCO_file,NHSQC_directory,HNCA_directory,HNCACB_directory,HNCO_directory,text_area,CHSQC_file,CHSQC_directory,HBHACONH_file,HBHACONH_directory,CCH_TOCSY_file,CCH_TOCSY_directory,HCCH_TOCSY_file,HCCH_TOCSY_directory,save_file,save_directory,standard_deviation_value,HNCACO_file,HNCACO_directory,HNCOCA_file,HNCOCA_directory,CBCACONH_file,CBCACONH_directory,HCCONH_file,HCCONH_directory,seq_start_value,progress_bar):
     aa_dict={'D':'Asp','T':'Thr','S':'Ser','E':'Glu','P':'Pro','G':'Gly','A':'Ala','C':'Cys','V':'Val',
     'M':'Met','I':'Ile','L':'Leu','Y':'Tyr','F':'Phe','H':'His','K':'Lys','R':'Arg','W':'Trp','Q':'Gln','N':'Asn'}
+    reg_list=regex_list(sequence_file,seq_directory,seq_start_value)
+    progress_bar.pb2['value'] = 0
+    progress_bar.progress2['text']=int(progress_bar.pb2['value']),'%'
+    reg_list_size=len(reg_list)
     temp_list=[]
     nmrstar_list=[]
     spectra_list=[]
     counter=0
-    for values in regex_list(sequence_file,seq_directory,seq_start_value):
+    for values in reg_list:
+        if counter <= reg_list_size:
+            progress_bar.update_idletasks()
+            progress_bar.pb2['value'] += 100/reg_list_size
+            progress_bar.progress2['text']=int(progress_bar.pb2['value']),'%'
         split_values=values.split('-')
         amino_acid=split_values[0][-1]
         residue_number=split_values[0][0:-1]
@@ -407,30 +471,58 @@ def compare_to_bmrb(bmrb_file,bmrb_directory,save_file,save_directory,text_area)
                             text_area.insert(tk.INSERT,f'{star_amino_acid} {star_residue} {star_atom} value {star_value} is outside of range {round(lower_half,3)}-{round(upper_half,3)}\n')
                             text_area.update_idletasks()
 
-def main_loop(sequence_file,seq_directory,NHSQC_file,HNCA_file,HNCACB_file,HNCO_file,NHSQC_directory,HNCA_directory,HNCACB_directory,HNCO_directory,text_area,CHSQC_file,CHSQC_directory,HBHACONH_file,HBHACONH_directory,CCH_TOCSY_file,CCH_TOCSY_directory,HCCH_TOCSY_file,HCCH_TOCSY_directory,save_file,save_directory,standard_deviation_value,bmrb_file,bmrb_directory,terminal_flag,HNCACO_file,HNCACO_directory,HNCOCA_file,HNCOCA_directory,CBCACONH_file,CBCACONH_directory,HCCONH_file,HCCONH_directory,seq_start_value,Bruker_check,Keep_file_check):
+def main_loop(sequence_file,seq_directory,NHSQC_file,HNCA_file,HNCACB_file,HNCO_file,NHSQC_directory,HNCA_directory,HNCACB_directory,HNCO_directory,text_area,CHSQC_file,CHSQC_directory,HBHACONH_file,HBHACONH_directory,CCH_TOCSY_file,CCH_TOCSY_directory,HCCH_TOCSY_file,HCCH_TOCSY_directory,save_file,save_directory,standard_deviation_value,bmrb_file,bmrb_directory,terminal_flag,HNCACO_file,HNCACO_directory,HNCOCA_file,HNCOCA_directory,CBCACONH_file,CBCACONH_directory,HCCONH_file,HCCONH_directory,seq_start_value,Bruker_check,Keep_file_check,second_window):
+    new_top=ProgressBar(second_window)
+    progress_bar = new_top.pbWindow
+    progress_bar.update_idletasks()
+    progress_bar.progress['text']=int(progress_bar.pb['value']),'%'
+    progress_bar.update_bar['text']='Starting Program'
     text_area.insert(tk.INSERT,'Starting Program\n')
     if Bruker_check.get() != 0:
+        progress_bar.update_idletasks()
+        progress_bar.pb['value'] = 10
+        progress_bar.progress['text']=int(progress_bar.pb['value']),'%'
+        progress_bar.update_bar['text']='Converting from Bruker format to Varian'
         text_area.insert(tk.INSERT,'Converting from Bruker format to Varian\n')
         HNCA_file, HNCACB_file, HNCOCA_file, HNCACO_file, HNCO_file, CBCACONH_file, HCCONH_file, HBHACONH_file, CCH_TOCSY_file, HCCH_TOCSY_file = convert_bruker_files(HNCA_file,HNCACB_file,HNCO_file,HNCA_directory,HNCACB_directory,HNCO_directory,HBHACONH_file,HBHACONH_directory,CCH_TOCSY_file,CCH_TOCSY_directory,HCCH_TOCSY_file,HCCH_TOCSY_directory,HNCACO_file,HNCACO_directory,HNCOCA_file,HNCOCA_directory,CBCACONH_file,CBCACONH_directory,HCCONH_file,HCCONH_directory)
-    check_peaklist_labels(NHSQC_file,HNCA_file,HNCACB_file,HNCO_file,NHSQC_directory,HNCA_directory,HNCACB_directory,HNCO_directory,text_area,CHSQC_file,CHSQC_directory,HBHACONH_file,HBHACONH_directory,CCH_TOCSY_file,CCH_TOCSY_directory,HCCH_TOCSY_file,HCCH_TOCSY_directory,HNCACO_file,HNCACO_directory,HNCOCA_file,HNCOCA_directory,CBCACONH_file,CBCACONH_directory,HCCONH_file,HCCONH_directory)
+    progress_bar.update_idletasks()
+    progress_bar.pb['value'] = 33
+    progress_bar.progress['text']=int(progress_bar.pb['value']),'%'
+    progress_bar.update_bar['text']='Checking proper labeling and formatting in peaklists'
+    check_peaklist_labels(NHSQC_file,HNCA_file,HNCACB_file,HNCO_file,NHSQC_directory,HNCA_directory,HNCACB_directory,HNCO_directory,text_area,CHSQC_file,CHSQC_directory,HBHACONH_file,HBHACONH_directory,CCH_TOCSY_file,CCH_TOCSY_directory,HCCH_TOCSY_file,HCCH_TOCSY_directory,HNCACO_file,HNCACO_directory,HNCOCA_file,HNCOCA_directory,CBCACONH_file,CBCACONH_directory,HCCONH_file,HCCONH_directory,progress_bar)
     text_area.insert(tk.INSERT,f'\n Any Errors found will pop here. Please wait until program is finished before interacting with window.\n')
     text_area.insert(tk.INSERT,f'\nChecking proper labeling and formatting in peaklists\n')
     text_area.update_idletasks()
+    progress_bar.update_idletasks()
+    progress_bar.pb['value'] = 66
+    progress_bar.progress['text']=int(progress_bar.pb['value']),'%'
+    progress_bar.update_bar['text']='Check Complete'
     text_area.insert(tk.INSERT,'\nCheck Complete\n')
     text_area.insert(tk.INSERT,'\nIf any errors were found, please correct and rerun \n')
     if terminal_flag is True:
         question=input('If no errors were found, type "continue". Otherwise, type "quit", correct errors, and rerun: ')
         if question=='quit':
             sys.exit()
+    progress_bar.update_bar['text']='Generating NMRSTAR File'
     text_area.insert(tk.INSERT,'\nGenerating NMRSTAR File (Takes a minute depending on size of protein)\n')
     text_area.update_idletasks()
-    nmrstar_file(sequence_file,seq_directory,NHSQC_file,HNCA_file,HNCACB_file,HNCO_file,NHSQC_directory,HNCA_directory,HNCACB_directory,HNCO_directory,text_area,CHSQC_file,CHSQC_directory,HBHACONH_file,HBHACONH_directory,CCH_TOCSY_file,CCH_TOCSY_directory,HCCH_TOCSY_file,HCCH_TOCSY_directory,save_file,save_directory,standard_deviation_value,HNCACO_file,HNCACO_directory,HNCOCA_file,HNCOCA_directory,CBCACONH_file,CBCACONH_directory,HCCONH_file,HCCONH_directory,seq_start_value)
+    nmrstar_file(sequence_file,seq_directory,NHSQC_file,HNCA_file,HNCACB_file,HNCO_file,NHSQC_directory,HNCA_directory,HNCACB_directory,HNCO_directory,text_area,CHSQC_file,CHSQC_directory,HBHACONH_file,HBHACONH_directory,CCH_TOCSY_file,CCH_TOCSY_directory,HCCH_TOCSY_file,HCCH_TOCSY_directory,save_file,save_directory,standard_deviation_value,HNCACO_file,HNCACO_directory,HNCOCA_file,HNCOCA_directory,CBCACONH_file,CBCACONH_directory,HCCONH_file,HCCONH_directory,seq_start_value,progress_bar)
     try:
+        progress_bar.pb['value'] = 88
+        progress_bar.progress['text']=int(progress_bar.pb['value']),'%'
+        progress_bar.update_bar['text']='Comparing to bmrb'
         compare_to_bmrb(bmrb_file,bmrb_directory,save_file,save_directory,text_area)
     except:
-        if Keep_file_check.get() == 0:
+        if Keep_file_check.get() == 0 and Bruker_check.get() != 0:
             remove_converted_varian_files(HNCA_file,HNCACB_file,HNCO_file,HNCA_directory,HNCACB_directory,HNCO_directory,HBHACONH_file,HBHACONH_directory,CCH_TOCSY_file,CCH_TOCSY_directory,HCCH_TOCSY_file,HCCH_TOCSY_directory,HNCACO_file,HNCACO_directory,HNCOCA_file,HNCOCA_directory,CBCACONH_file,CBCACONH_directory,HCCONH_file,HCCONH_directory)
-        else:
+        elif Keep_file_check.get() != 0 and Bruker_check.get() != 0:
             text_area.insert(tk.INSERT,'Converted Bruker files are in the same directory as original files\n')
-        text_area.insert(tk.INSERT,'Program Complete, Please exit window\n')
-        text_area.update_idletasks()
+        else:
+            progress_bar.pb['value'] = 100
+            progress_bar.progress['text']=int(progress_bar.pb['value']),'%'
+            progress_bar.update_bar['text']='Program Complete'
+            progress_bar.update_idletasks()
+            time.sleep(1)
+            progress_bar.destroy()
+            text_area.insert(tk.INSERT,'Program Complete, Please exit window\n')
+            text_area.update_idletasks()
