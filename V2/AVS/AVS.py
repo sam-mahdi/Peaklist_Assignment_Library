@@ -13,7 +13,7 @@ import sys
 
 
 root = tk.Tk()
-root.title('AVS_V2')
+root.title('AVS_V3')
 #This is for fitting the image to the size of the GUI
 def on_resize(event):
     image = bgimg.resize((event.width, event.height), Image.ANTIALIAS)
@@ -100,6 +100,9 @@ def input_file():
     global sparta_file
     sparta_directory=os.path.dirname(fullpath)
     sparta_file= os.path.basename(fullpath)
+    if sparta_directory == '' or sparta_file == '':
+        sparta_file=()
+        sparta_directory=()
     label2=Label(root,text=fullpath).grid(row=1,column=1)
 
 def input_seq():
@@ -108,6 +111,9 @@ def input_seq():
     global seq_directory
     seq_directory=os.path.dirname(fullpath)
     seq_file= os.path.basename(fullpath)
+    if seq_directory == '' or seq_file == '':
+        seq_directory=()
+        seq_file=()
     label3=Label(root,text=fullpath).grid(row=2,column=1)
 
 
@@ -118,6 +124,9 @@ def save_file():
     global save_directory
     save_directory=os.path.dirname(fullpath)
     save_file_sparta=os.path.basename(fullpath)
+    if save_directory == '' or save_file_sparta == '':
+        save_directory=()
+        save_file_sparta=()
     label2=Label(root,text=fullpath).grid(row=3,column=1)
 
 def save_filsequence_file_entry():
@@ -127,6 +136,9 @@ def save_filsequence_file_entry():
     global save_directory
     save_directory=os.path.dirname(fullpath)
     save_file_peaklist=os.path.basename(fullpath)
+    if save_directory == '' or save_file_peaklist == '':
+        save_directory=()
+        save_file_peaklist=()
     label8=Label(root,text=fullpath).grid(row=4,column=1)
 
 def mutation_input():
