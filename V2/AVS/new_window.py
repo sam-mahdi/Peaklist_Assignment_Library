@@ -257,10 +257,11 @@ class newTopLevel(object):
                 terminal_flag=False
                 from SPARKYtoNMRSTAR3p1 import main_loop
                 from additional_nmr_experiments_window import get_variables
+                second_window=self.newWindow
                 HNCACO_file,HNCACO_directory,HNCOCA_file,HNCOCA_directory,CBCACONH_file,CBCACONH_directory,HCCONH_file,HCCONH_directory=get_variables()
-                main_loop(sequence_file,seq_directory,NHSQC_file,HNCA_file,HNCACB_file,HNCO_file,NHSQC_directory,HNCA_directory,HNCACB_directory,HNCO_directory,text_area,CHSQC_file,CHSQC_directory,HBHACONH_file,HBHACONH_directory,CCH_TOCSY_file,CCH_TOCSY_directory,HCCH_TOCSY_file,HCCH_TOCSY_directory,save_file,save_directory,standard_deviation_value,bmrb_file,bmrb_directory,terminal_flag,HNCACO_file,HNCACO_directory,HNCOCA_file,HNCOCA_directory,CBCACONH_file,CBCACONH_directory,HCCONH_file,HCCONH_directory,seq_start_value,Bruker_check,Keep_file_check)
+                main_loop(sequence_file,seq_directory,NHSQC_file,HNCA_file,HNCACB_file,HNCO_file,NHSQC_directory,HNCA_directory,HNCACB_directory,HNCO_directory,text_area,CHSQC_file,CHSQC_directory,HBHACONH_file,HBHACONH_directory,CCH_TOCSY_file,CCH_TOCSY_directory,HCCH_TOCSY_file,HCCH_TOCSY_directory,save_file,save_directory,standard_deviation_value,bmrb_file,bmrb_directory,terminal_flag,HNCACO_file,HNCACO_directory,HNCOCA_file,HNCOCA_directory,CBCACONH_file,CBCACONH_directory,HCCONH_file,HCCONH_directory,seq_start_value,Bruker_check,Keep_file_check,second_window)
             except:
-                text_area.insert(tk.INSERT,'Unknown Error, Program could not run. Please Contact Support')
+                text_area.insert(tk.INSERT,'Unknown Error, Program could not run. Restart and try again. If it still fails, Please Contact Support.')
                 #print(traceback.print_exc())
     def assignment_completion(self):
         from percent_assigned import calculate_percentage
