@@ -398,7 +398,7 @@ def nmrstar_file(sequence_file,seq_directory,NHSQC_file,HNCA_file,HNCACB_file,HN
             CCH_TOCSY_peaklist(amino_acid,residue_number,atom,temp_list,spectra_list,CCH_TOCSY_file,CCH_TOCSY_directory)
         if HCCH_TOCSY_file != ():
             os.chdir(HCCH_TOCSY_directory)
-            HCCH_TOCSY_peaklist(amino_acid,residue_number,atom,temp_list,spectra_list,CCH_TOCSY_file,CCH_TOCSY_directory)
+            HCCH_TOCSY_peaklist(amino_acid,residue_number,atom,temp_list,spectra_list,HCCH_TOCSY_file,HCCH_TOCSY_directory)
         if len(temp_list) == 0:
             continue
         counter+=1
@@ -490,14 +490,12 @@ def main_loop(sequence_file,seq_directory,NHSQC_file,HNCA_file,HNCACB_file,HNCO_
     progress_bar.progress['text']=int(progress_bar.pb['value']),'%'
     progress_bar.update_bar['text']='Checking proper labeling and formatting in peaklists'
     check_peaklist_labels(NHSQC_file,HNCA_file,HNCACB_file,HNCO_file,NHSQC_directory,HNCA_directory,HNCACB_directory,HNCO_directory,text_area,CHSQC_file,CHSQC_directory,HBHACONH_file,HBHACONH_directory,CCH_TOCSY_file,CCH_TOCSY_directory,HCCH_TOCSY_file,HCCH_TOCSY_directory,HNCACO_file,HNCACO_directory,HNCOCA_file,HNCOCA_directory,CBCACONH_file,CBCACONH_directory,HCCONH_file,HCCONH_directory,progress_bar)
-    text_area.insert(tk.INSERT,f'\n Any Errors found will pop here. Please wait until program is finished before interacting with window.\n')
-    text_area.insert(tk.INSERT,f'\nChecking proper labeling and formatting in peaklists\n')
     text_area.update_idletasks()
     progress_bar.update_idletasks()
     progress_bar.pb['value'] = 66
     progress_bar.progress['text']=int(progress_bar.pb['value']),'%'
     progress_bar.update_bar['text']='Check Complete'
-    text_area.insert(tk.INSERT,'\nCheck Complete\n')
+    text_area.insert(tk.INSERT,'Check Complete\n')
     text_area.insert(tk.INSERT,'\nIf any errors were found, please correct and rerun \n')
     if terminal_flag is True:
         question=input('If no errors were found, type "continue". Otherwise, type "quit", correct errors, and rerun: ')
