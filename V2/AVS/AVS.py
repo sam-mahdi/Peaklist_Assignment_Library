@@ -216,6 +216,11 @@ def sparky_peaklist_files():
     new_top = newTopLevel(root)
     newWindow = new_top.newWindow
 
+def sparta_generator():
+    from sparta_window import  SpartaGenerationWindow
+    new_sparta_window= SpartaGenerationWindow(root)
+    spartawidnow=new_sparta_window.sparta_window
+
 def sparta_run():
     text_area.delete(1.0,END)
     if sparta_file == ():
@@ -298,6 +303,7 @@ def bmrb_run():
 
 tk.Button(root,text='Click here if using SPARKY peaklist files',command=sparky_peaklist_files).grid(row=0,column=1)
 tk.Button(root,text='browse',command=input_file).grid(row=1,column=2)
+tk.Button(root,text='Generate Sparta File',command=sparta_generator).grid(row=1,column=3)
 tk.Button(root,text='browse',command=input_seq).grid(row=2,column=2)
 tk.Button(root,text='browse',command=save_file).grid(row=3,column=2)
 tk.Button(root,text='browse',command=save_filsequence_file_entry).grid(row=4,column=2)
