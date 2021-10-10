@@ -437,12 +437,19 @@ def nmrstar_file(sequence_file,seq_directory,NHSQC_file,HNCA_file,HNCACB_file,HN
 
 
 
-def compare_to_bmrb(bmrb_file,bmrb_directory,save_file,save_directory,text_area):
+def compare_to_bmrb(bmrb_file,bmrb_directory,save_file,save_directory,text_area,progress_bar):
     text_area.insert(tk.INSERT,'Comparing to BMRB Values\n')
     text_area.update_idletasks()
     os.chdir(save_directory)
+    num_lines = (sum(1 for line in open(save_file)))-13
+    progress_bar.pb2['value'] = 0
+    progress_bar.progress2['text']=int(progress_bar.pb2['value']),'%'
+    progress_bar.update_idletasks()
     with open(save_file) as file:
         for lines in file:
+            progress_bar.update_idletasks()
+            progress_bar.pb2['value'] += 100/num_lines
+            progress_bar.progress2['text']=int(progress_bar.pb2['value']),'%'
             if re.search('^\d+',lines.strip()) is None:
                 continue
             star_residue=lines.split()[1]
@@ -509,7 +516,15 @@ def main_loop(sequence_file,seq_directory,NHSQC_file,HNCA_file,HNCACB_file,HNCO_
         progress_bar.pb['value'] = 88
         progress_bar.progress['text']=int(progress_bar.pb['value']),'%'
         progress_bar.update_bar['text']='Comparing to bmrb'
-        compare_to_bmrb(bmrb_file,bmrb_directory,save_file,save_directory,text_area)
+        compare_to_bmrb(bmrb_file,bmrb_directory,save_file,save_directory,text_area,progress_bar)
+        progress_bar.pb['value'] = 100
+        progress_bar.progress['text']=int(progress_bar.pb['value']),'%'
+        progress_bar.update_bar['text']='Program Complete'
+        progress_bar.update_idletasks()
+        time.sleep(1)
+        progress_bar.destroy()
+        text_area.insert(tk.INSERT,'Program Complete, Please exit window\n')
+        text_area.update_idletasks()
     except:
         if Keep_file_check.get() == 0 and Bruker_check.get() != 0:
             remove_converted_varian_files(HNCA_file,HNCACB_file,HNCO_file,HNCA_directory,HNCACB_directory,HNCO_directory,HBHACONH_file,HBHACONH_directory,CCH_TOCSY_file,CCH_TOCSY_directory,HCCH_TOCSY_file,HCCH_TOCSY_directory,HNCACO_file,HNCACO_directory,HNCOCA_file,HNCOCA_directory,CBCACONH_file,CBCACONH_directory,HCCONH_file,HCCONH_directory)
