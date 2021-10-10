@@ -128,13 +128,13 @@ class SpartaGenerationWindow(object):
         if Run_spart_flag.get() != 0:
             text_area.insert(tk.INSERT,'Running Sparta\n')
             if use_entire_pdb_flag.get() == 0 and Add_hydrogens_flag.get() != 0:
-                 sfm.run_sparta('modified_'+file+'_hydrogens_added.pdb')
+                 sfm.run_sparta('modified_'+pdb_file+'_hydrogens_added.pdb')
             elif use_entire_pdb_flag.get() != 0 and Add_hydrogens_flag.get() != 0:
-                sfm.run_sparta(file+'_hydrogens_added.pdb')
+                sfm.run_sparta(pdb_file+'_hydrogens_added.pdb')
             elif use_entire_pdb_flag.get() != 0 and Add_hydrogens_flag.get() == 0:
-                sfm.run_sparta(file)
+                sfm.run_sparta(pdb_file)
             elif use_entire_pdb_flag.get() == 0 and Add_hydrogens_flag.get() == 0:
-                sfm.run_sparta('modified_'+file)
+                sfm.run_sparta('modified_'+pdb_file)
             else:
                 pass
         text_area.insert(tk.INSERT,'Program Complete\n')
