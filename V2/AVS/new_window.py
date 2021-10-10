@@ -253,7 +253,7 @@ class newTopLevel(object):
         global bmrb_directory
         bmrb_directory=os.path.dirname(fullpath)
         bmrb_file= os.path.basename(fullpath)
-        label7=Label(self.newWindow,text=fullpath).grid(row=11,column=1)
+        label7=Label(self.newWindow,text=fullpath).grid(row=12,column=1)
     def nmr_experiments(self):
         from additional_nmr_experiments_window import nmr_experiment_window
         experiments_window = nmr_experiment_window(self.newWindow)
