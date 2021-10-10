@@ -118,15 +118,18 @@ class SpartaGenerationWindow(object):
                 text_area.insert(tk.INSERT,'Please enter a start and end value, and specify which chain\n')
                 return
             text_area.insert(tk.INSERT,'Modifying PDB File\n')
+            text_area.update_idletasks()
             sfm.write_new_pdb(pdb_file,start,end,chain)
         if Add_hydrogens_flag.get() != 0:
             text_area.insert(tk.INSERT,'Adding Hydrogens\n')
+            text_area.update_idletasks()
             if use_entire_pdb_flag.get() == 0:
                 sfm.add_hydrogen('modified_'+pdb_file)
             else:
                 sfm.add_hydrogen(pdb_file)
         if Run_spart_flag.get() != 0:
             text_area.insert(tk.INSERT,'Running Sparta\n')
+            text_area.update_idletasks()
             if use_entire_pdb_flag.get() == 0 and Add_hydrogens_flag.get() != 0:
                  sfm.run_sparta('modified_'+pdb_file[0:-4]+'_hydrogens_added.pdb')
             elif use_entire_pdb_flag.get() != 0 and Add_hydrogens_flag.get() != 0:
