@@ -16,7 +16,7 @@ New Features for Version 2:
 4. Can check assignment percentage progress/completion, and check individual atoms and amino acid percentage completion. 
 5. Can now be run via the terminal
 
-Version 3: 
+New Features for Version 3: 
 
 1. New experiment options have been added (HNCACO, CBCACONH, HCCONH) and program has been slightly rewritten to easily include more if desired. 
 2. Bruker dimenions vary from Varians. A converter has been added so you may now input peaklists obtained from Bruker data. You may choose to keep this converted format if you had a mixture of Bruker and Varian data. 
