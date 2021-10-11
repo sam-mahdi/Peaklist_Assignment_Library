@@ -249,7 +249,7 @@ def sparta_run():
         from RMSD_Calculator import filter_peaklist_to_sparta
 
         sparta_file_boundaries=check_sparta_file_boundaries(seq_file,seq_directory,mutation_list,sparta_file,sparta_directory,seq_start)
-        data_files=fill_in_missing_data(seq_file,nmrstarfile,seq_start,text_area)
+        data_files=fill_in_missing_data(seq_file,nmrstarfile,seq_start,text_area,seq_directory)
         RMSD_calc(set_threshold,sparta_file_boundaries,data_files,text_area)
         data_file_to_save=filter_peaklist_to_sparta(sparta_file_boundaries,data_files,text_area)
 
