@@ -4,15 +4,27 @@ import tkinter as tk
 
 iteration=0
 
+acid_map = {
+          'ASP':'D', 'THR':'T', 'SER':'S', 'GLU':'E',
+          'PRO':'P', 'GLY':'G', 'ALA':'A', 'CYS':'C',
+          'VAL':'V', 'MET':'M', 'ILE':'I', 'LEU':'L',
+          'TYR':'Y', 'PHE':'F', 'HIS':'H', 'LYS':'K',
+          'ARG':'R', 'TRP':'W', 'GLN':'Q', 'ASN':'N'
+        }
+
 def filter_peaklist_to_sparta(sparta_file_boundaries,data_files,text_area):
     global iteration
     iteration+=1
     peaklist_filtered_to_match_sparta=[]
     count=0
     for lines in data_files:
-        splitting=lines.strip().split()
-        number_search=re.search('^\d+',splitting[0])
-        r=re.compile(number_search.group(0))
+        number_search=re.search('^(\d+)\s+([A-Z]+)',lines)
+        try:
+            atom=acid_map[number_search.group(2)]
+        except:
+            atom=number_search.group(2)
+        number_atom=(number_search.group(1)+' '+atom)
+        r=re.compile(number_atom)
         comparison_to_sparta=list(filter(r.match,sparta_file_boundaries))
         if comparison_to_sparta != []:
             peaklist_filtered_to_match_sparta.append(lines.strip())
@@ -23,7 +35,7 @@ def filter_peaklist_to_sparta(sparta_file_boundaries,data_files,text_area):
                 count=0
                 if iteration > 1:
                     continue
-                text_area.insert(tk.INSERT,f"{' '.join(splitting[0:2])} was excluded\n")
+                text_area.insert(tk.INSERT,f"{number_atom} was excluded\n")
     return peaklist_filtered_to_match_sparta
 
 def RMSD_calc(set_threshold,sparta_file_boundaries,data_files,text_area):
