@@ -81,6 +81,16 @@ loop_
 ```
 This can be readily inputted into multiple programs (including AVS) and run. 
 
+***Generate Sparta File***
+This will generate the pred.tab required for AVS. To run SPARTA+ on a pdb file, the pdb file must include hydrogens. If hydrogens are included (e.g. NMR Structure), then you may skip the hydrogen addition step. 
+
+There are 3 options for this script. 
+
+1. You may choose to truncate the pdb file, in which case you will have to define which chain, and the bounds of that chain you wish to truncate (start is where your truncated protein starts, and end is where your truncated protein ends). Make sure to click enter at each stage. You may also choose to use the entire pdb file, in which case simply leave the start, end, and chain lines blank and check the use entire PDB Structure box. 
+
+2. You can then add hydrogens to either the entire PDB structure, or the truncated one by checking Add Hydrogens. This uses a basic pymol filling option, it does not optomize hydroxyl rotamers or reorientate ASN/GLN/HIS. You may wish to use another program (e.g. reduce from MolProbity) to add hydrogens, and upload that PDB file instead (in which case leave the Add Hydrogens unchecked). 
+
+3. The run Sparta option is self explanatory. It will run sparta on your pdb file (truncated/full, added hydrogens or not). This *only* runs Sparta, so if Sparta+ fails, check the terminal to see what errors sparta gives out. These are errors from Sparta and not my program, so if your PDB file has an issue, it is not an issue introduced from my program. 
 
 
 ***Line 2 Sparta or BMRB file***
