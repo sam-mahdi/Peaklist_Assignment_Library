@@ -6,8 +6,6 @@ This program takes NMR assignments and calculates the RMSD of the assignments to
 Additionally, it generates files that are in the appropriate format to be used for APS. 
 A module has also been added that takes SPARKY peaklist files and converts them into NMRSTAR 3.1.
 
-The code for AVS has been rehauled and a couple of new features have been added. 
-
 New Features for Version 2:
 
 1. For those proteins that don't have structures, you may now use BMRB average chemical shift values https://bmrb.io/ref_info/csstats.php?set=full&restype=aa&output=html 
