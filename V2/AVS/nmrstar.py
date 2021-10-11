@@ -136,9 +136,10 @@ acid_map = {
           'ARG':'R', 'TRP':'W', 'GLN':'Q', 'ASN':'N'
         }
 
-def make_sequence_list(seq_file,seq_start):
+def make_sequence_list(seq_file,seq_start,seq_directory):
     sequence_list=[]
     counter=(0+seq_start)-1
+    os.chdir(seq_directory)
     with open(seq_file) as file:
         for line in file:
             for lines in line:
@@ -148,9 +149,9 @@ def make_sequence_list(seq_file,seq_start):
                 sequence_list.append(f'{counter} {lines}')
     return sequence_list
 
-def fill_in_missing_data(seq_file,nmrstarfile,seq_start,text_area):
+def fill_in_missing_data(seq_file,nmrstarfile,seq_start,text_area,seq_directory):
     counter=0
-    sequence_list=make_sequence_list(seq_file,seq_start)
+    sequence_list=make_sequence_list(seq_file,seq_start,seq_directory)
     check_output=check(nmrstarfile,text_area)
     completed_list=[]
     for values in sequence_list:
