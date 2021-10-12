@@ -530,6 +530,14 @@ def main_loop(sequence_file,seq_directory,NHSQC_file,HNCA_file,HNCACB_file,HNCO_
             remove_converted_varian_files(HNCA_file,HNCACB_file,HNCO_file,HNCA_directory,HNCACB_directory,HNCO_directory,HBHACONH_file,HBHACONH_directory,CCH_TOCSY_file,CCH_TOCSY_directory,HCCH_TOCSY_file,HCCH_TOCSY_directory,HNCACO_file,HNCACO_directory,HNCOCA_file,HNCOCA_directory,CBCACONH_file,CBCACONH_directory,HCCONH_file,HCCONH_directory)
         elif Keep_file_check.get() != 0 and Bruker_check.get() != 0:
             text_area.insert(tk.INSERT,'Converted Bruker files are in the same directory as original files\n')
+            progress_bar.pb['value'] = 100
+            progress_bar.progress['text']=int(progress_bar.pb['value']),'%'
+            progress_bar.update_bar['text']='Program Complete'
+            progress_bar.update_idletasks()
+            time.sleep(1)
+            progress_bar.destroy()
+            text_area.insert(tk.INSERT,'Program Complete, Please exit window\n')
+            text_area.update_idletasks()
         else:
             progress_bar.pb['value'] = 100
             progress_bar.progress['text']=int(progress_bar.pb['value']),'%'
