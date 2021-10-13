@@ -615,7 +615,7 @@ def CCH_TOCSY_checker(cch_tocsy_file,CCH_TOCSY_directory,text_area):
                         text_area.insert(tk.INSERT,f'Amino Acid {ccc_tocsy_split[0]} TOCSY carbon improperly labeled\n')
                         text_area.update_idletasks()
                 if amino_acid == 'P':
-                    if atom not in {'CA','CB','CG','CD'} or ccc_tocsy_split[0].split('-')[2] not in {'HA','HB2','HB3','HG3','HG2','HE'}:
+                    if atom not in {'CA','CB','CG','CD'} or ccc_tocsy_split[0].split('-')[2] not in {'HA','HB2','HB3','HG3','HG2','HD2','HD3'}:
                         text_area.insert(tk.INSERT,f'Amino Acid {ccc_tocsy_split[0]} carbon or hydrogen improperly labeled\n')
                         text_area.update_idletasks()
                     if ccc_tocsy_split[0].split('-')[1] not in {'CA','CB','CG','CD'}:
@@ -725,7 +725,7 @@ def HCCH_TOCSY_checker(hcch_tocsy_file,HCCH_TOCSY_directory,text_area):
                         text_area.insert(tk.INSERT,f'Amino Acid {hcch_tocsy_split[0]} TOCSY hydrogen improperly labeled\n')
                         text_area.update_idletasks()
                 if amino_acid == 'P':
-                    if atom not in {'CA','CB','CG','CD'} or hcch_tocsy_split[0].split('-')[2] not in {'HA','HB2','HB3','HG3','HG2','HE'}:
+                    if atom not in {'CA','CB','CG','CD'} or hcch_tocsy_split[0].split('-')[2] not in {'HA','HB2','HB3','HG3','HG2','HD2','HD3'}:
                         text_area.insert(tk.INSERT,f'Amino Acid {hcch_tocsy_split[0]} carbon or hydrogen improperly labeled\n')
                         text_area.update_idletasks()
                     if hcch_tocsy_split[0].split('-')[1] not in {'HA','HB2','HB3','HG3','HG2','HE'}:
