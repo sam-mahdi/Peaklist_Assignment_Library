@@ -221,6 +221,11 @@ def sparta_generator():
     new_sparta_window= SpartaGenerationWindow(root)
     spartawidnow=new_sparta_window.sparta_window
 
+def run_talos():
+    from talos_window import TalosrunWindow
+    new_talos_window=TalosrunWindow(root)
+    taloswindow=new_talos_window.talos_window
+
 def sparta_run():
     text_area.delete(1.0,END)
     if sparta_file == ():
@@ -279,7 +284,7 @@ def bmrb_run():
         text_area.insert(tk.INSERT,'please upload your nmrstar file (make sure to use browse)\n')
     else:
         text_area.insert(tk.INSERT,'Starting Program\n')
-        text_area.insert(tk.INSERT,'Creating Sparta File\n')
+        text_area.insert(tk.INSERT,'Creating BMRB File\n')
         text_area.update_idletasks()
 
         os.chdir(nmrstarfile_directory)
@@ -304,6 +309,7 @@ def bmrb_run():
 tk.Button(root,text='Click here if using SPARKY peaklist files',command=sparky_peaklist_files).grid(row=0,column=1)
 tk.Button(root,text='browse',command=input_file).grid(row=1,column=2)
 tk.Button(root,text='Generate Sparta File',command=sparta_generator).grid(row=1,column=3)
+tk.Button(root,text='Run TALOS',command=run_talos).grid(row=3,column=3)
 tk.Button(root,text='browse',command=input_seq).grid(row=2,column=2)
 tk.Button(root,text='browse',command=save_file).grid(row=3,column=2)
 tk.Button(root,text='browse',command=save_filsequence_file_entry).grid(row=4,column=2)
