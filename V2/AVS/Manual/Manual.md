@@ -82,6 +82,7 @@ loop_
 This can be readily inputted into multiple programs (including AVS) and run. 
 
 ***Generate Sparta File***
+
 This will generate the pred.tab required for AVS. To run SPARTA+ on a pdb file, the pdb file must include hydrogens. If hydrogens are included (e.g. NMR Structure), then you may skip the hydrogen addition step. 
 
 There are 3 options for this script. 
