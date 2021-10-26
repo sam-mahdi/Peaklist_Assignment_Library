@@ -11,6 +11,8 @@ import os.path
 import functools
 import tkinter.scrolledtext as st
 from tkinter import ttk
+import threading
+import subprocess
 
 pdb_file=()
 pdb_directory=()
@@ -18,6 +20,12 @@ NMRSTAR_file=()
 NMRSTAR_directory=()
 startaa=()
 text_area=()
+
+def map_SS():
+    subprocess.call([f'python3 map_SS.py {NMRSTAR_directory} {pdb_file} {pdb_directory} {startaa}'],shell=True)
+
+def map_S2():
+    subprocess.call([f'python3 map_S2.py {NMRSTAR_directory} {pdb_file} {pdb_directory} {startaa}'],shell=True)
 
 class ReadOnlyText(st.ScrolledText):
     def __init__(self, *args, **kwargs):
@@ -38,19 +46,26 @@ class ReadOnlyText(st.ScrolledText):
 
 
 
+
+
+def talos_display():
+    os.system('rama+ -in pred.tab')
+
+
+
 class TalosrunWindow(object):
     def __init__(self, root):
         global text_area
         self.talos_window = Toplevel(root)
         self.talos_window.title("TALOS")
-        self.talos_window.geometry("600x600")
+        self.talos_window.geometry("1200x1200")
         tk.Label(self.talos_window, text="PDB File").grid(row=0)
         tk.Label(self.talos_window, text="NMRSTAR File").grid(row=1)
         tk.Label(self.talos_window, text="Start amino acid for PDB mapping").grid(row=2)
         pdb_file_line = tk.Entry(self.talos_window).grid(row=0, column=1)
         NMRSTAR_file_line=tk.Entry(self.talos_window).grid(row=1, column=1)
-        self.start_aa = tk.Entry(self.talos_window)
-        self.start_aa.grid(row=2, column=1)
+        self.start_aa_input = tk.Entry(self.talos_window)
+        self.start_aa_input.grid(row=2, column=1)
         self.talos_window.btn = tk.Button(self.talos_window,text='browse',command=self.input_pdb_file)
         self.talos_window.btn.grid(row=0,column=2)
         self.talos_window.btn = tk.Button(self.talos_window,text='browse',command=self.input_NMRSTAR_file)
@@ -91,19 +106,20 @@ class TalosrunWindow(object):
         if NMRSTAR_file == '' or NMRSTAR_directory == '':
             NMRSTAR_file=()
             NMRSTAR_directory=()
-        label4=Label(self.talos_window,text=fullpath).grid(row=0,column=1)
+        label4=Label(self.talos_window,text=fullpath).grid(row=1,column=1)
 
     def start_aa(self):
-        start_aa=self.start_aa.get()
+        start_aa_line=self.start_aa_input.get()
         global startaa
-        startaa=float(start_aa)
+        startaa=int(start_aa_line)
         text_area.insert(tk.INSERT,f'Start value set: {startaa} \n')
 
     def runtalos(self):
-        text_area.insert(tk.INSERT,'Starting Talos\n')
         if NMRSTAR_file == ():
             text_area.insert(tk.INSERT,'Please upload an NMRSTAR file\n')
         else:
+            text_area.insert(tk.INSERT,'Starting Talos\n')
+            text_area.update_idletasks()
             os.chdir(NMRSTAR_directory)
             os.system(f'talos+ -in {NMRSTAR_file}')
             text_area.insert(tk.INSERT,'Talos Completed\n')
@@ -112,73 +128,24 @@ class TalosrunWindow(object):
         if os.path.isfile('pred.tab') == False:
             text_area.insert(tk.INSERT,'No Pred.tab file found, please run Talos first\n')
         else:
-            rama+ -in 'pred.tab'
+            talos_display_thread=threading.Thread(target=talos_display,daemon=True)
+            talos_display_thread.start()
+
 
     def mapSS(self):
         if pdb_file == ():
             text_area.insert(tk.INSERT,'Please Upload a PDB File\n')
-        if os.path.isfile('predSS.tab') == False:
+        if os.path.isfile(NMRSTAR_directory+'/predSS.tab') == False:
             text_area.insert(tk.INSERT,'No PredSS.tab file found, please run Talos first\n')
         else:
-            ss_dict={'L':0,'H':2,'E':1,'X':0}
-            ss_only=[]
-            pymol.finish_launching()
-            cmd.load(pdb_file)
-            mol=pdb_file[0:-4]
-        	with open('predSS.tab') as ss_file:
-        		for lines in ss_file:
-                    searcher=re.search('^\d+',lines.strip())
-                    if searcher != None:
-        				if int(lines.strip().split()[0]) < int(startaa):
-        					continue
-        				ss_only.append(ss_dict[lines.strip().split()[8]])
-        	obj=cmd.get_object_list(mol)
-        	cmd.alter(mol,"b=-1.0")
-        	counter=int(startaa)
-        	bfacts=[]
-        	for line in ss_only:
-        		bfact=float(line)
-        		bfacts.append(bfact)
-        		cmd.alter("%s and resi %s and n. CA"%(mol,counter), "b=%s"%bfact)
-        		counter=counter+1
-        	if visual=="Y":
-        		cmd.cartoon("automatic",mol)
-        		cmd.spectrum("b","grey blue red", "%s and n. CA " %mol)
-        		cmd.recolor()
+            thread1=threading.Thread(target=map_SS)
+            thread1.start()
 
     def mapS2(self):
         if pdb_file == ():
             text_area.insert(tk.INSERT,'Please Upload a PDB File\n')
-        if os.path.isfile('predSS.tab') == False:
+        if os.path.isfile(NMRSTAR_directory+'/predS2.tab') == False:
             text_area.insert(tk.INSERT,'No PredSS.tab file found, please run Talos first\n')
         else:
-            s2_only=[]
-            cmd.load(pdb_file)
-            pymol.finish_launching()
-            mol=pdb_file[0:-4]
-        	with open('predS2.tab') as s2_file:
-        		for lines in s2_file:
-                    searcher=re.search('\d+\.\d{3}',lines)
-                    if searcher != None:
-        				if int(lines.strip().split()[0]) < int(startaa):
-        					continue
-        				s2_only.append(searcher.group(0))
-        	obj=cmd.get_object_list(mol)
-        	cmd.alter(mol,"b=-1.0")
-        	counter=int(startaa)
-        	bfacts=[]
-        	for line in s2_only:
-        		bfact=((1/(float(line)))-float(line))/1.5
-        		bfacts.append(bfact)
-        		cmd.alter("%s and resi %s and n. CA"%(mol,counter), "b=%s"%bfact)
-        		counter=counter+1
-        	if visual=="Y":
-        		cmd.show_as("cartoon",mol)
-        		cmd.cartoon("putty", mol)
-        		cmd.set("cartoon_putty_scale_min", min(bfacts),obj)
-        		cmd.set("cartoon_putty_scale_max", max(bfacts),obj)
-        		cmd.set("cartoon_putty_transform", 7,obj)
-        		cmd.set("cartoon_putty_radius", max(bfacts),obj)
-        		cmd.spectrum("b","white red", "%s and n. CA " %mol)
-        		cmd.ramp_new("color_bar", obj, [min(bfacts), max(bfacts)],["white","red"])
-        		cmd.recolor()
+            thread2=threading.Thread(target=map_S2)
+            thread2.start()
