@@ -93,6 +93,14 @@ There are 3 options for this script.
 
 3. The run Sparta option is self explanatory. It will run sparta on your pdb file (truncated/full, added hydrogens or not). This *only* runs Sparta, so if Sparta+ fails, check the terminal to see what errors sparta gives out. These are errors from Sparta and not my program, so if your PDB file has an issue, it is not an issue introduced from my program. 
 
+***Run TALOS***
+
+This will run TALOS+ on an AVS generated NMRSTAR file. To run TALOS, simply upload the NMRSTAR file, and click run TALOS. 
+
+You may also display TALOS via the typical java view, or you may map out the secondary structure predictions and S2 values on a PDB file. 
+
+To map on the PDB file, you must indicate what amino acid in the sequence to start mapping. The PDB file must be a single chain. You may truncate the PDB file using the Generate Sparta File option. ***The program assumes the TALOS prediction outputs are all in the same directory as your NMRSTAR file. Thus, you must always upload your NMRSTAR to use any of the options, even if you've already run TALOS***. 
+
 
 ***Line 2 Sparta or BMRB file***
 
