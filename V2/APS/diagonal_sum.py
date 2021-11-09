@@ -25,7 +25,7 @@ def extract_experimental(data_file,data_directory):
     experimental_values=[]
     with open(data_file) as experimental:
         for data in experimental:
-            if data == '' or data == '\n':
+            if data == '' or data == '\n' or data.split() == []:
                 continue
             experimental_values.append(data)
     return experimental_values
