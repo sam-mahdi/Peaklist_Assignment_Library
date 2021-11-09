@@ -60,7 +60,7 @@ def add_mutation(mutation_list,sparta_file,sparta_directory):
                 if residue_number + original_amino_acid == ''.join(amino_acids.split()[0:2]):
                     split_line_to_list=amino_acids.split()
                     split_line_to_list[1] = new_amino_acid
-                    sparta_mutations_added_list.append(f"{' '.join(split_line_to_list[0:3])} 1000 1000")
+                    sparta_mutations_added_list.append(f"{' '.join(split_line_to_list[0:3])} 1000.00 1000.00")
                     counter+=1
                     if mutations == mutation_list.split()[-1]:
                         counter=0
