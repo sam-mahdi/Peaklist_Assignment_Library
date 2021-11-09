@@ -18,7 +18,7 @@ def extract_experimental(data_file,data_directory):
 
     with open(data_file) as experimental:
         for data in experimental:
-            if data == '' or data == '\n':
+            if data == '' or data == '\n' data.split() == []:
                 continue
             counter+=1
             data_checker=re.findall('\d+\.\d+',data)
