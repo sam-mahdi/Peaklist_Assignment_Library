@@ -28,7 +28,7 @@ def extract_experimental(data_file,data_directory):
     experiment_values=[]
     with open(data_file) as experimental_values:
         for data in experimental_values:
-            if data == '' or data == '\n' data.split() == []:
+            if data == '' or data == '\n' or data.split() == []:
                 continue
             experimental_value=(re.search('\d+\.\d+',data.strip())).group(0)
             experiment_values.append(experimental_value)
